@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://to6d1j5dni6t"]
+
+[ext_resource type="Script" uid="uid://cqccah7i5ah2b" path="res://Scenes/Towers/tower.gd" id="1_nh6md"]
+
+[node name="Tower" type="Node2D" unique_id=2013600930]
+script = ExtResource("1_nh6md")
+
+[node name="Base" type="Sprite2D" parent="." unique_id=1033670289]
+
+[node name="Turret" type="Sprite2D" parent="." unique_id=602573845]
+
+[node name="EnemyDetectionArea" type="Area2D" parent="." unique_id=37526851]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea" unique_id=1380349703]
+
+[node name="ReloadTimer" type="Timer" parent="." unique_id=1148239278]
+autostart = true
+
+[connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
+[connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]

@@ -1,0 +1,3 @@
+credits:
+Artwork from Kenney: https://kenney.nl/assets/pixel-shmup
+BG Music: https://opengameart.org/content/town-center
