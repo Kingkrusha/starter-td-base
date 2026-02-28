@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://4e4dveqj5cpq"]
+
+[ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="1_o3d1f"]
+[ext_resource type="Script" uid="uid://c7te4c7tl4gby" path="res://scenes/ui/ui.gd" id="1_pfayw"]
+[ext_resource type="Texture2D" uid="uid://5fcgjf624a6x" path="res://graphics/ui/frame.png" id="2_tsrkt"]
+[ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="3_rjvug"]
+[ext_resource type="Texture2D" uid="uid://b3k0r3etcd08f" path="res://graphics/ui/dollar.png" id="4_03p2l"]
+[ext_resource type="Texture2D" uid="uid://l6jm6r7wbg1m" path="res://graphics/ui/menu.png" id="7_7vp6q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mf8j2"]
+bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.19607843)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o3d1f"]
+bg_color = Color(0.48178947, 0.48178947, 0.48178947, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.19607843)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ja3lj"]
+bg_color = Color(0.21176471, 0.21176471, 0.21176471, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.19607843)
+shadow_size = 3
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rhwd3"]
+texture = ExtResource("2_tsrkt")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[node name="UI" type="CanvasLayer" unique_id=1655196185 groups=["UI"]]
+script = ExtResource("1_pfayw")
+
+[node name="Control" type="Control" parent="." unique_id=188920790]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1153.0
+offset_bottom = 648.0
+mouse_filter = 2
+
+[node name="WaveButton" type="Button" parent="Control" unique_id=221016106]
+custom_minimum_size = Vector2(192, 40)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -97.0
+offset_top = 20.0
+offset_right = 97.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_o3d1f")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_mf8j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_o3d1f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ja3lj")
+text = "Start Wave"
+
+[node name="StatsContainer" type="VBoxContainer" parent="Control" unique_id=1677627706]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="PanelContainer2" type="PanelContainer" parent="Control/StatsContainer" unique_id=1384105646]
+self_modulate = Color(0.15294118, 0.15294118, 0.15294118, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_rhwd3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/StatsContainer/PanelContainer2" unique_id=1508838756]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Control/StatsContainer/PanelContainer2/HBoxContainer" unique_id=1326523640]
+modulate = Color(1, 0.89411765, 0.19607843, 1)
+layout_mode = 2
+texture = ExtResource("4_03p2l")
+expand_mode = 3
+
+[node name="MoneyLabel" type="Label" parent="Control/StatsContainer/PanelContainer2/HBoxContainer" unique_id=936814529]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_o3d1f")
+theme_override_font_sizes/font_size = 32
+text = "50"
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/StatsContainer" unique_id=2016503199]
+self_modulate = Color(0.15294118, 0.15294118, 0.15294118, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_rhwd3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/StatsContainer/PanelContainer" unique_id=1431015497]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Control/StatsContainer/PanelContainer/HBoxContainer" unique_id=1896769299]
+modulate = Color(1, 0.21568628, 0.21568628, 1)
+layout_mode = 2
+texture = ExtResource("3_rjvug")
+expand_mode = 3
+
+[node name="HealthLabel" type="Label" parent="Control/StatsContainer/PanelContainer/HBoxContainer" unique_id=1741517721]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_o3d1f")
+theme_override_font_sizes/font_size = 32
+text = "50"
+
+[node name="TowerCards" type="Control" parent="Control" unique_id=612117377]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="TowerCardsContainer" type="HBoxContainer" parent="Control/TowerCards" unique_id=1422678976]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_bottom = -10.0
+grow_vertical = 0
+
+[node name="MenuToggleButton" type="TextureButton" parent="Control/TowerCards" unique_id=445278258]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_bottom = -10.0
+grow_vertical = 0
+texture_normal = ExtResource("7_7vp6q")
+stretch_mode = 4
+
+[connection signal="pressed" from="Control/WaveButton" to="." method="_on_wave_button_pressed"]
+[connection signal="pressed" from="Control/TowerCards/MenuToggleButton" to="." method="_on_menu_toggle_button_pressed"]

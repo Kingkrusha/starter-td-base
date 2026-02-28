@@ -23,6 +23,11 @@ config/icon="res://icon.svg"
 
 Data="*res://global/data.gd"
 
+[display]
+
+window/size/borderless=true
+window/stretch/mode="viewport"
+
 [input]
 
 exit={

@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://cn3dps3m2qep2"]
+
+[ext_resource type="Texture2D" uid="uid://bngxdi2wdjkr1" path="res://graphics/explosion animations/mortar explosion.png" id="1_gsvrn"]
+[ext_resource type="Script" uid="uid://c66q2usmit4oh" path="res://scenes/bullets/explosion.gd" id="2_2ydpy"]
+
+[sub_resource type="Animation" id="Animation_2ydpy"]
+resource_name = "Explosion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.03333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hit_enemies"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_npy6q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aiuqa"]
+_data = {
+&"Explosion": SubResource("Animation_2ydpy"),
+&"RESET": SubResource("Animation_npy6q")
+}
+
+[node name="Explosion" type="Sprite2D" unique_id=1965245254]
+scale = Vector2(2, 2)
+texture = ExtResource("1_gsvrn")
+hframes = 5
+script = ExtResource("2_2ydpy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=543331997]
+libraries/ = SubResource("AnimationLibrary_aiuqa")

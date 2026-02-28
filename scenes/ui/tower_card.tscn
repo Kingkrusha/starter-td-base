@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://c78ec16wdsuvr"]
+
+[ext_resource type="Texture2D" uid="uid://5fcgjf624a6x" path="res://graphics/ui/frame.png" id="1_fixwu"]
+[ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="2_dufpo"]
+[ext_resource type="Script" uid="uid://bw8iqjm7ynit2" path="res://scenes/ui/tower_card.gd" id="2_ensqj"]
+[ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="3_ensqj"]
+[ext_resource type="Texture2D" uid="uid://b3k0r3etcd08f" path="res://graphics/ui/dollar.png" id="5_4rgsa"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b1i5j"]
+texture = ExtResource("1_fixwu")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hqswl"]
+texture = ExtResource("1_fixwu")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[node name="TowerCard" type="Button" unique_id=577431223 groups=["TowerCard"]]
+clip_children = 1
+custom_minimum_size = Vector2(112, 144)
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1i5j")
+script = ExtResource("2_ensqj")
+
+[node name="Panel" type="Panel" parent="." unique_id=820217398]
+self_modulate = Color(0.15294118, 0.15294118, 0.15294118, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hqswl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=743130834]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TowerPreview" type="Control" parent="VBoxContainer" unique_id=1059268895]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TowerPreview" unique_id=1997805638]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.83137256, 0.9254902, 1, 1)
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TowerPreview" unique_id=1862283114]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dufpo")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1101094874]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control" unique_id=2015242062]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/Control/VBoxContainer" unique_id=1632131081]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ensqj")
+theme_override_font_sizes/font_size = 20
+text = "Tower Name"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control/VBoxContainer" unique_id=1793079610]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Control/VBoxContainer/HBoxContainer" unique_id=25537346]
+self_modulate = Color(1, 0.89411765, 0.19607843, 1)
+layout_mode = 2
+texture = ExtResource("5_4rgsa")
+expand_mode = 3
+
+[node name="CostLabel" type="Label" parent="VBoxContainer/Control/VBoxContainer/HBoxContainer" unique_id=1709576223]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ensqj")
+theme_override_font_sizes/font_size = 20
+text = "Tower Cost"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

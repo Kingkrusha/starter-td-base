@@ -1,11 +1,16 @@
 [gd_scene format=3 uid="uid://to6d1j5dni6t"]
 
-[ext_resource type="Script" uid="uid://cqccah7i5ah2b" path="res://Scenes/Towers/tower.gd" id="1_nh6md"]
+[ext_resource type="Script" uid="uid://cqccah7i5ah2b" path="res://scenes/towers/tower.gd" id="1_nh6md"]
+[ext_resource type="Texture2D" uid="uid://cw3cdy003wqxn" path="res://graphics/towers/basic/basic tower upgrade mockup.png" id="2_g767u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vfpy0"]
+size = Vector2(24, 24)
 
 [node name="Tower" type="Node2D" unique_id=2013600930]
 script = ExtResource("1_nh6md")
 
 [node name="Base" type="Sprite2D" parent="." unique_id=1033670289]
+texture = ExtResource("2_g767u")
 
 [node name="Turret" type="Sprite2D" parent="." unique_id=602573845]
 
@@ -17,5 +22,13 @@ collision_layer = 0
 [node name="ReloadTimer" type="Timer" parent="." unique_id=1148239278]
 autostart = true
 
+[node name="ClickArea" type="Area2D" parent="." unique_id=1903775514]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=982975432]
+shape = SubResource("RectangleShape2D_vfpy0")
+
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]
+[connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]
