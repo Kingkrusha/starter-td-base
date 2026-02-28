@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="3_rjvug"]
 [ext_resource type="Texture2D" uid="uid://b3k0r3etcd08f" path="res://graphics/ui/dollar.png" id="4_03p2l"]
 [ext_resource type="Texture2D" uid="uid://l6jm6r7wbg1m" path="res://graphics/ui/menu.png" id="7_7vp6q"]
+[ext_resource type="Texture2D" uid="uid://bdrdwyfstc433" path="res://graphics/ui/clock_normal.png" id="7_jcn1r"]
+[ext_resource type="Texture2D" uid="uid://ownp18s83xcg" path="res://graphics/ui/clock_hover.png" id="8_uegxj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mf8j2"]
 bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
@@ -157,5 +159,28 @@ grow_vertical = 0
 texture_normal = ExtResource("7_7vp6q")
 stretch_mode = 4
 
+[node name="PanelContainer" type="PanelContainer" parent="Control" unique_id=820975564]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer" unique_id=1645313245]
+layout_mode = 2
+alignment = 1
+
+[node name="SpeedButton" type="TextureButton" parent="Control/PanelContainer/VBoxContainer" unique_id=2098035497]
+layout_mode = 2
+texture_normal = ExtResource("7_jcn1r")
+texture_hover = ExtResource("8_uegxj")
+stretch_mode = 3
+
+[node name="SpeedLabel" type="Label" parent="Control/PanelContainer/VBoxContainer" unique_id=1376826101]
+layout_mode = 2
+text = " 1 X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="pressed" from="Control/WaveButton" to="." method="_on_wave_button_pressed"]
 [connection signal="pressed" from="Control/TowerCards/MenuToggleButton" to="." method="_on_menu_toggle_button_pressed"]
+[connection signal="pressed" from="Control/PanelContainer/VBoxContainer/SpeedButton" to="." method="_on_speed_button_pressed"]
