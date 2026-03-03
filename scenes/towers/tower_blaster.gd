@@ -15,3 +15,6 @@ func _on_reload_timer_timeout():
 func fire_animation():
 	for particles :GPUParticles2D in $Particles.get_children():
 		particles.emitting = true
+
+func apply_big_upgrade(key : String):
+	pass

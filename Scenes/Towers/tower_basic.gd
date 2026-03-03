@@ -2,6 +2,7 @@ extends Tower
 
 func _ready():
 	type = Data.Tower.BASIC
+	$TowerMenu.setup(Data.Tower.BASIC)
 	$ReloadTimer.wait_time = reload_speed
 
 func _process(_delta):
@@ -14,3 +15,6 @@ func _on_reload_timer_timeout():
 	if enemies.size() > 0:
 		var dir = Vector2.DOWN.rotated($Turret.rotation).normalized()
 		shoot.emit(position + dir * 16, $Turret.rotation, Data.Bullet.SINGLE, self)
+		
+func apply_big_upgrade(key : String):
+	pass

@@ -20,3 +20,6 @@ func finish_placing():
 func _on_reload_timer_timeout():
 	if not placing_crosshair:
 		shoot.emit($CrosshairSprite.global_position,0,Data.Bullet.MORTAR_EXPLOSION, self)
+
+func apply_big_upgrade(key : String):
+	pass

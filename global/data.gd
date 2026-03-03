@@ -8,7 +8,6 @@ const TOWER_DATA = {
 	Tower.BASIC: {
 		'name': 'Basic',
 		'cost': 20,
-		'upgrade_cost': 30,
 		'reload_time': 1.0,
 		'bullet': Bullet.SINGLE,
 		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
@@ -16,7 +15,6 @@ const TOWER_DATA = {
 	Tower.BLAST: {
 		'name': 'Blaster',
 		'cost': 30,
-		'upgrade_cost': 50,
 		'reload_time': 1.5,
 		'bullet': Bullet.FIRE,
 		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
@@ -24,21 +22,80 @@ const TOWER_DATA = {
 	Tower.MORTAR: {
 		'name': 'Mortar',
 		'cost': 30,
-		'upgrade_cost': 60,
 		'reload_time': 2.0,
 		'bullet': Bullet.MORTAR_EXPLOSION,
 		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
 		'scene': "res://scenes/towers/mortar_tower.tscn"}}
-const UPGRADE_DATA = {
-	Tower.BASIC: {
-		'reload_time': 0.6,
-		'bullet': Bullet.SINGLE},
+var UPGRADE_DATA = {
+		Tower.BASIC: {
+		"tracks": {
+			"damage":       { "base": 1 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
+			"range":        { "base": 100,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"attack_speed": { "base": 1.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
+		},
+		"big": {
+			"A": {
+				"name": "Fan Shot",
+				"description": "Fires 3 bullets in a fan pattern",
+				"cost": 150,
+				"texture": "res://graphics/ui/tower thumbnails/basic_fan.png",
+				"effects": { "bullet_count": 3, "spread_angle": 20.0 }
+			},
+			"B": {
+				"name": "Ricochet",
+				"description": "Bullets gain pierce, lifetime, and bounce off walls",
+				"cost": 175,
+				"texture": "res://graphics/ui/tower thumbnails/basic_ricochet.png",
+				"effects": { "pierce": 3, "lifetime_mult": 2.0, "bounce": true }
+			}
+		}
+	},
 	Tower.BLAST: {
-		'reload_time': 1.2,
-		'bullet': Bullet.FIRE},
+		"tracks": {
+			"damage":       { "base": 1,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
+			"range":        { "base": 35,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"attack_speed": { "base": 1.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
+		},
+		"big": {
+			"A": {
+				"name": "Feel the Burn",
+				"description": "Applies Burn damage over time effect",
+				"cost": 180,
+				"texture": "res://graphics/ui/tower thumbnails/basic_fan.png",
+				"effects": { "burn_duration": 3.0, "burn_tick_speed": 0.5, "burn_damage": 1 }
+			},
+			"B": {
+				"name": "flamethrower",
+				"description": "increased range and greatly increased attack speed",
+				"cost": 175,
+				"texture": "res://graphics/ui/tower thumbnails/basic_ricochet.png",
+				"effects": { "range": 30, "attack_speed_mult": 2.5,}
+			}
+		}
+	},
 	Tower.MORTAR: {
-		'reload_time': 1.5,
-		'bullet': Bullet.ICE_EXPLOSION}}
+		"tracks": {
+			"damage":       { "base": 3,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
+			"area":        { "base": 45,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"attack_speed": { "base": 1.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
+		},
+		"big": {
+			"A": {
+				"name": "Feel the Burn",
+				"description": "Applies Burn damage over time effect",
+				"cost": 180,
+				"texture": "res://graphics/ui/tower thumbnails/basic_fan.png",
+				"effects": { "burn_duration": 3.0, "burn_tick_speed": 0.5, "burn_damage": 1 }
+			},
+			"B": {
+				"name": "flamethrower",
+				"description": "increased range and greatly increased attack speed",
+				"cost": 175,
+				"texture": "res://graphics/ui/tower thumbnails/basic_ricochet.png",
+				"effects": { "range": 30, "attack_speed_mult": 2.5,}
+			}
+		}
+	}}
 const ENEMY_WAVES = {
    0: {
 	   "enemies": {Enemy.DEFAULT: 5, Enemy.STRONG: 2, Enemy.FAST: 1},

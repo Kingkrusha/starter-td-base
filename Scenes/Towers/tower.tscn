@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cqccah7i5ah2b" path="res://scenes/towers/tower.gd" id="1_nh6md"]
 [ext_resource type="Texture2D" uid="uid://cw3cdy003wqxn" path="res://graphics/towers/basic/basic tower upgrade mockup.png" id="2_g767u"]
+[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="3_vfpy0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfpy0"]
 size = Vector2(24, 24)
@@ -28,6 +29,9 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=982975432]
 shape = SubResource("RectangleShape2D_vfpy0")
+
+[node name="TowerMenu" parent="." unique_id=511109904 instance=ExtResource("3_vfpy0")]
+visible = false
 
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]

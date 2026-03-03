@@ -14,6 +14,7 @@ const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
 var current_state: MenuState = MenuState.CLOSED
 var wave:int = 0
 var game_speed: float = 1.0
+var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 
 func _ready():
@@ -51,7 +52,51 @@ func _on_menu_toggle_button_pressed():
 	$Control/TowerCards/TowerCardsContainer.visible = true if current_state == MenuState.OPEN else false
 
 
-func _on_speed_button_pressed():
+
+func _on_slow_down_pressed():
+	#if stored_speed != game_speed:
+		#game_speed = stored_speed
+	match game_speed:
+		1.0:
+			game_speed = 0.5
+			Engine.time_scale = 0.5
+		2.0:
+			game_speed = 1
+			Engine.time_scale = 1
+		4.0:
+			game_speed = 2
+			Engine.time_scale = 2
+		8.0:
+			game_speed = 4
+			Engine.time_scale = 4
+		16.0:
+			game_speed = 8
+			Engine.time_scale = 8
+		0.5:
+			game_speed = 16
+			Engine.time_scale = 16
+	if game_speed >= 8:
+		Engine.physics_ticks_per_second = 180
+	elif game_speed >= 2:
+		Engine.physics_ticks_per_second = 120
+	else:
+		Engine.physics_ticks_per_second = 60
+	if game_speed < 1.0:
+		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(game_speed) + " X")
+	else:
+		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(int(game_speed)) + " X")
+
+
+#func _on_pause_pressed():
+	#if Engine.time_scale > 0:
+		#stored_speed = Engine.time_scale
+		#Engine.time_scale = 0
+	#else:
+		#Engine.time_scale = stored_speed
+		
+func _on_speed_up_pressed():
+	#if stored_speed != game_speed:
+		#game_speed = stored_speed
 	match game_speed:
 		1.0:
 			game_speed = 2
@@ -74,7 +119,7 @@ func _on_speed_button_pressed():
 	if game_speed >= 8:
 		Engine.physics_ticks_per_second = 150
 	elif game_speed >= 2:
-		Engine.physics_ticks_per_second = 120
+		Engine.physics_ticks_per_second = 180
 	else:
 		Engine.physics_ticks_per_second = 60
 	if game_speed < 1.0:
