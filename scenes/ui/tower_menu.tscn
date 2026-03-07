@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://bs7mlpxrwhrat"]
 
 [ext_resource type="Script" uid="uid://d103txvrdom45" path="res://scenes/ui/tower_menu.gd" id="1_n2bmw"]
-[ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="1_s8xt8"]
 [ext_resource type="Texture2D" uid="uid://rnnvxeejg1o3" path="res://graphics/ui/bigup_normal.png" id="2_2nd6s"]
+[ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_n2bmw"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="3_10234"]
 [ext_resource type="Texture2D" uid="uid://btkxerqdlusr7" path="res://graphics/ui/bigup_hover.png" id="3_bvfoo"]
+[ext_resource type="FontFile" uid="uid://5wltcegg83o" path="res://scenes/ui/Tangerine-Bold.ttf" id="4_10234"]
 [ext_resource type="Texture2D" uid="uid://duabn1x61wk2j" path="res://graphics/ui/icon.png" id="6_gy57x"]
-[ext_resource type="Texture2D" uid="uid://dkv52qc7oggso" path="res://graphics/ui/progress bar_empty.png" id="7_lky70"]
-[ext_resource type="Texture2D" uid="uid://dme8vvypmfug0" path="res://graphics/ui/progress bar.png" id="8_hvcil"]
+[ext_resource type="Texture2D" uid="uid://v2yuex73fti6" path="res://graphics/ui/progress bar_empty2.png" id="7_n2bmw"]
+[ext_resource type="Texture2D" uid="uid://ppuhmtuyh2w5" path="res://graphics/ui/progress bar2.png" id="8_10234"]
 [ext_resource type="Texture2D" uid="uid://dpunof0ashj11" path="res://graphics/ui/plus.png" id="9_t15my"]
 [ext_resource type="Texture2D" uid="uid://dqyf366fw1dd" path="res://graphics/ui/plus proble.png" id="10_agkva"]
 
@@ -35,17 +36,38 @@ mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=472667169]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=941671284]
+[node name="Exit" type="Control" parent="PanelContainer/VBoxContainer" unique_id=7473728]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_s8xt8")
-theme_override_font_sizes/font_size = 24
+size_flags_horizontal = 0
+
+[node name="ExitButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Exit" unique_id=674927257]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 0
+offset_left = 262.0
+offset_top = -1.0000153
+offset_right = 282.0
+offset_bottom = 18.999985
+rotation = 0.7853982
+size_flags_horizontal = 8
+texture_normal = ExtResource("9_t15my")
+texture_pressed = ExtResource("10_agkva")
+texture_hover = ExtResource("10_agkva")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TowerName" type="Label" parent="PanelContainer/VBoxContainer" unique_id=941671284]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("4_10234")
+theme_override_font_sizes/font_size = 32
 text = "Tower Name"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer" unique_id=1267009460]
+[node name="Tower Preview" type="TextureRect" parent="PanelContainer/VBoxContainer" unique_id=1267009460]
+custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
-size_flags_vertical = 3
 texture = ExtResource("3_10234")
 expand_mode = 1
 stretch_mode = 5
@@ -57,6 +79,12 @@ alignment = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/FlowContainer" unique_id=64551762]
 layout_mode = 2
 
+[node name="Upgrade" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=1913884888]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_font_sizes/font_size = 20
+text = "Upgrade Name"
+
 [node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=776041157]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
@@ -66,14 +94,21 @@ texture_hover = ExtResource("3_bvfoo")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=10115328]
+[node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=10115328]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_s8xt8")
-theme_override_font_sizes/font_size = 16
-text = "Upgrade Name"
+theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_font_sizes/font_size = 20
+text = "Cost"
+horizontal_alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer/FlowContainer" unique_id=2060927503]
 layout_mode = 2
+
+[node name="Upgrade" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1551679419]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_font_sizes/font_size = 20
+text = "Upgrade Name"
 
 [node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1575207938]
 custom_minimum_size = Vector2(80, 80)
@@ -84,15 +119,17 @@ texture_hover = ExtResource("3_bvfoo")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1737141260]
+[node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1737141260]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_s8xt8")
-theme_override_font_sizes/font_size = 16
-text = "Upgrade Name"
+theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_font_sizes/font_size = 20
+text = "Cost"
+horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=595202416]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=1641449347]
 layout_mode = 2
@@ -106,8 +143,8 @@ texture = ExtResource("6_gy57x")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=843281482]
 layout_mode = 2
-texture_under = ExtResource("7_lky70")
-texture_progress = ExtResource("8_hvcil")
+texture_under = ExtResource("7_n2bmw")
+texture_progress = ExtResource("8_10234")
 
 [node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1790307094]
 custom_minimum_size = Vector2(20, 20)
@@ -117,47 +154,65 @@ texture_hover = ExtResource("10_agkva")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=1770839368]
+[node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=363684890]
+layout_mode = 2
+text = "10"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=550489008]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1379395678]
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=637564343]
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("6_gy57x")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=966996622]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1178192568]
 layout_mode = 2
-texture_under = ExtResource("7_lky70")
-texture_progress = ExtResource("8_hvcil")
+texture_under = ExtResource("7_n2bmw")
+texture_progress = ExtResource("8_10234")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=823464583]
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1703917787]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("9_t15my")
+texture_hover = ExtResource("10_agkva")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1286798532]
+layout_mode = 2
+text = "10"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=1122717005]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1568872174]
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1054024821]
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("6_gy57x")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=42361874]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1491696540]
 layout_mode = 2
-texture_under = ExtResource("7_lky70")
-texture_progress = ExtResource("8_hvcil")
+texture_under = ExtResource("7_n2bmw")
+texture_progress = ExtResource("8_10234")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=1882146502]
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=461093708]
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
+texture_normal = ExtResource("9_t15my")
+texture_hover = ExtResource("10_agkva")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=606348330]
+[node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1703127882]
 layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("6_gy57x")
+text = "10"
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=907535703]
-layout_mode = 2
-texture_under = ExtResource("7_lky70")
-texture_progress = ExtResource("8_hvcil")
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Exit/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2/TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3/TextureButton" to="." method="_on_texture_button_pressed"]

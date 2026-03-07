@@ -2,7 +2,6 @@ extends Tower
 
 func _ready():
 	type = Data.Tower.BASIC
-	$TowerMenu.setup(Data.Tower.BASIC)
 	$ReloadTimer.wait_time = reload_speed
 
 func _process(_delta):

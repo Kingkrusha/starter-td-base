@@ -12,7 +12,7 @@ const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
 		'pressed':"res://graphics/ui/close_normal.png",
 		'hover': "res://graphics/ui/close_hover.png"}}
 var current_state: MenuState = MenuState.CLOSED
-var wave:int = 0
+var wave: int = 0
 var game_speed: float = 1.0
 var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")

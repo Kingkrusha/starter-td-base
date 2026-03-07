@@ -16,11 +16,11 @@ var current_tower: Tower
 var tower_menu: bool
 var used_cells: Array[Vector2i]
 var ongoing_wave: bool
+var spawning_enemies: bool
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
 	$UI.connect("start_wave", spawn_wave)
-	#$tower_blaster.connect('shoot', create_bullet)
 
 func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_ref: Node = null):
 	if bullet_enum == Data.Bullet.SINGLE:
@@ -81,31 +81,47 @@ func _input(event: InputEvent):
 
 func spawn_wave(wave_idx):
 	if not ongoing_wave:
+		spawning_enemies = true
 		ongoing_wave = true
-		var wave_data = Data.ENEMY_WAVES[wave_idx]
-		var enemy_counts = wave_data["enemies"]
-		var delay = wave_data["delay"]
-		var enemy_list = []
-		var boss_list = []
-		for enemy_type in enemy_counts.keys():
-			var count = enemy_counts[enemy_type]
-			for i in range(count):
-				if enemy_type == Data.Enemy.BOSS:
-					boss_list.append(enemy_type)
-				else:
-					enemy_list.append(enemy_type)
+		var wave_data = Data.get_wave_data(wave_idx)
+		var credits: int = wave_data["credits"]
+		var pool: Array = wave_data["pool"]
+		var delay: float = wave_data["delay"]
+
+		# Build spawn list by spending credits
+		var enemy_list: Array = []
+		var boss_list: Array = []
+		while credits > 0:
+			# Filter pool to affordable enemies
+			var affordable: Array = []
+			for enemy_type in pool:
+				if Data.ENEMY_DATA[enemy_type]['spawn_cost'] <= credits:
+					affordable.append(enemy_type)
+			if affordable.is_empty():
+				break
+			var picked = affordable.pick_random()
+			credits -= Data.ENEMY_DATA[picked]['spawn_cost']
+			if picked == Data.Enemy.BOSS:
+				boss_list.append(picked)
+			else:
+				enemy_list.append(picked)
+
 		enemy_list.shuffle()
 
-		await _spawn_enemies_with_delay(enemy_list, delay)
-		await _spawn_enemies_with_delay(boss_list, delay)
-		ongoing_wave = false
+		await _spawn_enemies_with_delay(enemy_list, delay, wave_idx)
+		await _spawn_enemies_with_delay(boss_list, delay, wave_idx)
+		spawning_enemies = false
 
-
-func _spawn_enemies_with_delay(enemy_types: Array, delay: float) -> void:
+func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) -> void:
 	for enemy_type in enemy_types:
 		var path_follow = PathFollow2D.new()
 		var enemy = enemy_scene.instantiate()
-		enemy.setup(path_follow, enemy_type)
+		enemy.setup(path_follow, enemy_type, wave_idx)
 		path_follow.add_child(enemy)
 		$Path2D.add_child(path_follow)
 		await get_tree().create_timer(delay).timeout
+
+
+func _process(delta):
+	if get_tree().get_nodes_in_group("enemies").size() == 0 and not spawning_enemies:
+		ongoing_wave = false

@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://to6d1j5dni6t"]
 
-[ext_resource type="Script" uid="uid://cqccah7i5ah2b" path="res://scenes/towers/tower.gd" id="1_nh6md"]
 [ext_resource type="Texture2D" uid="uid://cw3cdy003wqxn" path="res://graphics/towers/basic/basic tower upgrade mockup.png" id="2_g767u"]
 [ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="3_vfpy0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g767u"]
+radius = 100.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfpy0"]
 size = Vector2(24, 24)
 
 [node name="Tower" type="Node2D" unique_id=2013600930]
-script = ExtResource("1_nh6md")
 
 [node name="Base" type="Sprite2D" parent="." unique_id=1033670289]
 texture = ExtResource("2_g767u")
@@ -19,6 +20,7 @@ texture = ExtResource("2_g767u")
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea" unique_id=1380349703]
+shape = SubResource("CircleShape2D_g767u")
 
 [node name="ReloadTimer" type="Timer" parent="." unique_id=1148239278]
 autostart = true
@@ -31,7 +33,10 @@ collision_mask = 0
 shape = SubResource("RectangleShape2D_vfpy0")
 
 [node name="TowerMenu" parent="." unique_id=511109904 instance=ExtResource("3_vfpy0")]
-visible = false
+offset_left = 140.0
+offset_top = -219.0
+offset_right = 140.0
+offset_bottom = -219.0
 
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]

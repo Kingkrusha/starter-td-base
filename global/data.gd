@@ -3,6 +3,31 @@ extends Node
 enum Tower {BASIC, BLAST, MORTAR}
 enum Bullet {SINGLE, FIRE, MORTAR_EXPLOSION, ICE_EXPLOSION}
 enum Enemy {DEFAULT, FAST, STRONG, BIG, BOSS}
+const WAVE_BASE_CREDITS: int = 8
+const WAVE_CREDIT_GROWTH: int = 4   
+const WAVE_BASE_DELAY: float = 0.7
+const WAVE_MIN_DELAY: float = 0.3      
+const WAVE_DELAY_REDUCTION: float = 0.002
+var HP_MULT_PER_WAVE = 0.02
+const ENEMY_UNLOCK_SCHEDULE: Array = [
+	[0,  Enemy.DEFAULT],
+	[2,  Enemy.FAST],
+	[5,  Enemy.STRONG],
+	[10, Enemy.BIG],
+	[15, Enemy.BOSS],
+]
+func get_scaled_health(enemy : Data.Enemy, wave: int):
+	var base_hp: int = ENEMY_DATA[enemy]['health']
+	return base_hp * (1 + (HP_MULT_PER_WAVE * wave))
+
+func get_wave_data(wave_idx: int) -> Dictionary:
+	var credits = WAVE_BASE_CREDITS + wave_idx * WAVE_CREDIT_GROWTH
+	var delay = max(WAVE_BASE_DELAY - wave_idx * WAVE_DELAY_REDUCTION, WAVE_MIN_DELAY)
+	var pool: Array = []
+	for entry in ENEMY_UNLOCK_SCHEDULE:
+		if wave_idx >= entry[0]:
+			pool.append(entry[1])
+	return { "credits": credits, "pool": pool, "delay": delay }
 
 const TOWER_DATA = {
 	Tower.BASIC: {
@@ -11,26 +36,26 @@ const TOWER_DATA = {
 		'reload_time': 1.0,
 		'bullet': Bullet.SINGLE,
 		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
-		'scene': "res://scenes/towers/single_tower.tscn"},
+		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
 	Tower.BLAST: {
 		'name': 'Blaster',
 		'cost': 30,
 		'reload_time': 1.5,
 		'bullet': Bullet.FIRE,
 		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
-		'scene': "res://scenes/towers/blaster_tower.tscn"},
+		'portrait': "res://graphics/ui/tower thumbnails/blaster.png"},
 	Tower.MORTAR: {
 		'name': 'Mortar',
 		'cost': 30,
 		'reload_time': 2.0,
 		'bullet': Bullet.MORTAR_EXPLOSION,
 		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
-		'scene': "res://scenes/towers/mortar_tower.tscn"}}
+		'portrait': "res://graphics/ui/tower thumbnails/mortar.png"}}
 var UPGRADE_DATA = {
 		Tower.BASIC: {
 		"tracks": {
 			"damage":       { "base": 1 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
-			"range":        { "base": 100,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"range":        { "base": 100,  "per_level": 0.20, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 1.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
@@ -96,28 +121,18 @@ var UPGRADE_DATA = {
 			}
 		}
 	}}
-const ENEMY_WAVES = {
-   0: {
-	   "enemies": {Enemy.DEFAULT: 5, Enemy.STRONG: 2, Enemy.FAST: 1},
-	   "delay": 0.7
-   },
-   1: {
-	   "enemies": {Enemy.DEFAULT: 5, Enemy.FAST: 1, Enemy.BOSS: 1},
-	   "delay": 1.0
-   }
-}
 const ENEMY_DATA = {
-	Enemy.DEFAULT: {'health': 3, 'texture': "res://graphics/Ships/ship_0001.png", 'speed': 30},
-	Enemy.FAST: {'health': 3, 'texture': "res://graphics/Ships/ship_0007.png", 'speed': 60},
-	Enemy.STRONG: {'health': 6, 'texture': "res://graphics/Ships/ship_0000.png", 'speed': 35},
-	Enemy.BIG: {'health': 20, 'texture': "res://graphics/Ships/ship_0005.png", 'speed': 25},
-	Enemy.BOSS: {'health': 50, 'texture': "res://graphics/Ships/ship_0015.png", 'speed': 20}}
+	Enemy.DEFAULT: {'health': 3, 'texture': "res://graphics/Ships/ship_0001.png", 'speed': 30, 'spawn_cost': 1, 'spawn_weight': 5},
+	Enemy.FAST: {'health': 3, 'texture': "res://graphics/Ships/ship_0007.png", 'speed': 60, 'spawn_cost': 1, 'spawn_weight': 3},
+	Enemy.STRONG: {'health': 6, 'texture': "res://graphics/Ships/ship_0000.png", 'speed': 35, 'spawn_cost': 2, 'spawn_weight': 4},
+	Enemy.BIG: {'health': 20, 'texture': "res://graphics/Ships/ship_0005.png", 'speed': 25, 'spawn_cost': 5, 'spawn_weight': 3},
+	Enemy.BOSS: {'health': 50, 'texture': "res://graphics/Ships/ship_0015.png", 'speed': 20, 'spawn_cost': 14, 'spawn_weight': 1}}
 
 var health: int = 100:
 	set(value):
 		health = value
 		get_tree().get_first_node_in_group("UI").update_stats(money, health)
-var money = 50:
+var money = 9999:
 	set(value):
 		money = value
 		get_tree().get_first_node_in_group("UI").update_stats(money, health)

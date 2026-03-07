@@ -5,11 +5,11 @@ var health : int
 var reward: int
 var path_follow : PathFollow2D
 
-func setup(new_path_follow : PathFollow2D, enemy_type: Data.Enemy):
+func setup(new_path_follow : PathFollow2D, enemy_type: Data.Enemy, wave_idx: int = 0):
 	path_follow = new_path_follow
 	var enemy_data = Data.ENEMY_DATA[enemy_type]
 	speed = enemy_data['speed']
-	health = enemy_data['health']
+	health = Data.get_scaled_health(enemy_type, wave_idx)
 	reward = round(float(health)/2)
 	$Sprite.texture = load(enemy_data['texture'])
 	

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkv52qc7oggso"
-path="res://.godot/imported/progress bar_empty.png-dd7b9f4727741a5cfa599f5edec9a2b0.ctex"
+uid="uid://dmvxjwrq1onjp"
+path="res://.godot/imported/tiles.png-ce7936cecdb64c1033994d6c8f5f073f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/ui/progress bar_empty.png"
-dest_files=["res://.godot/imported/progress bar_empty.png-dd7b9f4727741a5cfa599f5edec9a2b0.ctex"]
+source_file="res://graphics/tilesets/tiles.png"
+dest_files=["res://.godot/imported/tiles.png-ce7936cecdb64c1033994d6c8f5f073f.ctex"]
 
 [params]
 
