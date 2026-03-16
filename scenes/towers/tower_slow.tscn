@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c8jvellp0ruc1"]
+
+[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://scenes/towers/tower.tscn" id="1_3pw6u"]
+[ext_resource type="Script" uid="uid://bygeme0qf2pgy" path="res://scenes/towers/tower_slow.gd" id="2_3pw6u"]
+[ext_resource type="Texture2D" uid="uid://dgceqlcnpr4dg" path="res://graphics/towers/basic/basic tower upgrade bottom.png" id="3_h635o"]
+[ext_resource type="Texture2D" uid="uid://c5e22m6h857yp" path="res://graphics/towers/basic/basic tower upgrade top.png" id="4_g0gbm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t18nb"]
+radius = 100.0
+
+[node name="TowerSlow" unique_id=2013600930 instance=ExtResource("1_3pw6u")]
+script = ExtResource("2_3pw6u")
+
+[node name="Base" parent="." index="0" unique_id=1033670289]
+texture = ExtResource("3_h635o")
+
+[node name="Turret" parent="." index="1" unique_id=602573845]
+texture = ExtResource("4_g0gbm")
+flip_h = true
+
+[node name="CollisionShape2D" parent="EnemyDetectionArea" parent_id_path=PackedInt32Array(37526851) index="0" unique_id=1380349703]
+shape = SubResource("CircleShape2D_t18nb")
+
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_reload_timer_timeout"]

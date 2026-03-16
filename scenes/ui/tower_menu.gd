@@ -2,8 +2,7 @@ extends Control
 
 var tower_ref: Tower  
 var track_buttons: Array = []  
-
-
+signal close()
 
 func setup(tower):
 	tower_ref = tower
@@ -11,6 +10,14 @@ func setup(tower):
 	$"PanelContainer/VBoxContainer/TowerName".text = Data.TOWER_DATA[tower.type]['name']
 	$"PanelContainer/VBoxContainer/Tower Preview".texture = load(Data.TOWER_DATA[tower.type]['portrait'])
 	
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/Upgrade.text = upgrade_data['big']['A']['name']
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/Upgrade.text = upgrade_data['big']['B']['name']
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/TextureButton.texture_normal = load(upgrade_data['big']['A']['texture'])
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/TextureButton.texture_normal = load(upgrade_data['big']['B']['texture'])
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/TextureButton.tooltip_text = upgrade_data['big']['A']['description']
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/TextureButton.tooltip_text = upgrade_data['big']['B']['description']
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/Cost.text = str(upgrade_data['big']['A']['cost'])
+	$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/Cost.text = str(upgrade_data['big']['B']['cost'])
 	var rows = [
 		[$PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer/TextureButton, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer/TextureProgressBar, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer/Cost],
 		[$PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2/TextureButton, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2/TextureProgressBar, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Cost],
@@ -48,3 +55,6 @@ func _on_track_button_pressed(track: String):
 
 func _on_exit_button_pressed():
 	self.visible = false
+	tower_ref.show_range = false
+	tower_ref.queue_redraw()
+	close.emit()

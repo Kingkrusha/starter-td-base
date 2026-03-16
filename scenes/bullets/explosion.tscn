@@ -68,7 +68,7 @@ _data = {
 }
 
 [node name="Explosion" type="Sprite2D" unique_id=1965245254]
-scale = Vector2(2, 2)
+scale = Vector2(7, 7)
 texture = ExtResource("1_gsvrn")
 hframes = 5
 script = ExtResource("2_2ydpy")

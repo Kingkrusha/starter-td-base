@@ -4,11 +4,13 @@ var placing_crosshair: bool
 
 func _ready():
 	track_levels = { "damage": 0, "area": 0, "attack_speed": 0 }
+	twr_range = 0
 	reload_speed = 3.0
 	damage = 2
 	damage_area = 45.0
 	dmg_type = 'fire'
 	type = Data.Tower.MORTAR
+	init_stats()
 	$ReloadTimer.wait_time = reload_speed
 
 

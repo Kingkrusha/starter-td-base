@@ -2,9 +2,10 @@ extends Tower
 
 
 func _ready():
-	damage = 1
 	type = Data.Tower.BLAST
-	$ReloadTimer.wait_time = reload_speed
+	init_stats()
+	twr_range = Data.UPGRADE_DATA[type]['tracks']['range']['base']
+	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]['tracks']['attack_speed']['base']
 
 
 func _on_reload_timer_timeout():
@@ -16,5 +17,5 @@ func fire_animation():
 	for particles :GPUParticles2D in $Particles.get_children():
 		particles.emitting = true
 
-func apply_big_upgrade(key : String):
+func apply_big_upgrade(_key : String):
 	pass

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://to6d1j5dni6t"]
 
 [ext_resource type="Texture2D" uid="uid://cw3cdy003wqxn" path="res://graphics/towers/basic/basic tower upgrade mockup.png" id="2_g767u"]
-[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="3_vfpy0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g767u"]
 radius = 100.0
@@ -10,6 +9,7 @@ radius = 100.0
 size = Vector2(24, 24)
 
 [node name="Tower" type="Node2D" unique_id=2013600930]
+scale = Vector2(6, 6)
 
 [node name="Base" type="Sprite2D" parent="." unique_id=1033670289]
 texture = ExtResource("2_g767u")
@@ -26,17 +26,11 @@ shape = SubResource("CircleShape2D_g767u")
 autostart = true
 
 [node name="ClickArea" type="Area2D" parent="." unique_id=1903775514]
-collision_layer = 4
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=982975432]
 shape = SubResource("RectangleShape2D_vfpy0")
-
-[node name="TowerMenu" parent="." unique_id=511109904 instance=ExtResource("3_vfpy0")]
-offset_left = 140.0
-offset_top = -219.0
-offset_right = 140.0
-offset_bottom = -219.0
 
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]

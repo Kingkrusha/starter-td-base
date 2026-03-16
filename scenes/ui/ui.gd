@@ -2,6 +2,7 @@ extends CanvasLayer
 
 signal place_tower(tower_type: Data.Tower)
 signal start_wave(wave: int)
+signal closemenu()
 enum MenuState {CLOSED, OPEN}
 const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
 	'normal': "res://graphics/ui/menu.png", 
@@ -26,7 +27,6 @@ func _ready():
 		tower_card.setup(tower)
 		$Control/TowerCards/TowerCardsContainer.add_child(tower_card)
 		tower_card.connect('press', tower_select)
-
 
 func tower_select(tower_enum: Data.Tower):
 	place_tower.emit(tower_enum)
@@ -126,3 +126,11 @@ func _on_speed_up_pressed():
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(game_speed) + " X")
 	else:
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(int(game_speed)) + " X")
+		
+func show_tower_menu(tower: Tower):
+	$Control/TowerMenu.setup(tower)
+	$Control/TowerMenu.visible = true
+
+
+func _on_tower_menu_close():
+	closemenu.emit()

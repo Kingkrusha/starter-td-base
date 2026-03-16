@@ -1,13 +1,12 @@
 extends Area2D
 
-
 var direction: Vector2
 var parent_tower: Node = null
 var speed: int
 var damage: int
 var pierce: int
 var lifetime: float
-var type: String = 'normal'
+var dmg_type: String = 'normal'
 
 func setup(pos: Vector2, angle: float, _bullet_enum: Data.Bullet, tower_ref: Node):
 	position = pos
@@ -20,7 +19,7 @@ func setup(pos: Vector2, angle: float, _bullet_enum: Data.Bullet, tower_ref: Nod
 		pierce = parent_tower.pierce
 		lifetime = parent_tower.lifetime
 		speed = parent_tower.bullet_speed
-		type = parent_tower.dmg_type
+		dmg_type = parent_tower.dmg_type
 	$Timer.wait_time = lifetime
 
 

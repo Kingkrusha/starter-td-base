@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bdrdwyfstc433" path="res://graphics/ui/clock_normal.png" id="7_jcn1r"]
 [ext_resource type="Texture2D" uid="uid://ownp18s83xcg" path="res://graphics/ui/clock_hover.png" id="8_uegxj"]
 [ext_resource type="Texture2D" uid="uid://dpunof0ashj11" path="res://graphics/ui/plus.png" id="9_uegxj"]
+[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="10_y220t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mf8j2"]
 bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
@@ -208,8 +209,13 @@ text = " 1 X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TowerMenu" parent="Control" unique_id=511109904 instance=ExtResource("10_y220t")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="Control/WaveButton" to="." method="_on_wave_button_pressed"]
 [connection signal="pressed" from="Control/TowerCards/MenuToggleButton" to="." method="_on_menu_toggle_button_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/SlowDown" to="." method="_on_slow_down_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/SpeedUp" to="." method="_on_speed_up_pressed"]
+[connection signal="close" from="Control/TowerMenu" to="." method="_on_tower_menu_close"]

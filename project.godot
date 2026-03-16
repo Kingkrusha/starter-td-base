@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Tower defense"
-run/main_scene="uid://cnj438cs45i3f"
+run/main_scene="uid://l55pr03rxtvs"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -41,7 +41,3 @@ exit={
 2d_physics/layer_1="Enemies"
 2d_physics/layer_2="Bullets"
 2d_physics/layer_3="Towers"
-
-[rendering]
-
-textures/canvas_textures/default_texture_filter=0

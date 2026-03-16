@@ -19,6 +19,8 @@ particle_flag_disable_z = true
 initial_velocity_min = 40.0
 initial_velocity_max = 60.0
 gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
 anim_speed_min = 0.5
 anim_speed_max = 1.0
 
@@ -28,6 +30,8 @@ direction = Vector3(-1, 0, 0)
 initial_velocity_min = 40.0
 initial_velocity_max = 60.0
 gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
 anim_speed_min = 0.5
 anim_speed_max = 1.0
 
@@ -37,6 +41,8 @@ direction = Vector3(0, -1, 0)
 initial_velocity_min = 40.0
 initial_velocity_max = 60.0
 gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
 anim_speed_min = 0.5
 anim_speed_max = 1.0
 
@@ -46,6 +52,8 @@ direction = Vector3(0, 1, 0)
 initial_velocity_min = 40.0
 initial_velocity_max = 60.0
 gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
 anim_speed_min = 0.5
 anim_speed_max = 1.0
 
