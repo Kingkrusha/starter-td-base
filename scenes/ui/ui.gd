@@ -12,7 +12,7 @@ const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
 		'pressed':"res://graphics/ui/close_normal.png",
 		'hover': "res://graphics/ui/close_hover.png"}}
 var current_state: MenuState = MenuState.CLOSED
-var wave:int = 0
+var wave = overManager.turn
 var game_speed: float = 1.0
 var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
@@ -37,8 +37,8 @@ func update_stats(money: int, health: int):
 
 
 func _on_wave_button_pressed():
+	overManager.set_new_turn()
 	start_wave.emit(wave)
-	wave += 1
 
 func change_button_texture(state: MenuState):
 	$Control/TowerCards/MenuToggleButton.texture_normal = load(MENU_BUTTON_TEXTURES[state]['normal'])
@@ -51,6 +51,8 @@ func _on_menu_toggle_button_pressed():
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = true if current_state == MenuState.OPEN else false
 
+func _on_toggle_scene_button_pressed() -> void:
+	overManager.toggleMode.emit()
 
 
 func _on_slow_down_pressed():

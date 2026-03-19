@@ -10,7 +10,7 @@ var tile_map_coords : Vector2i
 @onready var sprite : Sprite2D = $Sprite 
 
 func _ready ():
-	GameFarmManager.NewDay.connect(_on_new_day)
+	overManager.NewTurn.connect(_on_new_day)
 	
 func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	crop_data = data
@@ -21,7 +21,7 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	days_until_grown = data.days_to_grow
 	sprite.texture = crop_data.growth_sprites[0]
 	
-func _on_new_day (day:int):
+func _on_new_day (_day:int):
 	if not watered:
 		return
 		

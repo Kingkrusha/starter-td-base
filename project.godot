@@ -23,11 +23,16 @@ config/icon="res://icon.svg"
 
 Data="*res://global/data.gd"
 GameFarmManager="*uid://b8cgn3kbegw5j"
+overManager="*uid://djtedv2gjx1pg"
 
 [display]
 
 window/size/borderless=true
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script_splitter/plugin.cfg")
 
 [input]
 

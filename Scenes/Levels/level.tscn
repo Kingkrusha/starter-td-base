@@ -518,7 +518,7 @@ tile_set = SubResource("TileSet_tq1so")
 [node name="TowerPreview" type="Sprite2D" parent="BG" unique_id=2031566472]
 modulate = Color(1, 1, 1, 0.78431374)
 
-[node name="Player Camera" parent="." unique_id=372857730 instance=ExtResource("5_tq1so")]
+[node name="PlayerCamera" parent="." unique_id=372857730 instance=ExtResource("5_tq1so")]
 
 [node name="UI" parent="." unique_id=1655196185 instance=ExtResource("6_rv5g2")]
 

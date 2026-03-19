@@ -10,4 +10,5 @@
 [resource]
 script = ExtResource("1_futi7")
 growth_sprites = Array[Texture]([ExtResource("1_mgucx"), ExtResource("2_eepxt"), ExtResource("3_v31ra"), ExtResource("4_16bpf"), ExtResource("5_07hhx")])
+days_to_grow = 2
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

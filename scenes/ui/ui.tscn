@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://4e4dveqj5cpq"]
 
 [ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="1_o3d1f"]
-[ext_resource type="Script" uid="uid://c7te4c7tl4gby" path="res://scenes/ui/ui.gd" id="1_pfayw"]
+[ext_resource type="Script" uid="uid://c7te4c7tl4gby" path="res://Scenes/Ui/ui.gd" id="1_pfayw"]
 [ext_resource type="Texture2D" uid="uid://5fcgjf624a6x" path="res://graphics/ui/frame.png" id="2_tsrkt"]
 [ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="3_rjvug"]
 [ext_resource type="Texture2D" uid="uid://b3k0r3etcd08f" path="res://graphics/ui/dollar.png" id="4_03p2l"]
@@ -208,8 +208,27 @@ text = " 1 X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ToggleSceneButton" type="Button" parent="Control" unique_id=620428279]
+custom_minimum_size = Vector2(192, 40)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -216.0
+offset_top = 20.0
+offset_right = -22.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("1_o3d1f")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_mf8j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_o3d1f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ja3lj")
+text = "Above Ground"
+
 [connection signal="pressed" from="Control/WaveButton" to="." method="_on_wave_button_pressed"]
 [connection signal="pressed" from="Control/TowerCards/MenuToggleButton" to="." method="_on_menu_toggle_button_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/SlowDown" to="." method="_on_slow_down_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/VBoxContainer/HBoxContainer/SpeedUp" to="." method="_on_speed_up_pressed"]
+[connection signal="pressed" from="Control/ToggleSceneButton" to="." method="_on_toggle_scene_button_pressed"]

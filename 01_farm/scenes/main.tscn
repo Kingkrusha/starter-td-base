@@ -335,7 +335,7 @@ offset_right = -23.0
 offset_bottom = 79.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 28
-text = "Next Day"
+text = "Beneath the Soil"
 
 [node name="BuySeedButton" type="BaseButton" parent="CanvasLayer" unique_id=1504593121]
 unique_name_in_owner = false

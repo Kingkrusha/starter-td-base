@@ -28,7 +28,8 @@ var tile_atlas_coords : Dictionary[TileType, Vector2i] = {
 @onready var plant_seed_sound : AudioStreamPlayer = $PlantSeedSound
 @onready var harvest_sound : AudioStreamPlayer = $HarvestSound
 func _ready ():
-	GameFarmManager.NewDay.connect(_on_new_day)
+	#GameFarmManager.NewDay.connect(_on_new_day)
+	overManager.NewTurn.connect(_on_new_day)
 	GameFarmManager.HarvestCrop.connect(_on_harvest_crop)
 	for cell in tile_map.get_used_cells():
 		tile_info[cell] = TileInfo.new()
