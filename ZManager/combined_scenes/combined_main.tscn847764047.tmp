@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://re8lhm4uq2rw"]
+
+[ext_resource type="PackedScene" uid="uid://4ag7rchc255l" path="res://01_farm/scenes/main.tscn" id="1_q02fv"]
+[ext_resource type="Script" uid="uid://b45ieah6pbcj0" path="res://ZManager/combined_main.gd" id="1_xnitx"]
+[ext_resource type="PackedScene" uid="uid://cnj438cs45i3f" path="res://Scenes/Levels/level.tscn" id="2_2jqjl"]
+
+[node name="combined_Main" type="Node2D" unique_id=1877780561]
+script = ExtResource("1_xnitx")
+
+[node name="Level" parent="." unique_id=1689850729 instance=ExtResource("2_2jqjl")]
+
+[node name="main" parent="." unique_id=1857958262 instance=ExtResource("1_q02fv")]

@@ -1,5 +1,7 @@
 extends Node
 
+signal money_changed(new_value)
+
 enum Tower {BASIC, BLAST, MORTAR, SLOW, BOMB}
 enum Bullet {SINGLE, FIRE, MORTAR_EXPLOSION, BOMB}
 enum Enemy {DEFAULT, FAST, STRONG, BIG, BOSS}
@@ -190,6 +192,7 @@ const ENEMY_DATA = {
 	Enemy.BIG: {'health': 20, 'texture': "res://graphics/Ships/ship_0005.png", 'speed': 150, 'spawn_cost': 5, 'spawn_weight': 3},
 	Enemy.BOSS: {'health': 50, 'texture': "res://graphics/Ships/ship_0015.png", 'speed': 140, 'spawn_cost': 14, 'spawn_weight': 1}}
 
+
 var health: int = 100:
 	set(value):
 		health = value
@@ -197,6 +200,11 @@ var health: int = 100:
 var money = 9999:
 	set(value):
 		money = value
-		get_tree().get_first_node_in_group("UI").update_stats(money, health)
-		for tower_card in get_tree().get_nodes_in_group('TowerCard'):
-			tower_card.toggle_active(money)
+		money_changed.emit(money)
+		var ui = get_tree().get_first_node_in_group("UI")
+		print("Money Added")
+		if ui:
+			print("UI error")
+			ui.update_stats(money, health)
+			for tower_card in get_tree().get_nodes_in_group('TowerCard'):
+				tower_card.toggle_active(money)

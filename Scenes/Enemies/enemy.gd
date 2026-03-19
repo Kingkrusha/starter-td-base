@@ -46,7 +46,7 @@ func hit(ref):
 			apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
 	#print("Dealing ", ref.damage, " damage")
 	if health <=0 :
-		Data.money += reward
+		overManager.give_money_farm(reward)
 		queue_free.call_deferred()
 
 func flash():

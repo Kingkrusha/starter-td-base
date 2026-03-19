@@ -1,10 +1,10 @@
 [gd_scene format=4 uid="uid://cnj438cs45i3f"]
 
-[ext_resource type="Script" uid="uid://4ux7812oiigt" path="res://scenes/levels/level.gd" id="1_f1n8c"]
+[ext_resource type="Script" uid="uid://4ux7812oiigt" path="res://Scenes/Levels/level.gd" id="1_f1n8c"]
 [ext_resource type="Texture2D" uid="uid://385v1i5ways2" path="res://graphics/tilesets/grass_tile_bg.png" id="3_yjxcc"]
 [ext_resource type="Texture2D" uid="uid://ddclvt0mlpvl0" path="res://graphics/tilesets/grass_paths.png" id="4_lkqqh"]
-[ext_resource type="PackedScene" uid="uid://k2uh63vandnx" path="res://scenes/ui/player_camera.tscn" id="5_tq1so"]
-[ext_resource type="PackedScene" uid="uid://4e4dveqj5cpq" path="res://scenes/ui/ui.tscn" id="6_rv5g2"]
+[ext_resource type="PackedScene" uid="uid://k2uh63vandnx" path="res://Scenes/Ui/player_camera.tscn" id="5_tq1so"]
+[ext_resource type="PackedScene" uid="uid://4e4dveqj5cpq" path="res://Scenes/Ui/ui.tscn" id="6_rv5g2"]
 
 [sub_resource type="Curve2D" id="Curve2D_tq1so"]
 _data = {
@@ -518,7 +518,7 @@ tile_set = SubResource("TileSet_tq1so")
 [node name="TowerPreview" type="Sprite2D" parent="BG" unique_id=2031566472]
 modulate = Color(1, 1, 1, 0.78431374)
 
-[node name="Player Camera" parent="." unique_id=372857730 instance=ExtResource("5_tq1so")]
+[node name="PlayerCamera" parent="." unique_id=372857730 instance=ExtResource("5_tq1so")]
 
 [node name="UI" parent="." unique_id=1655196185 instance=ExtResource("6_rv5g2")]
 
