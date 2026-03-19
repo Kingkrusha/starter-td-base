@@ -1,8 +1,10 @@
 extends Tower
-
+var animation_scale : float = 6.0
 
 func _ready():
-	type = Data.Tower.BASIC
+	twr_range = 60
+	track_levels = { "damage": 0, "area": 0, "attack_speed": 0 }
+	type = Data.Tower.BOMB
 	init_stats()
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]["tracks"]["attack_speed"]["base"]
 
@@ -15,7 +17,7 @@ func _process(_delta):
 func _on_reload_timer_timeout():
 	if enemies.size() > 0:
 		var dir = Vector2.DOWN.rotated($Turret.rotation).normalized()
-		shoot.emit($Turret/BulletSpawn.global_position + dir, $Turret.rotation, Data.Bullet.SINGLE, self)
+		shoot.emit($Turret/BulletSpawn.global_position + dir , $Turret.rotation, Data.Bullet.BOMB, self)
 		
 func apply_big_upgrade(_key : String):
 	pass

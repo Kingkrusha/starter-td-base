@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://nqj0vmiat8us"]
+
+[ext_resource type="Script" uid="uid://cp57ln4y4pkvk" path="res://scenes/bullets/bomb.gd" id="1_mopht"]
+[ext_resource type="Texture2D" uid="uid://1xv3l3o87o12" path="res://graphics/bullets/default.png" id="2_lpuq3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y25gk"]
+size = Vector2(6, 14)
+
+[node name="Bomb" type="Area2D" unique_id=1671156096]
+scale = Vector2(6, 6)
+collision_layer = 2
+script = ExtResource("1_mopht")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1568823988]
+self_modulate = Color(1, 0.45882353, 0, 1)
+texture = ExtResource("2_lpuq3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=905060359]
+shape = SubResource("RectangleShape2D_y25gk")
+
+[node name="Timer" type="Timer" parent="." unique_id=1362790402]
+one_shot = true
+autostart = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

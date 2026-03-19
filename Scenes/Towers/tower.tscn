@@ -16,6 +16,8 @@ texture = ExtResource("2_g767u")
 
 [node name="Turret" type="Sprite2D" parent="." unique_id=602573845]
 
+[node name="BulletSpawn" type="Node2D" parent="Turret" unique_id=853895909]
+
 [node name="EnemyDetectionArea" type="Area2D" parent="." unique_id=37526851]
 collision_layer = 0
 

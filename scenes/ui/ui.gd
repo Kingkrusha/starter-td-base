@@ -19,6 +19,7 @@ var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 
 func _ready():
+	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))
 	update_stats(Data.money,Data.health)
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = false
@@ -28,8 +29,10 @@ func _ready():
 		$Control/TowerCards/TowerCardsContainer.add_child(tower_card)
 		tower_card.connect('press', tower_select)
 
+
 func tower_select(tower_enum: Data.Tower):
 	place_tower.emit(tower_enum)
+
 
 func update_stats(money: int, health: int):
 	$Control/StatsContainer/PanelContainer2/HBoxContainer/MoneyLabel.text = str(money)
@@ -39,6 +42,8 @@ func update_stats(money: int, health: int):
 func _on_wave_button_pressed():
 	start_wave.emit(wave)
 	wave += 1
+	$Control/WaveButton.text = ("Start Wave " + str(wave +1 ))
+	$Control/WaveButton.disabled = true
 
 func change_button_texture(state: MenuState):
 	$Control/TowerCards/MenuToggleButton.texture_normal = load(MENU_BUTTON_TEXTURES[state]['normal'])
@@ -126,7 +131,8 @@ func _on_speed_up_pressed():
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(game_speed) + " X")
 	else:
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(int(game_speed)) + " X")
-		
+
+
 func show_tower_menu(tower: Tower):
 	$Control/TowerMenu.setup(tower)
 	$Control/TowerMenu.visible = true
@@ -134,3 +140,7 @@ func show_tower_menu(tower: Tower):
 
 func _on_tower_menu_close():
 	closemenu.emit()
+
+
+func enable_wave_button():
+	$Control/WaveButton.disabled = false

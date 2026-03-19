@@ -212,6 +212,7 @@ vertical_alignment = 1
 [node name="TowerMenu" parent="Control" unique_id=511109904 instance=ExtResource("10_y220t")]
 visible = false
 layout_mode = 1
+offset_bottom = 10.0
 
 [connection signal="pressed" from="Control/WaveButton" to="." method="_on_wave_button_pressed"]
 [connection signal="pressed" from="Control/TowerCards/MenuToggleButton" to="." method="_on_menu_toggle_button_pressed"]

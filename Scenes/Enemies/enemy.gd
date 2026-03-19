@@ -1,5 +1,7 @@
 extends Area2D
 
+var explosion_scene = preload("res://scenes/bullets/explosion.tscn")
+
 var speed : int
 var health : int
 var reward: int
@@ -24,6 +26,9 @@ func _process(delta):
 
 
 func _on_area_entered(bullet: Area2D):
+	#if bullet.dmg_type == 'explosion':
+		#explode(bullet.parent_tower)
+		#return
 	hit(bullet)
 	if bullet.pierce > 0:
 		bullet.pierce -= 1
@@ -31,10 +36,14 @@ func _on_area_entered(bullet: Area2D):
 		bullet.queue_free.call_deferred()
 		
 func hit(ref):
-	flash()
-	health -= ref.damage
-	if ref.dmg_type == "slow":
-		apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
+	if ref.dmg_type == "explosion":
+		ref.explode()
+		return
+	else:
+		flash()
+		health -= ref.damage
+		if ref.dmg_type == "slow":
+			apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
 	#print("Dealing ", ref.damage, " damage")
 	if health <=0 :
 		Data.money += reward
@@ -53,3 +62,7 @@ func apply_slow( new_speed: float, duration: float ):
 
 func _on_slow_timer_timeout():
 	speed_mult = 1.0
+
+#func explode(parent):
+	#var explosion = explosion_scene.instantiate()
+	#explosion.setup(self.global_position, parent)

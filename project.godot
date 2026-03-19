@@ -26,7 +26,7 @@ Data="*res://global/data.gd"
 [display]
 
 window/size/borderless=true
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 
 [input]
 
@@ -41,3 +41,7 @@ exit={
 2d_physics/layer_1="Enemies"
 2d_physics/layer_2="Bullets"
 2d_physics/layer_3="Towers"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

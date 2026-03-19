@@ -62,6 +62,7 @@ const TOWER_DATA = {
 		'name': 'Bomb',
 		'cost': 40,
 		'reload_time': 1.2,
+		'twr_range': 60,
 		'bullet': Bullet.SINGLE,
 		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"}}

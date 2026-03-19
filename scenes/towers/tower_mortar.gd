@@ -1,6 +1,6 @@
 extends Tower
 var placing_crosshair: bool
-
+var animation_scale : float = 1.0
 
 func _ready():
 	track_levels = { "damage": 0, "area": 0, "attack_speed": 0 }

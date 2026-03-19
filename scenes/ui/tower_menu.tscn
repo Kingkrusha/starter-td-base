@@ -140,10 +140,12 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=34131752]
+[node name="Icon" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=34131752]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("6_gy57x")
+expand_mode = 1
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=843281482]
 layout_mode = 2
@@ -168,10 +170,12 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=637564343]
+[node name="Icon" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=637564343]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("6_gy57x")
+expand_mode = 1
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1178192568]
 layout_mode = 2
@@ -196,10 +200,12 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1054024821]
+[node name="Icon" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1054024821]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("6_gy57x")
+expand_mode = 1
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1491696540]
 layout_mode = 2

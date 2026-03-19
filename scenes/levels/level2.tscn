@@ -10,7 +10,7 @@
 [sub_resource type="Curve2D" id="Curve2D_ok6xr"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -1566.481, -1293.236, 0, 0, 0, 0, -1566.481, -881.102, 0, 0, 0, 0, -2049.5837, -881.102, 0, 0, 0, 0, -2049.5837, 950.6043, 0, 0, 0, 0, 271.66727, 950.6043, 0, 0, 0, 0, 271.66727, -613.7719, 0, 0, 0, 0, -1224.7739, -613.7719, 0, 0, 0, 0, -1224.7739, 396.1419, 0, 0, 0, 0, 1614.9293, 396.1419, 0, 0, 0, 0, 1614.9293, -445.4529, 0, 0, 0, 0, 2690.1282, -442.97763)
+"points": PackedVector2Array(0, 0, 0, 0, -1566.481, -1504.8723, 0, 0, 0, 0, -1566.481, -881.102, 0, 0, 0, 0, -2049.5837, -881.102, 0, 0, 0, 0, -2049.5837, 950.6043, 0, 0, 0, 0, 271.66727, 950.6043, 0, 0, 0, 0, 271.66727, -613.7719, 0, 0, 0, 0, -1224.7739, -613.7719, 0, 0, 0, 0, -1224.7739, 396.1419, 0, 0, 0, 0, 1614.9293, 396.1419, 0, 0, 0, 0, 1614.9293, -445.4529, 0, 0, 0, 0, 2690.1282, -442.97763)
 }
 point_count = 11
 
@@ -288,6 +288,8 @@ sources/1 = SubResource("TileSetAtlasSource_d5djh")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d5djh"]
 size = Vector2(24, 24)
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ok6xr"]
+
 [node name="Level" type="Node2D" unique_id=1689850729]
 script = ExtResource("1_d5djh")
 
@@ -333,6 +335,8 @@ script = ExtResource("3_ok6xr")
 [node name="Player Camera" parent="." unique_id=372857730 instance=ExtResource("4_k0mew")]
 position = Vector2(-61, -111)
 zoom = Vector2(0.333, 0.333)
+min_zoom = 0.333
+zoom_incriment = 0.001
 
 [node name="UI" parent="." unique_id=1655196185 instance=ExtResource("5_b0vvs")]
 
@@ -355,6 +359,27 @@ polygon = PackedVector2Array(1047.8724, 1388.7288, 1223.1445, 1204.3206, 1171.59
 
 [node name="Trees2" type="CollisionPolygon2D" parent="Background/NoPlaceZones" unique_id=1849009076]
 polygon = PackedVector2Array(581.78564, -1428.2361, 536.1265, -1360.1659, 643.6464, -1341.6013, 838.0659, -1321.7991, 948.53156, -1228.9761, 1058.9972, -1126.2521, 1020.70245, -1001.2504, 1013.99634, -895.95374, 1086.1672, -866.25037, 1301.2069, -904.6172, 1559.7748, -1065.6077, 1751.2485, -1027.2408, 1854.3499, -1075.5088, 1861.7142, -1158.4307, 1799.8534, -1248.7783, 1705.5895, -1446.8007)
+
+[node name="WorldBounds" type="Area2D" parent="Background" unique_id=2033040665]
+
+[node name="Left" type="CollisionShape2D" parent="Background/WorldBounds" unique_id=1259250744]
+position = Vector2(-2545.1284, 5.4001335e-13)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_ok6xr")
+
+[node name="Right" type="CollisionShape2D" parent="Background/WorldBounds" unique_id=1727805067]
+position = Vector2(2551.0198, 2.5124791e-11)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_ok6xr")
+
+[node name="Top" type="CollisionShape2D" parent="Background/WorldBounds" unique_id=1469831412]
+position = Vector2(-2545.1282, -1426.9983)
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_ok6xr")
+
+[node name="Bottom" type="CollisionShape2D" parent="Background/WorldBounds" unique_id=1795878919]
+position = Vector2(-2545.1282, 1428.236)
+shape = SubResource("WorldBoundaryShape2D_ok6xr")
 
 [connection signal="area_entered" from="BG/TowerPreview/Tower Footprint" to="." method="_on_tower_footprint_area_entered"]
 [connection signal="area_exited" from="BG/TowerPreview/Tower Footprint" to="." method="_on_tower_footprint_area_exited"]

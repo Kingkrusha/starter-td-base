@@ -12,7 +12,7 @@ extends Camera2D
 	#elif event is InputEventMouseButton and event.button_index == 3 and not event.pressed:
 		#drag = false
 	#elif event is InputEventMouseButton and event.pressed:
-		#var current_zoom := zoom.x  # zoom is Vector2; we keep it uniform
+		#var current_zoom := zoom.x 
 		#var target := current_zoom
 		#if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			#target = current_zoom - zoom_incriment

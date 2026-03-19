@@ -3,11 +3,13 @@ extends Node2D
 var enemy_scene = preload("res://scenes/Enemies/enemy.tscn")
 var bullet_scene = preload("res://scenes/bullets/bullet.tscn")
 var explosion_scene = preload("res://scenes/bullets/explosion.tscn")
+var bomb_scene = preload("res://scenes/bullets/bomb.tscn")
 var tower_scenes = {
 	Data.Tower.BASIC: "res://scenes/towers/tower_basic.tscn",
 	Data.Tower.BLAST: "res://scenes/towers/tower_blaster.tscn",
 	Data.Tower.MORTAR: "res://scenes/towers/tower_mortar.tscn",
-	Data.Tower.SLOW: "res://scenes/towers/tower_slow.tscn"}
+	Data.Tower.SLOW: "res://scenes/towers/tower_slow.tscn",
+	Data.Tower.BOMB: "res://scenes/towers/tower_bomb.tscn"}
 	
 var place_tower: bool:
 	set(value):
@@ -20,25 +22,35 @@ var tower_menu: bool
 var ongoing_wave: bool
 var spawning_enemies: bool
 var valid_placement: bool = true
-
+signal enable_wave_button()
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
 	$UI.connect("start_wave", spawn_wave)
+	#$"Player Camera".limit_bottom = $Background/WorldBounds/Bottom.global_position.y
+	#$"Player Camera".limit_top = $Background/WorldBounds/Top.global_position.y
+	#$"Player Camera".limit_left = $Background/WorldBounds/Left.global_position.x
+	#$"Player Camera".limit_right = $Background/WorldBounds/Right.global_position.x
+
 
 func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_ref: Node = null):
 	if bullet_enum == Data.Bullet.SINGLE:
 		var bullet = bullet_scene.instantiate()
 		bullet.setup(pos, angle, bullet_enum, tower_ref)
 		$Bullets.add_child(bullet)
-	if bullet_enum == Data.Bullet.FIRE:
+
+	elif bullet_enum == Data.Bullet.FIRE:
 		for enemy in get_tree().get_nodes_in_group('enemies'):
 			if enemy in tower_ref.enemies:
 				enemy.hit(tower_ref)
-	if bullet_enum == Data.Bullet.MORTAR_EXPLOSION:
+	elif bullet_enum == Data.Bullet.MORTAR_EXPLOSION:
 		var explosion = explosion_scene.instantiate()
 		explosion.setup(pos, tower_ref)
 		$Bullets.add_child(explosion)
+	elif bullet_enum == Data.Bullet.BOMB:
+		var bomb = bomb_scene.instantiate()
+		bomb.setup(pos, angle, bullet_enum, tower_ref)
+		$Bullets.add_child(bomb)
 
 
 func tower_selection(tower:Tower):
@@ -60,8 +72,12 @@ func _on_ui_place_tower(tower_type: Data.Tower):
 	$BG/TowerPreview.texture = load(Data.TOWER_DATA[tower_type]['thumbnail'])
 	if selected_tower == Data.Tower.MORTAR:
 		return
-	$BG/TowerPreview/RangePreview.range = Data.UPGRADE_DATA[selected_tower]['tracks']['range']['base']
-	$BG/TowerPreview/RangePreview.queue_redraw()
+	elif selected_tower == Data.Tower.BOMB:
+		$BG/TowerPreview/RangePreview.range = Data.TOWER_DATA[selected_tower]['twr_range']
+		$BG/TowerPreview/RangePreview.queue_redraw()
+	else:
+		$BG/TowerPreview/RangePreview.range = Data.UPGRADE_DATA[selected_tower]['tracks']['range']['base']
+		$BG/TowerPreview/RangePreview.queue_redraw()
 	
 	
 func _input(event: InputEvent):
@@ -149,8 +165,9 @@ func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) 
 
 
 func _process(_delta):
-	if get_tree().get_nodes_in_group("enemies").size() == 0 and not spawning_enemies:
+	if get_tree().get_nodes_in_group("enemies").size() == 0 and not spawning_enemies and ongoing_wave == true:
 		ongoing_wave = false
+		$UI.enable_wave_button()
 
 
 func _on_tower_footprint_area_entered(_area):

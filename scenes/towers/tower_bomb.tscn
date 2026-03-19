@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dnq5a2n0mwki2"]
 
 [ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://scenes/towers/tower.tscn" id="1_ut4rp"]
-[ext_resource type="Script" uid="uid://bf6pkfcte6ikk" path="res://scenes/towers/tower_basic.gd" id="2_7x0x5"]
+[ext_resource type="Script" uid="uid://cyip1i0c0pex0" path="res://scenes/towers/tower_bomb.gd" id="2_ut4rp"]
 [ext_resource type="Texture2D" uid="uid://dcus2mnf1agk7" path="res://graphics/towers/basic/basic tower bottom.png" id="3_posww"]
 [ext_resource type="Texture2D" uid="uid://drqd7mybdere0" path="res://graphics/towers/basic/basic tower top.png" id="4_ht7yb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t18nb"]
-radius = 100.0
+radius = 60.0
 
 [node name="TowerBasic" unique_id=2013600930 instance=ExtResource("1_ut4rp")]
-script = ExtResource("2_7x0x5")
+script = ExtResource("2_ut4rp")
 
 [node name="Base" parent="." index="0" unique_id=1033670289]
 texture = ExtResource("3_posww")
