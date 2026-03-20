@@ -19,6 +19,7 @@ func _update_tower_money (amount : int):
 	tower_money = amount
 
 func _update_farm_money (amount : int):
+	print("Hit")
 	plant_money = amount
 
 func give_money_farm (amount : int):

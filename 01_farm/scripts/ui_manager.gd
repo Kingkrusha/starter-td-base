@@ -10,8 +10,9 @@ func _ready():
 		if child is ToolButton:
 			tool_buttons.append(child)
 	GameFarmManager.SetPlayerTool.connect(_on_set_player_tool)
-	overManager.ChangeFarmMoney.connect(_on_change_money)
+	GameFarmManager.money_changed.connect(_on_change_money)
 	overManager.NewTurn.connect(_on_new_day)
+	_on_change_money(GameFarmManager.money)
 func _on_set_player_tool (tool : PlayerTools.Tool, seed : CropData):
 	for button in tool_buttons:
 		if button.tool != tool or button.seed != seed:
