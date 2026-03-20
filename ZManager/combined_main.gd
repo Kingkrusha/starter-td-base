@@ -1,41 +1,68 @@
 extends Node2D
 
-@onready var scene_farm = $main
-@onready var scene_tower = $Level
-@onready var farm_canvas = $main/CanvasLayer      
-@onready var tower_canvas = $Level/UI
-@onready var farm_tile = $main/FarmManager/FarmTileMap
-@onready var tower_tile = $Level/BG/TileMapLayer
-@onready var farm_camera = $main/Camera2D
-@onready var tower_camera = $Level/PlayerCamera
-@onready var farm_crop = $main
+@export var sceneFarm: PackedScene
+@export var sceneTower: PackedScene
+var farm: Dictionary
+var td: Dictionary
 
+
+func bind_farm(root_node: Node2D) -> Dictionary:
+	return {
+		"root": root_node,
+		"ui": root_node.get_node("CanvasLayer"),
+		"tile": root_node.get_node("FarmManager/FarmTileMap"),
+		"camera": root_node.get_node("Camera2D")
+	}
+
+
+func bind_tower(root_node: Node2D) -> Dictionary:
+	return {
+		"root": root_node,
+		"ui": root_node.get_node("UI"),
+		"tile": root_node.get_node("BG/TileMapLayer"),
+		"camera": root_node.get_node("Player Camera")
+	}
+
+
+func apply_view_state(view: Dictionary, is_active: bool):
+	var root: Node2D = view["root"]
+	var ui: CanvasLayer = view["ui"]
+	var tile: CanvasItem = view["tile"]
+	var camera: Camera2D = view["camera"]
+	root.visible = is_active
+	ui.visible = is_active
+	if tile : tile.visible = is_active
+	camera.enabled = is_active
+	root.process_mode = Node.PROCESS_MODE_INHERIT if is_active else Node.PROCESS_MODE_DISABLED
 
 
 func _ready():
-	scene_farm.show()
-	farm_canvas.visible = true
-	farm_tile.show()
-	farm_camera.enabled = true
-	scene_farm.process_mode = Node.PROCESS_MODE_INHERIT
-	
-	
-	scene_tower.hide()
-	tower_canvas.visible = false
-	tower_tile.hide()
-	tower_camera.enabled = false
-	scene_tower.process_mode = Node.PROCESS_MODE_DISABLED
-	overManager.toggleMode.connect(toggle_scenes)
+	farm = bind_farm(sceneFarm.instantiate())
+	td = bind_tower(sceneTower.instantiate())
+	$scenes.add_child(farm["root"])
+	$scenes.add_child(td["root"])
+	apply_view_state(farm, true)
+	apply_view_state(td, false)
+	if not overManager.toggleMode.is_connected(toggle_scenes):
+		overManager.toggleMode.connect(toggle_scenes)
 	
 func toggle_scenes():
-	scene_farm.visible = !scene_farm.visible
-	farm_canvas.visible = !farm_canvas.visible
-	farm_tile.visible = !farm_tile.visible
-	farm_camera.enabled = !farm_camera.enabled
-	scene_farm.process_mode = Node.PROCESS_MODE_DISABLED if !scene_farm.visible else Node.PROCESS_MODE_INHERIT
+	if farm["root"].visible == true:
+		apply_view_state(farm, false)
+		apply_view_state(td, true)
+	else:
+		apply_view_state(farm, true)
+		apply_view_state(td, false)
 	
-	scene_tower.visible = !scene_tower.visible
-	tower_canvas.visible = !tower_canvas.visible
-	tower_tile.visible = !tower_tile.visible
-	tower_camera.enabled = !tower_camera.enabled
-	scene_tower.process_mode = Node.PROCESS_MODE_DISABLED if !scene_tower.visible else Node.PROCESS_MODE_INHERIT
+#func toggle_scenes():
+	#farm.visible = ! farm.visible
+	#farm_canvas.visible = !farm_canvas.visible
+	#farm_tile.visible = !farm_tile.visible
+	#farm_camera.enabled = !farm_camera.enabled
+	#farm.process_mode = Node.PROCESS_MODE_DISABLED if !scene_farm.visible else Node.PROCESS_MODE_INHERIT
+	#
+	#td.visible = !td.visible
+	#tower_canvas.visible = !tower_canvas.visible
+	#tower_tile.visible = !tower_tile.visible
+	#tower_camera.enabled = !tower_camera.enabled
+	#td.process_mode = Node.PROCESS_MODE_DISABLED if !td.visible else Node.PROCESS_MODE_INHERIT
