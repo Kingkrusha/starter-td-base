@@ -3,6 +3,7 @@ extends CanvasLayer
 signal place_tower(tower_type: Data.Tower)
 signal start_wave(wave: int)
 signal closemenu()
+signal current_speed(timescale : float, tick_rate : int)
 enum MenuState {CLOSED, OPEN}
 const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
 	'normal': "res://graphics/ui/menu.png", 
@@ -93,7 +94,7 @@ func _on_slow_down_pressed():
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(game_speed) + " X")
 	else:
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(int(game_speed)) + " X")
-
+	current_speed.emit(Engine.time_scale, Engine.physics_ticks_per_second)
 
 #func _on_pause_pressed():
 	#if Engine.time_scale > 0:

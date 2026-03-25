@@ -10,7 +10,10 @@
 [resource]
 script = ExtResource("1_jv2f6")
 growth_sprites = Array[Texture]([ExtResource("1_3nylr"), ExtResource("2_88e4h"), ExtResource("3_ewii4"), ExtResource("4_fe8v2"), ExtResource("5_ctaci")])
-days_to_grow = 2
+days_to_grow = 4
 seed_price = 15
-sell_price = 30
+sell_price_initial = 50
+sell_price_second = 100
+sell_price_third = 150
+sell_price_final = 200
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

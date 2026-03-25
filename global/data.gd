@@ -1,7 +1,7 @@
 extends Node
 
-signal money_changed(new_value)
-
+signal money_changed(new_value : int)
+signal health_changed(new_value : int)
 enum Tower {BASIC, BLAST, MORTAR, SLOW, BOMB}
 enum Bullet {SINGLE, FIRE, MORTAR_EXPLOSION, BOMB}
 enum Enemy {DEFAULT, FAST, STRONG, BIG, BOSS}
@@ -196,15 +196,15 @@ const ENEMY_DATA = {
 var health: int = 100:
 	set(value):
 		health = value
-		get_tree().get_first_node_in_group("UI").update_stats(money, health)
-var money = 9999:
+		health_changed.emit(health)
+		#get_tree().get_first_node_in_group("UI").update_stats(money, health)
+var money = 500:
 	set(value):
 		money = value
 		money_changed.emit(money)
+		print("Current tower money: ", money)
 		var ui = get_tree().get_first_node_in_group("UI")
-		print("Money Added")
 		if ui:
-			print("UI error")
 			ui.update_stats(money, health)
 			for tower_card in get_tree().get_nodes_in_group('TowerCard'):
 				tower_card.toggle_active(money)

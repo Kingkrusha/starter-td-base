@@ -17,13 +17,17 @@ func _ready() -> void:
 # wave/day logic will all be controlled via over_manager for simplicity
 func _update_tower_money (amount : int):
 	tower_money = amount
+	ChangeTowerMoney.emit(tower_money)
 
 func _update_farm_money (amount : int):
-	print("Hit")
+	#print("Farm money update", amount)
 	plant_money = amount
+	ChangeFarmMoney.emit(plant_money)
 
 func give_money_farm (amount : int):
+	#print("Farm money given ", plant_money)
 	plant_money += amount
+	print(plant_money)
 	ChangeFarmMoney.emit(plant_money)
 	
 func give_money_tower (amount : int):
@@ -32,7 +36,7 @@ func give_money_tower (amount : int):
 	ChangeTowerMoney.emit(tower_money)
 	
 func set_new_turn():
-	print("New Turn")
+	#print("New Turn")
 	turn += 1
 	NewTurn.emit(turn)
 	

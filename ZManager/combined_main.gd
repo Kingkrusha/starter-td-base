@@ -1,11 +1,17 @@
 extends Node2D
+signal current_speed(timescale : float, tick_rate : int)
 
 @export var sceneFarm: PackedScene
 @export var sceneTower: PackedScene
 var farm: Dictionary
 var td: Dictionary
+var engine_speed: float = 1.0
+var tick_speed: int = 60
 
-
+func _tower_speed(engine : float, tick : int):
+	engine_speed = engine
+	tick_speed = tick
+	
 func bind_farm(root_node: Node2D) -> Dictionary:
 	return {
 		"root": root_node,
@@ -41,8 +47,11 @@ func _ready():
 	td = bind_tower(sceneTower.instantiate())
 	$scenes.add_child(farm["root"])
 	$scenes.add_child(td["root"])
+	td["ui"].current_speed.connect(_tower_speed)
 	apply_view_state(farm, true)
 	apply_view_state(td, false)
+	
+	
 	if not overManager.toggleMode.is_connected(toggle_scenes):
 		overManager.toggleMode.connect(toggle_scenes)
 	
@@ -50,9 +59,14 @@ func toggle_scenes():
 	if farm["root"].visible == true:
 		apply_view_state(farm, false)
 		apply_view_state(td, true)
+		Engine.time_scale = engine_speed
+		Engine.physics_ticks_per_second = tick_speed
 	else:
 		apply_view_state(farm, true)
 		apply_view_state(td, false)
+		Engine.time_scale = 1.0
+		Engine.physics_ticks_per_second = 60
+		
 	
 #func toggle_scenes():
 	#farm.visible = ! farm.visible

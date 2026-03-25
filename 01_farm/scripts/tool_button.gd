@@ -1,5 +1,5 @@
 class_name ToolButton
-extends TextureButton
+extends Control
 
 @export var tool : PlayerTools.Tool
 @export var seed : CropData
