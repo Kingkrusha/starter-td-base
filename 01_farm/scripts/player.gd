@@ -37,4 +37,9 @@ func _animate ():
 			
 	var anim_name : String = state + "_" + direction
 	
-	anim.play(anim_name)
+	if (direction == "right"):
+		anim.flip_h = true
+		anim.play(anim_name)
+	else:
+		anim.flip_h = false
+		anim.play(anim_name)
