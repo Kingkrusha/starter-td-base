@@ -31,53 +31,62 @@ func _ready ():
 	#GameFarmManager.NewDay.connect(_on_new_day)
 	overManager.NewTurn.connect(_on_new_day)
 	GameFarmManager.HarvestCrop.connect(_on_harvest_crop)
+	tile_info = {}
 	for cell in tile_map.get_used_cells():
 		tile_info[cell] = TileInfo.new()
+
+func _get_tile_info(coords: Vector2i) -> TileInfo:
+	if not tile_info.has(coords):
+		tile_info[coords] = TileInfo.new()
+	return tile_info[coords]
 		
 func _on_new_day (day: int):
 	for tile_pos in tile_map.get_used_cells():
-		if  tile_info[tile_pos].watered:
+		var info := _get_tile_info(tile_pos)
+		if info.watered:
 			_set_tile_state(tile_pos, TileType.TILLED)
-		elif tile_info[tile_pos].tilled:
-			if tile_info[tile_pos].crop == null:
+		elif info.tilled:
+			if info.crop == null:
 				_set_tile_state(tile_pos, TileType.GRASS)
 				
 func _on_harvest_crop(crop : Crop):
-	tile_info[crop.tile_map_coords].crop = null
+	_get_tile_info(crop.tile_map_coords).crop = null
 	_set_tile_state(crop.tile_map_coords, TileType.TILLED)
 
 func try_till_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
+	var info := _get_tile_info(coords)
 	
-	if tile_info[coords].crop:
+	if info.crop:
 		return
-	if tile_info[coords].tilled:
+	if info.tilled:
 		return
 	_set_tile_state(coords, TileType.TILLED)
 	till_sound.play()
 
 func try_water_tile(player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
+	var info := _get_tile_info(coords)
 
 	# return if the tile is not tilled
-	if not tile_info[coords].tilled:
-		print(tile_info[coords].watered)
+	if not info.tilled:
 		return
 
 	_set_tile_state(coords, TileType.TILLED_WATERED)
 	water_sound.play()
 
 	# if there's a crop on the tile, water it
-	if tile_info[coords].crop:
-		tile_info[coords].crop.watered = true
+	if info.crop:
+		info.crop.watered = true
 func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
+	var info := _get_tile_info(coords)
 	
-	if not tile_info[coords].tilled:
+	if not info.tilled:
 		return
-	if tile_info[coords].crop:
+	if info.crop:
 		return
-	if GameFarmManager.owned_seeds[crop_data] <= 0:
+	if not GameFarmManager.owned_seeds.has(crop_data) or GameFarmManager.owned_seeds[crop_data] <= 0:
 		return
 	
 	var crop : Crop = crop_scene.instantiate()
@@ -85,37 +94,39 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	crop.global_position = tile_map.map_to_local(coords)
 	crop._set_crop(crop_data, is_tile_watered(coords), coords)
 	
-	tile_info[coords].crop = crop
+	info.crop = crop
 	
 	GameFarmManager.consume_seed(crop_data)
 	plant_seed_sound.play()
 
 func try_harvest_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
+	var info := _get_tile_info(coords)
 	
-	if not tile_info[coords].crop:
+	if not info.crop:
 		return
 	
-	if not tile_info[coords].crop.harvestable:
+	if not info.crop.harvestable:
 		return
 	
-	GameFarmManager.harvest_crop(tile_info[coords].crop)
-	tile_info[coords].crop = null
+	GameFarmManager.harvest_crop(info.crop)
+	info.crop = null
 	harvest_sound.play()
 
 func is_tile_watered (pos :Vector2) -> bool:
 	var coords : Vector2i = tile_map.local_to_map(pos)
-	return tile_info[coords].watered
+	return _get_tile_info(coords).watered
 	
 func _set_tile_state (coords :Vector2i, tile_type : TileType):
+	var info := _get_tile_info(coords)
 	tile_map.set_cell(coords, 0, tile_atlas_coords[tile_type])
 	match tile_type:
 		TileType.GRASS:
-			tile_info[coords].tilled = false
-			tile_info[coords].watered = false
+			info.tilled = false
+			info.watered = false
 		TileType.TILLED:
-			tile_info[coords].tilled = true
-			tile_info[coords].watered = false
+			info.tilled = true
+			info.watered = false
 		TileType.TILLED_WATERED:
-			tile_info[coords].tilled = true
-			tile_info[coords].watered = true
+			info.tilled = true
+			info.watered = true

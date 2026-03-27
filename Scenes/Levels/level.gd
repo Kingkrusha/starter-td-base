@@ -1,6 +1,6 @@
 extends Node2D
 
-var enemy_scene = preload("res://scenes/Enemies/enemy.tscn")
+var enemy_scene = preload("res://scenes/enemies/enemy.tscn")
 var bullet_scene = preload("res://scenes/bullets/bullet.tscn")
 var explosion_scene = preload("res://scenes/bullets/explosion.tscn")
 var bomb_scene = preload("res://scenes/bullets/bomb.tscn")
@@ -22,11 +22,18 @@ var tower_menu: bool
 var ongoing_wave: bool
 var spawning_enemies: bool
 var valid_placement: bool = true
+var unlocked_special_pool: Array[Data.Enemy] = []
+var pending_special_unlocks: Array[Dictionary] = []
+var selected_specials: Array[Data.Enemy] = []
+var last_special_pick_wave: int = -1
+const DEBUG_SPECIAL_SCHEDULER: bool = true
 signal enable_wave_button()
+signal special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int)
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
 	$UI.connect("start_wave", spawn_wave)
+	special_enemy_approaching.connect(_on_special_enemy_approaching)
 	#$"Player Camera".limit_bottom = $Background/WorldBounds/Bottom.global_position.y
 	#$"Player Camera".limit_top = $Background/WorldBounds/Top.global_position.y
 	#$"Player Camera".limit_left = $Background/WorldBounds/Left.global_position.x
@@ -36,8 +43,8 @@ func _ready() -> void:
 func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_ref: Node = null):
 	if bullet_enum == Data.Bullet.SINGLE:
 		var bullet = bullet_scene.instantiate()
-		bullet.setup(pos, angle, bullet_enum, tower_ref)
 		$Bullets.add_child(bullet)
+		bullet.setup(pos, angle, bullet_enum, tower_ref)
 
 	elif bullet_enum == Data.Bullet.FIRE:
 		for enemy in get_tree().get_nodes_in_group('enemies'):
@@ -49,8 +56,8 @@ func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_r
 		$Bullets.add_child(explosion)
 	elif bullet_enum == Data.Bullet.BOMB:
 		var bomb = bomb_scene.instantiate()
-		bomb.setup(pos, angle, bullet_enum, tower_ref)
 		$Bullets.add_child(bomb)
+		bomb.setup(pos, angle, bullet_enum, tower_ref)
 
 
 func tower_selection(tower:Tower):
@@ -116,9 +123,18 @@ func spawn_wave(wave_idx):
 	if not ongoing_wave:
 		spawning_enemies = true
 		ongoing_wave = true
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("\n=== WAVE %d START ===" % wave_idx)
+			print("[SPECIAL] Pending before processing: %s" % [pending_special_unlocks])
+			print("[SPECIAL] Unlocked before processing: %s" % [_enemy_list_debug_names(unlocked_special_pool)])
+		_process_pending_special_unlocks(wave_idx)
+		_schedule_next_special_pick(wave_idx)
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("[SPECIAL] Pending after processing/pick: %s" % [pending_special_unlocks])
+			print("[SPECIAL] Selected set: %s" % [_enemy_list_debug_names(selected_specials)])
 		var wave_data = Data.get_wave_data(wave_idx)
 		var credits: int = wave_data["credits"]
-		var pool: Array = wave_data["pool"]
+		var pool: Array = _build_spawn_pool(wave_data["pool"])
 		var delay: float = wave_data["delay"]
 
 		# Build spawn list by spending credits
@@ -159,6 +175,7 @@ func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) 
 		var path_follow = PathFollow2D.new()
 		var enemy = enemy_scene.instantiate()
 		enemy.setup(path_follow, enemy_type, wave_idx)
+		enemy.special_death_effect.connect(_on_enemy_special_death_effect)
 		path_follow.add_child(enemy)
 		$Path2D.add_child(path_follow)
 		await get_tree().create_timer(delay).timeout
@@ -182,3 +199,96 @@ func _on_tower_footprint_area_exited(_area):
 func _on_ui_closemenu():
 	tower_menu = false
 	current_tower = null
+
+
+func _enemy_debug_name(enemy_type: Data.Enemy) -> String:
+	var texture_path := String(Data.ENEMY_DATA[enemy_type].get("texture", "enemy_unknown"))
+	return texture_path.get_file().get_basename()
+
+
+func _enemy_list_debug_names(enemy_list: Array) -> Array[String]:
+	var names: Array[String] = []
+	for enemy_type in enemy_list:
+		names.append(_enemy_debug_name(enemy_type))
+	return names
+
+
+func _schedule_next_special_pick(current_wave: int) -> void:
+	# Every 5 waves (starting at wave 5), pick one unique special and schedule its unlock
+	if current_wave >= Data.SPECIAL_PICK_START_WAVE and (current_wave - Data.SPECIAL_PICK_START_WAVE) % Data.SPECIAL_PICK_INTERVAL == 0:
+		# Find unselected enemies from the pool
+		var available_specials: Array[Data.Enemy] = []
+		for enemy_type in Data.SPECIAL_ENEMY_POOL:
+			if enemy_type not in selected_specials:
+				available_specials.append(enemy_type)
+		
+		if available_specials.is_empty():
+			print("Warning: All special enemies have been selected!")
+			return
+		
+		# Pick random unselected special
+		var picked_special = available_specials[randi() % available_specials.size()]
+		selected_specials.append(picked_special)
+		
+		# Schedule unlock for 2 waves from now
+		var unlock_wave = current_wave + Data.SPECIAL_PREP_DELAY
+		pending_special_unlocks.append({"enemy_type": picked_special, "unlock_wave": unlock_wave})
+		
+		# Emit warning
+		special_enemy_approaching.emit(picked_special, unlock_wave)
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("[SPECIAL] Picked %s (enum=%d) on wave %d, unlocks on wave %d" % [_enemy_debug_name(picked_special), picked_special, current_wave, unlock_wave])
+			print("[SPECIAL] Selected so far: %s" % [_enemy_list_debug_names(selected_specials)])
+
+
+func _process_pending_special_unlocks(current_wave: int) -> void:
+	# Move pending specials whose unlock_wave has been reached into the active pool
+	var to_remove: Array[int] = []
+	for i in range(pending_special_unlocks.size()):
+		var entry = pending_special_unlocks[i]
+		if current_wave >= entry["unlock_wave"]:
+			unlocked_special_pool.append(entry["enemy_type"])
+			to_remove.append(i)
+			if DEBUG_SPECIAL_SCHEDULER:
+				print("[SPECIAL] Unlocked %s at wave %d" % [_enemy_debug_name(entry["enemy_type"]), current_wave])
+	
+	# Remove in reverse order to preserve indices
+	for idx in range(to_remove.size() - 1, -1, -1):
+		pending_special_unlocks.remove_at(to_remove[idx])
+
+	if DEBUG_SPECIAL_SCHEDULER and not to_remove.is_empty():
+		print("[SPECIAL] Active unlocked pool: %s" % [_enemy_list_debug_names(unlocked_special_pool)])
+
+
+func _build_spawn_pool(base_pool: Array) -> Array:
+	# Return base pool plus any unlocked special enemies
+	var combined_pool = base_pool.duplicate()
+	combined_pool.append_array(unlocked_special_pool)
+	if DEBUG_SPECIAL_SCHEDULER:
+		print("[SPECIAL] Spawn pool built. Base=%s UnlockedSpecial=%s Final=%s" % [
+			_enemy_list_debug_names(base_pool),
+			_enemy_list_debug_names(unlocked_special_pool),
+			_enemy_list_debug_names(combined_pool)
+		])
+	return combined_pool
+
+
+func _on_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:
+	# Forward approaching warning to UI
+	$UI.show_special_enemy_approaching(enemy_type, unlock_wave)
+
+
+func _on_enemy_special_death_effect(_effect_id: String, _payload: Dictionary) -> void:
+	# TODO: Handle enemy death-triggered effects.
+	# Example: spawn children with wave scaling, disable nearby towers.
+	pass
+
+
+func _spawn_children_from_death(_payload: Dictionary) -> void:
+	# TODO: Spawn child enemies using current wave scaling and path progress.
+	pass
+
+
+func _disable_nearby_towers(_payload: Dictionary) -> void:
+	# TODO: Find towers in radius and apply temporary disable.
+	pass

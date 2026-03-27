@@ -2,6 +2,7 @@ extends Control
 
 var tower_ref: Tower  
 var track_buttons: Array = []  
+var big_buttons: Array = []
 signal close()
 
 func setup(tower):
@@ -24,10 +25,38 @@ func setup(tower):
 		[$PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3/TextureButton, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3/TextureProgressBar, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3/Cost, $PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3/Icon],
 	]
 	var track_keys = upgrade_data['tracks'].keys()
+	var big_btn_a: TextureButton = $PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/TextureButton
+	var big_btn_b: TextureButton = $PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/TextureButton
+
+	for pair in big_buttons:
+		var btn: TextureButton = pair[0]
+		var cb: Callable = pair[1]
+		if btn.is_connected("pressed", cb):
+			btn.disconnect("pressed", cb)
+	big_buttons.clear()
+
+	var big_a_cb := _on_big_upgrade_pressed.bind("A")
+	var big_b_cb := _on_big_upgrade_pressed.bind("B")
+	big_btn_a.connect("pressed", big_a_cb)
+	big_btn_b.connect("pressed", big_b_cb)
+	big_buttons.append([big_btn_a, big_a_cb])
+	big_buttons.append([big_btn_b, big_b_cb])
+
+	var selected_big : String = tower.big_upgrade_chosen
+	big_btn_a.disabled = selected_big != "" and selected_big != "A"
+	big_btn_b.disabled = selected_big != "" and selected_big != "B"
+	if selected_big == "A":
+		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/Cost.text = "OWNED"
+		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/Cost.text = "LOCKED"
+	elif selected_big == "B":
+		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/Cost.text = "LOCKED"
+		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/Cost.text = "OWNED"
 
 	for pair in track_buttons:
-		if pair[0].is_connected("pressed", _on_track_button_pressed):
-			pair[0].disconnect("pressed", _on_track_button_pressed)
+		var btn: TextureButton = pair[0]
+		var cb: Callable = pair[1]
+		if btn.is_connected("pressed", cb):
+			btn.disconnect("pressed", cb)
 	track_buttons.clear()
 
 	for i in range(min(rows.size(), track_keys.size())):
@@ -64,13 +93,24 @@ func setup(tower):
 				icon.texture = load("res://graphics/sol's stuff/AOE.png")
 				icon.get_parent().tooltip_text = "Increase area of effect"
 
-		btn.connect("pressed", _on_track_button_pressed.bind(track))
-		track_buttons.append([btn, track])
+		var cb := _on_track_button_pressed.bind(track)
+		btn.connect("pressed", cb)
+		track_buttons.append([btn, cb])
 
 
 func _on_track_button_pressed(track: String):
 	tower_ref.apply_track_upgrade(track)
 	setup(tower_ref)
+
+
+func _on_big_upgrade_pressed(key: String):
+	tower_ref.apply_big_upgrade(key)
+	setup(tower_ref)
+
+
+func _on_texture_button_pressed():
+	# Legacy signal connection from the scene file; kept as a no-op.
+	pass
 
 
 func _on_exit_button_pressed():

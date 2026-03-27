@@ -17,17 +17,52 @@ var wave = overManager.turn
 var game_speed: float = 1.0
 var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
+@onready var alert_icon : TextureButton = $Control/AlertIcon
+@onready var alert_text_box: PanelContainer = $"Control/AlertIcon/Text Box"
+@onready var alert_text_label: Label = $"Control/AlertIcon/Text Box/Text"
+
+var current_started_wave: int = 0
+var alert_flash_active: bool = false
+var alert_flash_time: float = 0.0
+var latest_special_enemy: Data.Enemy = Data.Enemy.DEFAULT
+var latest_special_unlock_wave: int = -1
+var has_alert_data: bool = false
 
 func _ready():
+	wave = overManager.turn
+	current_started_wave = wave
 	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))
 	update_stats(Data.money,Data.health)
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = false
+	alert_text_box.visible = false
+	alert_icon.pressed.connect(_on_alert_icon_pressed)
 	for tower in Data.Tower.values():
 		var tower_card = tower_card_scene.instantiate()
 		tower_card.setup(tower)
 		$Control/TowerCards/TowerCardsContainer.add_child(tower_card)
 		tower_card.connect('press', tower_select)
+
+
+func _process(delta: float) -> void:
+	if alert_flash_active:
+		alert_flash_time += delta
+		# Blink by toggling alpha so the icon appears/disappears while staying clickable.
+		var blink_on := int(floor(alert_flash_time * 4.0)) % 2 == 0
+		alert_icon.modulate = Color(1.0, 1.0, 1.0, 1.0 if blink_on else 0.0)
+	else:
+		alert_icon.modulate = Color.WHITE
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not alert_text_box.visible:
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var click_pos: Vector2 = event.position
+		var icon_rect := alert_icon.get_global_rect()
+		var text_rect := alert_text_box.get_global_rect()
+		if not icon_rect.has_point(click_pos) and not text_rect.has_point(click_pos):
+			alert_text_box.visible = false
 
 
 func tower_select(tower_enum: Data.Tower):
@@ -40,11 +75,15 @@ func update_stats(money: int, health: int):
 
 
 func _on_wave_button_pressed():
-	overManager.set_new_turn()
-	start_wave.emit(wave)
-	wave += 1
-	$Control/WaveButton.text = ("Start Wave " + str(wave +1 ))
+	if $Control/WaveButton.disabled:
+		return
 	$Control/WaveButton.disabled = true
+	overManager.set_new_turn()
+	wave = overManager.turn
+	var started_wave = wave
+	start_wave.emit(started_wave)
+	current_started_wave = started_wave
+	$Control/WaveButton.text = ("Start Wave " + str(wave +1 ))
 
 func change_button_texture(state: MenuState):
 	$Control/TowerCards/MenuToggleButton.texture_normal = load(MENU_BUTTON_TEXTURES[state]['normal'])
@@ -147,3 +186,42 @@ func _on_tower_menu_close():
 
 func enable_wave_button():
 	$Control/WaveButton.disabled = false
+
+
+func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:
+	latest_special_enemy = enemy_type
+	latest_special_unlock_wave = unlock_wave
+	has_alert_data = true
+
+	# A newly scheduled special should re-arm flashing and hide the textbox until clicked.
+	alert_text_box.visible = false
+	alert_flash_active = true
+	alert_flash_time = 0.0
+
+	_update_alert_text()
+
+
+func _on_alert_icon_pressed() -> void:
+	if not has_alert_data:
+		return
+	alert_text_box.visible = not alert_text_box.visible
+	if alert_text_box.visible:
+		_update_alert_text()
+		# Stop flashing once the info has been acknowledged.
+		alert_flash_active = false
+
+
+func _update_alert_text() -> void:
+	if not has_alert_data:
+		alert_text_label.text = "No special alerts yet."
+		return
+
+	var enemy_data: Dictionary = Data.ENEMY_DATA.get(latest_special_enemy, {})
+	var description := String(enemy_data.get("special_description", "A special enemy is approaching."))
+	var waves_until := latest_special_unlock_wave - current_started_wave
+
+	if waves_until > 0:
+		alert_text_label.text = "%s\nArrives in %d wave(s)." % [description, waves_until]
+	else:
+		# If already unlocked, keep showing latest enemy info but omit countdown text.
+		alert_text_label.text = description
