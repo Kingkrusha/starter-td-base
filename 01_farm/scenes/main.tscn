@@ -33,8 +33,12 @@ separation = Vector2i(1, 1)
 sources/0 = SubResource("TileSetAtlasSource_jyhfs")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sugp2"]
+radius = 7.0
+height = 16.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i4jtn"]
 radius = 6.0
-height = 15.0
+height = 20.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tiby6"]
 atlas = ExtResource("8_i4jtn")
@@ -269,16 +273,22 @@ zoom = Vector2(4, 4)
 [node name="player" type="CharacterBody2D" parent="." unique_id=477129966]
 script = ExtResource("1_0wfyh")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="player" unique_id=1745232243]
-position = Vector2(0, -5.5)
+[node name="CollisionShape2D_vertical" type="CollisionShape2D" parent="player" unique_id=1745232243]
+visible = false
+position = Vector2(0, -6)
 shape = SubResource("CapsuleShape2D_sugp2")
+
+[node name="CollisionShape2D_side" type="CollisionShape2D" parent="player" unique_id=2050051582]
+position = Vector2(-1, -6)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_i4jtn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="player" unique_id=709824930]
 z_index = 10
 position = Vector2(0, -6.5)
 sprite_frames = SubResource("SpriteFrames_dp3eg")
-animation = &"idle_right"
-frame_progress = 0.3975572
+animation = &"walk_left"
+offset = Vector2(-0.5, -6.5)
 
 [node name="Tools" type="Node2D" parent="player" unique_id=226986425]
 script = ExtResource("5_tbgi4")
