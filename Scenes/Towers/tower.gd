@@ -7,6 +7,8 @@ var pierce: int
 var reload_speed: float 
 var lifetime: float = 1.0
 var bullet_speed: int = 1200
+var bullet_can_bounce: bool = false
+var bullet_bounce_count: int = 0
 var dmg_type = "normal"
 var twr_range: float
 var damage_area: float
@@ -14,6 +16,9 @@ var type: Data.Tower
 var track_levels: Dictionary = { "damage": 0, "range": 0, "attack_speed": 0 }
 var big_upgrade_chosen: String = ""   # "", "A", or "B"
 var show_range: bool = false
+var is_temp_disabled: bool = false
+var disabled_until_time: float = 0.0
+var disable_visual_alpha: float = 0.45
 
 @warning_ignore("unused_signal")
 signal shoot(pos: Vector2, direction: float, bullet_enum: Data.Bullet, tower_ref: Node)
@@ -89,6 +94,22 @@ func apply_track_upgrade(track : String):
 
 func apply_big_upgrade(key : String):
 	pass
+
+
+func apply_temporary_disable(_duration: float) -> void:
+	# TODO: Disable this tower's target/fire behavior for a temporary duration.
+	# Suggested behavior: set is_temp_disabled, dim visuals, resume automatically.
+	pass
+
+
+func _update_disable_state() -> void:
+	# TODO: Tick and clear temporary disable state.
+	pass
+
+
+func is_disabled() -> bool:
+	# TODO: Return true while tower is temporarily disabled.
+	return false
 	
 
 func _draw():

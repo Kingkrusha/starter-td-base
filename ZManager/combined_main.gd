@@ -19,7 +19,7 @@ func bind_tower(root_node: Node2D) -> Dictionary:
 	return {
 		"root": root_node,
 		"ui": root_node.get_node("UI"),
-		"tile": root_node.get_node("BG/TileMapLayer"),
+		"tile": null,
 		"camera": root_node.get_node("Player Camera")
 	}
 

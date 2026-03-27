@@ -18,21 +18,20 @@ var all_crop_data : Array[CropData] = [
 	preload("res://01_farm/crops/tomato.tres")
 ]
 
-var owned_seeds : Dictionary[CropData, int]
+var owned_seeds : Dictionary[CropData, int] = {}
 	
 
 func _ready ():
 	money = overManager.plant_money
 	get_tree().scene_changed.connect(_on_change_scene)
-	GameFarmManager._on_change_scene()
+	_on_change_scene()
 	print(owned_seeds)
-func _on_change_scene ():
+func _on_change_scene (_new_scene: Node = null):
 	#if get_node_or_null("res://01_farm/scenes/main.tscn") == null:
 		#return
 	for cd in all_crop_data:
 		give_seed.call_deferred(cd, 2)
 	money += 10
-	overManager.set_new_turn.call_deferred()
 	
 func harvest_crop (crop : Crop):
 	overManager.give_money_tower(crop.crop_data.sell_price)
