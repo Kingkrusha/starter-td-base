@@ -1,0 +1,265 @@
+[gd_scene format=3 uid="uid://tuo25qjupvgd"]
+
+[ext_resource type="Script" uid="uid://t8ku0t475rst" path="res://01_farm/scripts/buy_seed_button.gd" id="1_0f1il"]
+[ext_resource type="Texture2D" uid="uid://bv03lu74d0rbo" path="res://01_farm/Sprites/UI/ItemBox.png" id="3_kn0gi"]
+[ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="4_ecbg8"]
+[ext_resource type="Script" uid="uid://drtvo46ynx5rw" path="res://01_farm/scripts/tool_button.gd" id="5_veeqt"]
+[ext_resource type="Resource" uid="uid://lg2s2sbojtbg" path="res://01_farm/crops/blackberry.tres" id="6_qs6vf"]
+[ext_resource type="Texture2D" uid="uid://dpq378b2uibbl" path="res://01_farm/Sprites/UI/CornSeed_Icon.png" id="7_n5x30"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jbj1t"]
+font = ExtResource("4_ecbg8")
+font_size = 28
+font_color = Color(0, 0, 0, 1)
+shadow_size = 5
+shadow_color = Color(1, 1, 1, 0.85882354)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7s656"]
+font = ExtResource("4_ecbg8")
+font_size = 28
+font_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 0.8117647)
+
+[node name="Seed_Button" type="Control" unique_id=1875219268]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1.0
+offset_right = 174.0
+offset_bottom = 63.0
+
+[node name="BuySeedButton" type="BaseButton" parent="." unique_id=1588105647]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 173.0
+offset_top = -1.0
+offset_right = 173.0
+offset_bottom = 63.0
+grow_horizontal = 1
+grow_vertical = 1
+rotation = 0.0
+scale = Vector2(1, 1)
+pivot_offset = Vector2(0, 0)
+pivot_offset_ratio = Vector2(0, 0)
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = "Buy Seed"
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = false
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = null
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
+script = ExtResource("1_0f1il")
+crop_data = ExtResource("6_qs6vf")
+metadata/_custom_type_script = "uid://t8ku0t475rst"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="BuySeedButton" unique_id=422248517]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -71.0
+offset_bottom = 64.0
+grow_horizontal = 0
+texture = ExtResource("3_kn0gi")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="PriceText" type="Label" parent="BuySeedButton" unique_id=1615027506]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -61.0
+offset_top = 12.0
+offset_right = -9.794876
+offset_bottom = 54.0
+grow_horizontal = 0
+text = "100$"
+label_settings = SubResource("LabelSettings_jbj1t")
+horizontal_alignment = 2
+
+[node name="Select" type="BaseButton" parent="." unique_id=1027479672]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 104.0
+offset_bottom = 63.0
+grow_horizontal = 1
+grow_vertical = 1
+rotation = 0.0
+scale = Vector2(1, 1)
+pivot_offset = Vector2(0, 0)
+pivot_offset_ratio = Vector2(0, 0)
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = "Current Seeds"
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = false
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = null
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
+script = ExtResource("5_veeqt")
+tool = 3
+seed = ExtResource("6_qs6vf")
+metadata/_custom_type_script = "uid://t8ku0t475rst"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Select" unique_id=1830501230]
+layout_mode = 1
+offset_right = 106.0
+offset_bottom = 64.0
+texture = ExtResource("3_kn0gi")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="Icon" type="TextureRect" parent="Select" unique_id=732563435]
+layout_mode = 1
+offset_left = 11.0
+offset_top = 8.0
+offset_right = 58.0
+offset_bottom = 57.54054
+texture = ExtResource("7_n5x30")
+stretch_mode = 4
+
+[node name="QuantityText" type="Label" parent="Select" unique_id=303095655]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -20.0
+offset_right = -13.0
+offset_bottom = 19.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "50"
+label_settings = SubResource("LabelSettings_7s656")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[connection signal="mouse_entered" from="BuySeedButton" to="BuySeedButton" method="_on_mouse_entered"]

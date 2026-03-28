@@ -83,7 +83,9 @@ func hit(ref):
 	#print("Dealing ", ref.damage, " damage")
 	if health <=0 :
 		_emit_special_death_effects()
-		Data.money += reward
+		
+		overManager.give_money_farm(reward)
+		#print_debug("Reward ", reward)
 		queue_free.call_deferred()
 
 func flash():

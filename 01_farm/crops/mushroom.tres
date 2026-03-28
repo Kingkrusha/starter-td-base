@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://doxfxus6xtpj4"]
+
+[ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_indsd"]
+[ext_resource type="Texture2D" uid="uid://cqinv51ifeab5" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_1_seed.png" id="1_lihfw"]
+[ext_resource type="Texture2D" uid="uid://c6rtkl4c8vyeh" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_2.png" id="2_h5sm7"]
+[ext_resource type="Texture2D" uid="uid://b2v0tguefeyi8" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_3.png" id="3_pt44p"]
+[ext_resource type="Texture2D" uid="uid://bco2w2ooifb5o" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_4.png" id="4_q3rxx"]
+
+[resource]
+script = ExtResource("1_indsd")
+growth_sprites = Array[Texture]([ExtResource("1_lihfw"), ExtResource("2_h5sm7"), ExtResource("3_pt44p"), ExtResource("4_q3rxx")])
+metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

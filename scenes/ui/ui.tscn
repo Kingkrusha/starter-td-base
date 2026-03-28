@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bdrdwyfstc433" path="res://graphics/ui/clock_normal.png" id="7_jcn1r"]
 [ext_resource type="Texture2D" uid="uid://ownp18s83xcg" path="res://graphics/ui/clock_hover.png" id="8_uegxj"]
 [ext_resource type="Texture2D" uid="uid://dpunof0ashj11" path="res://graphics/ui/plus.png" id="9_uegxj"]
-[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="10_y220t"]
+[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://Scenes/Ui/tower_menu.tscn" id="10_y220t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mf8j2"]
 bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
@@ -117,6 +117,7 @@ text = "Info about upcoming enemies here"
 label_settings = SubResource("LabelSettings_4kltc")
 
 [node name="StatsContainer" type="VBoxContainer" parent="Control" unique_id=1677627706]
+visible = false
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -206,8 +207,8 @@ stretch_mode = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="Control" unique_id=820975564]
 layout_mode = 1
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 44.0
+offset_bottom = 84.0
 mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer" unique_id=1645313245]
@@ -255,14 +256,17 @@ vertical_alignment = 1
 [node name="ToggleSceneButton" type="Button" parent="Control" unique_id=620428279]
 custom_minimum_size = Vector2(192, 40)
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -216.0
-offset_top = 20.0
-offset_right = -22.0
-offset_bottom = 60.0
+anchor_bottom = 1.0
+offset_left = -196.0
+offset_top = -188.0
+offset_right = -2.0
+offset_bottom = -148.0
 grow_horizontal = 0
+grow_vertical = 0
 theme_override_fonts/font = ExtResource("1_o3d1f")
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_mf8j2")

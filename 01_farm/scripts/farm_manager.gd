@@ -106,11 +106,12 @@ func try_harvest_tile (player_pos : Vector2):
 	if not info.crop:
 		return
 	
-	if not info.crop.harvestable:
+	if not tile_info[coords].crop.harvestable:
+		print_debug("Whoops!")
 		return
 	
-	GameFarmManager.harvest_crop(info.crop)
-	info.crop = null
+	GameFarmManager.harvest_crop(tile_info[coords].crop, tile_info[coords].crop.sell_price)
+	tile_info[coords].crop = null
 	harvest_sound.play()
 
 func is_tile_watered (pos :Vector2) -> bool:
@@ -128,5 +129,9 @@ func _set_tile_state (coords :Vector2i, tile_type : TileType):
 			info.tilled = true
 			info.watered = false
 		TileType.TILLED_WATERED:
-			info.tilled = true
-			info.watered = true
+			tile_info[coords].tilled = true
+			tile_info[coords].watered = true
+
+
+func _on_buy_seed_button_mouse_entered() -> void:
+	pass # Replace with function body.
