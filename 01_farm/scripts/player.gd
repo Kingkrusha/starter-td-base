@@ -4,7 +4,8 @@ extends CharacterBody2D
 var facing_direction : Vector2
 
 @onready var anim : AnimatedSprite2D = $AnimatedSprite2D
-
+@onready var coll1 : CollisionShape2D = $CollisionShape2D_vertical
+@onready var col2 : CollisionShape2D = $CollisionShape2D_side
 func _ready():
 	facing_direction = Vector2.DOWN
 	
@@ -36,5 +37,16 @@ func _animate ():
 			
 			
 	var anim_name : String = state + "_" + direction
-	
-	anim.play(anim_name)
+	if (direction == "up" or direction == "down"):
+		coll1.disabled = false
+		col2.disabled = true
+		anim.play(anim_name)
+	else:
+		coll1.disabled = true
+		col2.disabled = false
+		if (direction == "right"):
+			anim.flip_h = true
+			anim.play(anim_name)
+		else:
+			anim.flip_h = false
+			anim.play(anim_name)
