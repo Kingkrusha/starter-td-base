@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjoibuct8rtev"
-path="res://.godot/imported/ship_0017.png-e7426cda0b7e2ffe60d46cd56276411a.ctex"
+uid="uid://dl0l45f8h8s86"
+path="res://.godot/imported/Maple.png-2e01bb1788b14a97c43c48600d3e8a81.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/ships/ship_0017.png"
-dest_files=["res://.godot/imported/ship_0017.png-e7426cda0b7e2ffe60d46cd56276411a.ctex"]
+source_file="res://graphics/sol's stuff/Sad Style Character Sprites/Maple.png"
+dest_files=["res://.godot/imported/Maple.png-2e01bb1788b14a97c43c48600d3e8a81.ctex"]
 
 [params]
 

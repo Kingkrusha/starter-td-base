@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjoibuct8rtev"
-path="res://.godot/imported/ship_0017.png-e7426cda0b7e2ffe60d46cd56276411a.ctex"
+uid="uid://eom56qvi5fg8"
+path="res://.godot/imported/Pumpkin.png-e8713d9491c9642ba00ab4cec54c1a90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/ships/ship_0017.png"
-dest_files=["res://.godot/imported/ship_0017.png-e7426cda0b7e2ffe60d46cd56276411a.ctex"]
+source_file="res://graphics/sol's stuff/Sad Style Character Sprites/Pumpkin.png"
+dest_files=["res://.godot/imported/Pumpkin.png-e8713d9491c9642ba00ab4cec54c1a90.ctex"]
 
 [params]
 
