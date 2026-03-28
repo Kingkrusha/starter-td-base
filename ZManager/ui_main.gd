@@ -12,18 +12,18 @@ func _ready():
 	_plant(GameFarmManager.money)
 	Data.health_changed.connect(_health_ui)
 	overManager.NewTurn.connect(_wave_ui)
-	GameFarmManager.money_changed.connect(_tower)
-	Data.money_changed.connect(_plant)
+	GameFarmManager.money_changed.connect(_plant)
+	Data.money_changed.connect(_tower)
 
 func _health_ui(health : int):
 	print(health)
 	healthUi.text = str(health)
 
 func _wave_ui(wave : int):
-	waveUi.text = str(wave)
+	waveUi.text = "Wave: " + str(wave)
 	
 func _tower(money : int):
-	print(money)
+	#print(money)
 	tower_Money.text = str(money)
 
 func _plant(money : int):

@@ -17,7 +17,7 @@ func bind_farm(root_node: Node2D) -> Dictionary:
 		"root": root_node,
 		"ui": root_node.get_node("CanvasLayer"),
 		"tile": root_node.get_node("FarmManager/FarmTileMap"),
-		"camera": root_node.get_node("Camera2D")
+		"camera": root_node.get_node("player/Camera2D")
 	}
 
 
