@@ -21,11 +21,11 @@
 [ext_resource type="Texture2D" uid="uid://bv03lu74d0rbo" path="res://01_farm/Sprites/UI/ItemBox.png" id="15_jbj1t"]
 [ext_resource type="Script" uid="uid://t8ku0t475rst" path="res://01_farm/scripts/buy_seed_button.gd" id="18_jyo15"]
 [ext_resource type="Texture2D" uid="uid://c606gwfd21wif" path="res://01_farm/Sprites/Crops/Tomato/tomato_growth_0.tres" id="18_of6ed"]
-[ext_resource type="Script" uid="uid://b373udscqfvcb" path="res://01_farm/scripts/seed_toggle.gd" id="19_of6ed"]
+[ext_resource type="Script" path="res://01_farm/scripts/seed_toggle.gd" id="19_of6ed"]
 [ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="21_7s656"]
 [ext_resource type="Resource" uid="uid://o1n8fb8exbpe" path="res://01_farm/crops/firecracker.tres" id="24_avu8y"]
 [ext_resource type="Resource" uid="uid://lg2s2sbojtbg" path="res://01_farm/crops/blackberry.tres" id="24_cpmba"]
-[ext_resource type="Script" uid="uid://cxyb5f8ywppql" path="res://01_farm/scripts/seed_select.gd" id="24_jdoak"]
+[ext_resource type="Script" path="res://01_farm/scripts/seed_select.gd" id="24_jdoak"]
 [ext_resource type="Resource" uid="uid://doxfxus6xtpj4" path="res://01_farm/crops/mushroom.tres" id="25_jyo15"]
 [ext_resource type="Resource" uid="uid://bvayuh65caxgx" path="res://01_farm/crops/pumpkin.tres" id="26_of6ed"]
 
@@ -429,8 +429,9 @@ offset_top = 15.0
 offset_right = -55.0
 offset_bottom = 78.0
 grow_horizontal = 0
+scale = Vector2(0.92, 1)
 theme_override_font_sizes/font_size = 28
-text = "Beneath the Soil"
+text = "Defend"
 
 [node name="BuySeedButton" type="BaseButton" parent="CanvasLayer" unique_id=1504593121]
 unique_name_in_owner = false

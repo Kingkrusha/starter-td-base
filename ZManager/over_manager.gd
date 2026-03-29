@@ -11,6 +11,10 @@ var tower_money : int = 0
 var turn : int = 0
 
 func _ready() -> void:
+	# Initialize from current values before connecting signals
+	tower_money = Data.money
+	plant_money = GameFarmManager.money
+	
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
 	

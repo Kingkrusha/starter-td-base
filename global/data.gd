@@ -26,6 +26,7 @@ var SPECIAL_PICK_INTERVAL: int = 5
 var SPECIAL_PREP_DELAY: int = 2
 const SPECIAL_PICK_START_WAVE: int = 5
 var HP_MULT_PER_WAVE = 0.05
+var BASIC_ENEMY_CREDIT_CAP_RATIO: float = 0.30
 const ENEMY_UNLOCK_SCHEDULE: Array = [
 	[0,  Enemy.DEFAULT],
 	[2,  Enemy.FAST],
@@ -130,11 +131,15 @@ var UPGRADE_DATA = {
 				"effects": { "burn_duration": 3.0, "burn_tick_speed": 0.5, "burn_damage": 1 }
 			},
 			"B": {
-				"name": "flamethrower",
-				"description": "increased range and greatly increased attack speed",
+				"name": "Just Warming Up",
+				"description": "During waves, gains +5% range and attack speed per second, up to +150%",
 				"cost": 175,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "range": 30, "attack_speed_mult": 2.5,}
+				"effects": {
+					"tick_interval_seconds": 1.0,
+					"gain_percent_per_second": 0.05,
+					"max_bonus_percent": 1.5
+				}
 			}
 		}
 	},
@@ -212,7 +217,7 @@ const ENEMY_DATA = {
 	Enemy.DEFAULT: {
 		'health': 3,
 		'texture': "res://graphics/ships/ship_0001.png",
-		'speed': 170,
+		'speed': 190,
 		'spawn_cost': 1,
 		'spawn_weight': 5,
 		'is_special': false,
@@ -224,7 +229,7 @@ const ENEMY_DATA = {
 	Enemy.FAST: {
 		'health': 3,
 		'texture': "res://graphics/ships/ship_0007.png",
-		'speed': 280,
+		'speed': 300,
 		'spawn_cost': 1,
 		'spawn_weight': 3,
 		'is_special': false,
@@ -236,7 +241,7 @@ const ENEMY_DATA = {
 	Enemy.STRONG: {
 		'health': 6,
 		'texture': "res://graphics/ships/ship_0000.png",
-		'speed': 205,
+		'speed': 225,
 		'spawn_cost': 2,
 		'spawn_weight': 4,
 		'is_special': false,
@@ -248,7 +253,7 @@ const ENEMY_DATA = {
 	Enemy.BIG: {
 		'health': 20,
 		'texture': "res://graphics/ships/ship_0005.png",
-		'speed': 150,
+		'speed': 170,
 		'spawn_cost': 5,
 		'spawn_weight': 3,
 		'is_special': false,
@@ -260,7 +265,7 @@ const ENEMY_DATA = {
 	Enemy.BOSS: {
 		'health': 50,
 		'texture': "res://graphics/ships/ship_0015.png",
-		'speed': 140,
+		'speed': 160,
 		'spawn_cost': 14,
 		'spawn_weight': 1,
 		'is_special': false,
@@ -272,7 +277,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_SHIELD: {
 		'health': 12,
 		'texture': "res://graphics/ships/ship_0011.png",
-		'speed': 165,
+		'speed': 185,
 		'spawn_cost': 8,
 		'spawn_weight': 2,
 		'is_special': true,
@@ -289,7 +294,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_FULL_HP_BOOST: {
 		'health': 10,
 		'texture': "res://graphics/ships/ship_0012.png",
-		'speed': 180,
+		'speed': 200,
 		'spawn_cost': 8,
 		'spawn_weight': 2,
 		'is_special': true,
@@ -304,7 +309,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_FIRST_HIT_INVULN: {
 		'health': 14,
 		'texture': "res://graphics/ships/ship_0013.png",
-		'speed': 160,
+		'speed': 180,
 		'spawn_cost': 9,
 		'spawn_weight': 2,
 		'is_special': true,
@@ -319,7 +324,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_DEATH_SPAWN: {
 		'health': 16,
 		'texture': "res://graphics/ships/ship_0014.png",
-		'speed': 150,
+		'speed': 170,
 		'spawn_cost': 10,
 		'spawn_weight': 1,
 		'is_special': true,
@@ -336,7 +341,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_FLAT_REDUCTION: {
 		'health': 18,
 		'texture': "res://graphics/ships/ship_0016.png",
-		'speed': 155,
+		'speed': 175,
 		'spawn_cost': 10,
 		'spawn_weight': 1,
 		'is_special': true,
@@ -352,7 +357,7 @@ const ENEMY_DATA = {
 	Enemy.SPECIAL_DEATH_DISABLE: {
 		'health': 15,
 		'texture': "res://graphics/ships/ship_0017.png",
-		'speed': 150,
+		'speed': 170,
 		'spawn_cost': 11,
 		'spawn_weight': 1,
 		'is_special': true,

@@ -34,6 +34,12 @@ func _ready():
 	current_started_wave = wave
 	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))
 	update_stats(Data.money,Data.health)
+	if not Data.money_changed.is_connected(_on_tower_money_changed):
+		Data.money_changed.connect(_on_tower_money_changed)
+	if not Data.health_changed.is_connected(_on_tower_health_changed):
+		Data.health_changed.connect(_on_tower_health_changed)
+	if not overManager.NewTurn.is_connected(_on_turn_changed):
+		overManager.NewTurn.connect(_on_turn_changed)
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = false
 	alert_text_box.visible = false
@@ -187,6 +193,28 @@ func _on_tower_menu_close():
 
 func enable_wave_button():
 	$Control/WaveButton.disabled = false
+
+
+func sync_wave_display() -> void:
+	wave = overManager.turn
+	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))
+
+
+func refresh_display() -> void:
+	update_stats(Data.money, Data.health)
+	sync_wave_display()
+
+
+func _on_tower_money_changed(new_money: int) -> void:
+	update_stats(new_money, Data.health)
+
+
+func _on_tower_health_changed(new_health: int) -> void:
+	update_stats(Data.money, new_health)
+
+
+func _on_turn_changed(_turn: int) -> void:
+	sync_wave_display()
 
 
 func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:

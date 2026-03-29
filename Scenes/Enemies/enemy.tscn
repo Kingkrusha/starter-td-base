@@ -12,6 +12,12 @@ shader_parameter/progress = 0.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_jcvw6"]
 radius = 11.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
+bg_color = Color(0.17254902, 0.85882354, 0.36078432, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fcftc"]
+bg_color = Color(1, 0.18039216, 0.1882353, 1)
+
 [node name="Enemy" type="Area2D" unique_id=1273139506 groups=["enemies"]]
 z_index = 2
 scale = Vector2(6, 6)
@@ -28,6 +34,21 @@ shape = SubResource("CircleShape2D_jcvw6")
 
 [node name="SlowTimer" type="Timer" parent="." unique_id=1918230541]
 one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1702858582]
+visible = false
+offset_left = 12.333332
+offset_top = -11.999999
+offset_right = 36.333332
+offset_bottom = -10.999999
+rotation = 1.5707964
+theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fcftc")
+value = 50.0
+fill_mode = 1
+show_percentage = false
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1289995579]
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="timeout" from="SlowTimer" to="." method="_on_slow_timer_timeout"]

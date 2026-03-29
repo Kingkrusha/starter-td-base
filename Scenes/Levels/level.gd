@@ -27,6 +27,19 @@ var pending_special_unlocks: Array[Dictionary] = []
 var selected_specials: Array[Data.Enemy] = []
 var last_special_pick_wave: int = -1
 const DEBUG_SPECIAL_SCHEDULER: bool = true
+const DEBUG_ENEMY_HOTKEY_MAP := {
+	KEY_QUOTELEFT: Data.Enemy.DEFAULT,
+	KEY_1: Data.Enemy.FAST,
+	KEY_2: Data.Enemy.STRONG,
+	KEY_3: Data.Enemy.BIG,
+	KEY_4: Data.Enemy.BOSS,
+	KEY_5: Data.Enemy.SPECIAL_SHIELD,
+	KEY_6: Data.Enemy.SPECIAL_FULL_HP_BOOST,
+	KEY_7: Data.Enemy.SPECIAL_FIRST_HIT_INVULN,
+	KEY_8: Data.Enemy.SPECIAL_DEATH_SPAWN,
+	KEY_9: Data.Enemy.SPECIAL_FLAT_REDUCTION,
+	KEY_0: Data.Enemy.SPECIAL_DEATH_DISABLE,
+}
 signal enable_wave_button()
 signal special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int)
 
@@ -88,6 +101,10 @@ func _on_ui_place_tower(tower_type: Data.Tower):
 	
 	
 func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed and not event.echo:
+		if _handle_debug_key_input(event):
+			return
+
 	var raw_pos = get_local_mouse_position()
 	#var pos = Vector2i(raw_pos.x / 16, raw_pos.y /16)
 	var pos = Vector2i(raw_pos.x, raw_pos.y)
@@ -119,6 +136,36 @@ func _input(event: InputEvent):
 	if Input.is_action_just_pressed("exit"):
 		place_tower = false
 
+
+func _handle_debug_key_input(event: InputEventKey) -> bool:
+	if DEBUG_ENEMY_HOTKEY_MAP.has(event.keycode):
+		var enemy_type: Data.Enemy = DEBUG_ENEMY_HOTKEY_MAP[event.keycode]
+		_spawn_enemy_now(enemy_type, overManager.turn)
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("[DEBUG] Spawned enemy %s at wave %d" % [_enemy_debug_name(enemy_type), overManager.turn])
+		return true
+
+	if event.keycode == KEY_PLUS or event.keycode == KEY_KP_ADD or event.keycode == KEY_EQUAL:
+		overManager.turn += 1
+		_sync_wave_label()
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("[DEBUG] Wave set to %d" % overManager.turn)
+		return true
+
+	if event.keycode == KEY_MINUS or event.keycode == KEY_KP_SUBTRACT:
+		overManager.turn = max(0, overManager.turn - 1)
+		_sync_wave_label()
+		if DEBUG_SPECIAL_SCHEDULER:
+			print("[DEBUG] Wave set to %d" % overManager.turn)
+		return true
+
+	return false
+
+
+func _sync_wave_label() -> void:
+	if $UI.has_method("sync_wave_display"):
+		$UI.sync_wave_display()
+
 func spawn_wave(wave_idx):
 	if not ongoing_wave:
 		spawning_enemies = true
@@ -133,21 +180,42 @@ func spawn_wave(wave_idx):
 			print("[SPECIAL] Pending after processing/pick: %s" % [pending_special_unlocks])
 			print("[SPECIAL] Selected set: %s" % [_enemy_list_debug_names(selected_specials)])
 		var wave_data = Data.get_wave_data(wave_idx)
-		var credits: int = wave_data["credits"]
+		var total_budget: int = wave_data["credits"]
+		var credits: int = total_budget
 		var pool: Array = _build_spawn_pool(wave_data["pool"])
 		var delay: float = wave_data["delay"]
 
 		# Build spawn list by spending credits
 		var enemy_list: Array = []
 		var boss_list: Array = []
+		var available_specials: Array[Data.Enemy] = []
+		for enemy_type in pool:
+			if bool(Data.ENEMY_DATA[enemy_type].get("is_special", false)) and enemy_type not in available_specials:
+				available_specials.append(enemy_type)
+
+		# Ensure each available special appears at least once per wave.
+		for special_type in available_specials:
+			credits -= int(Data.ENEMY_DATA[special_type]["spawn_cost"])
+			if special_type == Data.Enemy.BOSS:
+				boss_list.append(special_type)
+			else:
+				enemy_list.append(special_type)
+
+		var basic_spent: int = 0
+		var enforce_basic_cap: bool = pool.size() >= 3
+		var basic_spend_cap: int = int(floor(float(total_budget) * Data.BASIC_ENEMY_CREDIT_CAP_RATIO))
 		while credits > 0:
 			# Filter pool to affordable enemies
 			var affordable: Array = []
 			var total_weight: int = 0
 			for enemy_type in pool:
-				if Data.ENEMY_DATA[enemy_type]['spawn_cost'] <= credits:
-					affordable.append(enemy_type)
-					total_weight += Data.ENEMY_DATA[enemy_type]['spawn_weight']
+				var spawn_cost: int = int(Data.ENEMY_DATA[enemy_type]["spawn_cost"])
+				if spawn_cost > credits:
+					continue
+				if enforce_basic_cap and enemy_type == Data.Enemy.DEFAULT and basic_spent + spawn_cost > basic_spend_cap:
+					continue
+				affordable.append(enemy_type)
+				total_weight += Data.ENEMY_DATA[enemy_type]['spawn_weight']
 			if affordable.is_empty():
 				break
 			# Weighted random pick
@@ -158,7 +226,9 @@ func spawn_wave(wave_idx):
 				if roll < 0:
 					picked = enemy_type
 					break
-			credits -= Data.ENEMY_DATA[picked]['spawn_cost']
+			credits -= int(Data.ENEMY_DATA[picked]["spawn_cost"])
+			if picked == Data.Enemy.DEFAULT:
+				basic_spent += int(Data.ENEMY_DATA[picked]["spawn_cost"])
 			if picked == Data.Enemy.BOSS:
 				boss_list.append(picked)
 			else:
@@ -172,13 +242,18 @@ func spawn_wave(wave_idx):
 
 func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) -> void:
 	for enemy_type in enemy_types:
-		var path_follow = PathFollow2D.new()
-		var enemy = enemy_scene.instantiate()
-		enemy.setup(path_follow, enemy_type, wave_idx)
-		enemy.special_death_effect.connect(_on_enemy_special_death_effect)
-		path_follow.add_child(enemy)
-		$Path2D.add_child(path_follow)
+		_spawn_enemy_now(enemy_type, wave_idx)
 		await get_tree().create_timer(delay).timeout
+
+
+func _spawn_enemy_now(enemy_type: Data.Enemy, wave_idx: int, path_progress: float = 0.0) -> void:
+	var path_follow := PathFollow2D.new()
+	path_follow.progress = path_progress
+	var enemy := enemy_scene.instantiate()
+	enemy.setup(path_follow, enemy_type, wave_idx)
+	enemy.special_death_effect.connect(_on_enemy_special_death_effect)
+	path_follow.add_child(enemy)
+	$Path2D.add_child(path_follow)
 
 
 func _process(_delta):
@@ -279,16 +354,104 @@ func _on_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> 
 
 
 func _on_enemy_special_death_effect(_effect_id: String, _payload: Dictionary) -> void:
-	# TODO: Handle enemy death-triggered effects.
-	# Example: spawn children with wave scaling, disable nearby towers.
-	pass
+	match _effect_id:
+		"spawn_on_death":
+			_spawn_children_from_death(_payload)
+		"death_disable_pulse":
+			_disable_nearby_towers(_payload)
+		_:
+			pass
 
 
 func _spawn_children_from_death(_payload: Dictionary) -> void:
-	# TODO: Spawn child enemies using current wave scaling and path progress.
-	pass
+	var spawn_enemy_type: Data.Enemy = int(_payload.get("spawn_enemy_type", Data.Enemy.DEFAULT))
+	var spawn_count: int = int(_payload.get("spawn_count", 0))
+	var spawn_delay: float = float(_payload.get("spawn_delay", 0.0))
+	var path_progress: float = float(_payload.get("path_progress", 0.0))
+	var wave_idx: int = int(_payload.get("wave_idx", 0))
+
+	if spawn_count <= 0:
+		return
+
+	_spawn_children_from_death_async(spawn_enemy_type, spawn_count, spawn_delay, path_progress, wave_idx)
 
 
 func _disable_nearby_towers(_payload: Dictionary) -> void:
-	# TODO: Find towers in radius and apply temporary disable.
-	pass
+	var origin: Vector2 = _payload.get("origin", Vector2.ZERO)
+	var pulse_radius: float = float(_payload.get("pulse_radius", 0.0))
+	var disable_duration: float = float(_payload.get("disable_duration", 0.0))
+
+	if pulse_radius <= 0.0 or disable_duration <= 0.0:
+		return
+
+	for tower in $Towers.get_children():
+		if tower is Tower and tower.global_position.distance_to(origin) <= pulse_radius:
+			tower.apply_temporary_disable(disable_duration)
+
+	_spawn_disable_pulse_visual(origin, pulse_radius)
+
+
+func _spawn_children_from_death_async(spawn_enemy_type: Data.Enemy, spawn_count: int, spawn_delay: float, path_progress: float, wave_idx: int) -> void:
+	var cumulative_offset: float = 0.0
+	for i in range(spawn_count):
+		if i > 0 and spawn_delay > 0.0:
+			await get_tree().create_timer(spawn_delay).timeout
+		var path_follow := PathFollow2D.new()
+		cumulative_offset += randf_range(50.0, 100.0)
+		path_follow.progress = max(0.0, path_progress - cumulative_offset)
+		var enemy := enemy_scene.instantiate()
+		enemy.setup(path_follow, spawn_enemy_type, wave_idx)
+		enemy.special_death_effect.connect(_on_enemy_special_death_effect)
+		path_follow.call_deferred("add_child", enemy)
+		$Path2D.call_deferred("add_child", path_follow)
+
+
+func _spawn_disable_pulse_visual(origin: Vector2, pulse_radius: float) -> void:
+	var segment_count := 72
+	var points := PackedVector2Array()
+	for i in range(segment_count):
+		var angle := TAU * float(i) / float(segment_count)
+		points.append(Vector2.RIGHT.rotated(angle) * pulse_radius)
+
+	# Soft filled disk to make the affected area obvious.
+	var fill := Polygon2D.new()
+	fill.polygon = points
+	fill.color = Color(0.2, 0.85, 1.0, 0.22)
+	fill.global_position = origin
+	add_child(fill)
+
+	# Main ring carries the strongest contrast.
+	var ring := Line2D.new()
+	ring.points = points
+	ring.width = 7.0
+	ring.default_color = Color(0.4, 0.95, 1.0, 1.0)
+	ring.closed = true
+	ring.antialiased = true
+	ring.global_position = origin
+	add_child(ring)
+
+	# Thin bright highlight ring improves readability on light backgrounds.
+	var highlight := Line2D.new()
+	highlight.points = points
+	highlight.width = 2.0
+	highlight.default_color = Color(1.0, 1.0, 1.0, 0.95)
+	highlight.closed = true
+	highlight.antialiased = true
+	highlight.global_position = origin
+	add_child(highlight)
+
+	fill.scale = Vector2(0.02, 0.02)
+	ring.scale = Vector2(0.02, 0.02)
+	highlight.scale = Vector2(0.02, 0.02)
+
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(fill, "scale", Vector2.ONE, 0.65)
+	tween.tween_property(ring, "scale", Vector2(1.06, 1.06), 0.65)
+	tween.tween_property(highlight, "scale", Vector2(1.1, 1.1), 0.65)
+	tween.tween_property(fill, "modulate:a", 0.0, 0.65)
+	tween.tween_property(ring, "modulate:a", 0.0, 0.65)
+	tween.tween_property(highlight, "modulate:a", 0.0, 0.65)
+	tween.finished.connect(fill.queue_free)
+	tween.finished.connect(ring.queue_free)
+	tween.finished.connect(highlight.queue_free)

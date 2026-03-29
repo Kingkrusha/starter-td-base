@@ -17,7 +17,7 @@ func bind_farm(root_node: Node2D) -> Dictionary:
 		"root": root_node,
 		"ui": root_node.get_node("CanvasLayer"),
 		"tile": root_node.get_node("FarmManager/FarmTileMap"),
-		"camera": root_node.get_node("Camera2D")
+		"camera": root_node.get_node("player/Camera2D")
 	}
 
 
@@ -38,7 +38,8 @@ func apply_view_state(view: Dictionary, is_active: bool):
 	root.visible = is_active
 	ui.visible = is_active
 	if tile : tile.visible = is_active
-	camera.enabled = is_active
+	if camera:
+		camera.enabled = is_active
 	root.process_mode = Node.PROCESS_MODE_INHERIT if is_active else Node.PROCESS_MODE_DISABLED
 
 
@@ -48,6 +49,7 @@ func _ready():
 	$scenes.add_child(farm["root"])
 	$scenes.add_child(td["root"])
 	td["ui"].current_speed.connect(_tower_speed)
+	_refresh_combined_ui_labels()
 	apply_view_state(farm, true)
 	apply_view_state(td, false)
 	
@@ -59,13 +61,22 @@ func toggle_scenes():
 	if farm["root"].visible == true:
 		apply_view_state(farm, false)
 		apply_view_state(td, true)
+		_refresh_combined_ui_labels()
 		Engine.time_scale = engine_speed
 		Engine.physics_ticks_per_second = tick_speed
 	else:
 		apply_view_state(farm, true)
 		apply_view_state(td, false)
+		_refresh_combined_ui_labels()
 		Engine.time_scale = 1.0
 		Engine.physics_ticks_per_second = 60
+
+
+func _refresh_combined_ui_labels() -> void:
+	if farm.has("ui") and farm["ui"] and farm["ui"].has_method("refresh_display"):
+		farm["ui"].refresh_display()
+	if td.has("ui") and td["ui"] and td["ui"].has_method("refresh_display"):
+		td["ui"].refresh_display()
 		
 	
 #func toggle_scenes():

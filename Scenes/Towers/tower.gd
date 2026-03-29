@@ -31,6 +31,10 @@ signal select (tower: Tower)
 func _ready():
 	init_stats()
 
+
+func _physics_process(_delta: float) -> void:
+	_update_disable_state()
+
 func _on_enemy_detection_area_area_entered(area):
 	if area not in enemies:
 		enemies.append(area)
@@ -97,19 +101,30 @@ func apply_big_upgrade(key : String):
 
 
 func apply_temporary_disable(_duration: float) -> void:
-	# TODO: Disable this tower's target/fire behavior for a temporary duration.
-	# Suggested behavior: set is_temp_disabled, dim visuals, resume automatically.
-	pass
+	if _duration <= 0.0:
+		return
+	var now := Time.get_ticks_msec() / 1000.0
+	is_temp_disabled = true
+	disabled_until_time = max(disabled_until_time, now + _duration)
+	modulate = Color(disable_visual_alpha, disable_visual_alpha, disable_visual_alpha, 1.0)
+	if has_node("ReloadTimer"):
+		$ReloadTimer.stop()
 
 
 func _update_disable_state() -> void:
-	# TODO: Tick and clear temporary disable state.
-	pass
+	if not is_temp_disabled:
+		return
+	var now := Time.get_ticks_msec() / 1000.0
+	if now >= disabled_until_time:
+		is_temp_disabled = false
+		disabled_until_time = 0.0
+		modulate = Color.WHITE
+		if has_node("ReloadTimer") and $ReloadTimer.is_stopped():
+			$ReloadTimer.start()
 
 
 func is_disabled() -> bool:
-	# TODO: Return true while tower is temporarily disabled.
-	return false
+	return is_temp_disabled
 	
 
 func _draw():

@@ -12,6 +12,8 @@ func _ready():
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]["tracks"]["attack_speed"]["base"]
 
 func _process(_delta):
+	if is_disabled():
+		return
 	if enemies.size() > 0 :
 		var targets = get_slowable_targets()
 		if targets.size() > 0 :
@@ -21,6 +23,8 @@ func _process(_delta):
 		$Turret.rotation -= PI/2
 
 func _on_reload_timer_timeout():
+	if is_disabled():
+		return
 	if enemies.size() > 0:
 		var dir = Vector2.DOWN.rotated($Turret.rotation).normalized()
 		shoot.emit(position + dir * 16, $Turret.rotation, Data.Bullet.SINGLE, self)

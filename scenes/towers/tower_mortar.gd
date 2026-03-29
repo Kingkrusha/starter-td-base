@@ -24,6 +24,8 @@ func finish_placing():
 	$CrosshairSprite.hide()
 	placing_crosshair = false
 func _on_reload_timer_timeout():
+	if is_disabled():
+		return
 	if not placing_crosshair:
 		shoot.emit($CrosshairSprite.global_position,0,Data.Bullet.MORTAR_EXPLOSION, self)
 
