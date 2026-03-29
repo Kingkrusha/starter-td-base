@@ -15,7 +15,6 @@ func _ready():
 	quantity_text.text = ""
 	pivot_offset = size /2
 	GameFarmManager.ChangeSeedQuantity.connect(_on_change_seed_quantity)
-
 #func _on_mouse_entered() -> void:
 	#modulate = Color.SEA_GREEN
 

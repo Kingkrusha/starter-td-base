@@ -1,12 +1,27 @@
 [gd_resource type="Resource" script_class="CropData" format=3 uid="uid://lg2s2sbojtbg"]
 
-[ext_resource type="Texture2D" uid="uid://c606gwfd21wif" path="res://01_farm/Sprites/Crops/Tomato/tomato_growth_0.tres" id="1_22847"]
+[ext_resource type="Texture2D" uid="uid://bctmsb1s8wiel" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Summer/Blackberry.png" id="1_84dgl"]
 [ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_urbiv"]
-[ext_resource type="Texture2D" uid="uid://c6nf0fq48ovtc" path="res://01_farm/Sprites/Crops/Blackberries/Blackberry_2.png" id="2_d5165"]
-[ext_resource type="Texture2D" uid="uid://bvvqyunen6dko" path="res://01_farm/Sprites/Crops/Blackberries/Blackberry_3.png" id="3_tkftx"]
-[ext_resource type="Texture2D" uid="uid://c34o4uepky6ym" path="res://01_farm/Sprites/Crops/Blackberries/Blackberry_4.png" id="4_8272o"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ot0dt"]
+atlas = ExtResource("1_84dgl")
+region = Rect2(3, 7, 9, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p46cn"]
+atlas = ExtResource("1_84dgl")
+region = Rect2(50, 5, 12, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22847"]
+atlas = ExtResource("1_84dgl")
+region = Rect2(66, 1, 12, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5165"]
+atlas = ExtResource("1_84dgl")
+region = Rect2(98, 0, 12, 16)
 
 [resource]
 script = ExtResource("1_urbiv")
-growth_sprites = Array[Texture]([ExtResource("1_22847"), ExtResource("2_d5165"), ExtResource("3_tkftx"), ExtResource("4_8272o")])
+crop_name = "blackberry"
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_ot0dt"), SubResource("AtlasTexture_p46cn"), SubResource("AtlasTexture_22847"), SubResource("AtlasTexture_d5165")])
+days_to_grow = 4
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

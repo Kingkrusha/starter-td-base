@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://l55pr03rxtvs"]
 
-[ext_resource type="Script" uid="uid://4ux7812oiigt" path="res://scenes/levels/level.gd" id="1_d5djh"]
-[ext_resource type="Script" uid="uid://ni6hj67xhu56" path="res://scenes/levels/range_preview.gd" id="3_ok6xr"]
-[ext_resource type="PackedScene" uid="uid://k2uh63vandnx" path="res://scenes/ui/player_camera.tscn" id="4_k0mew"]
-[ext_resource type="PackedScene" uid="uid://4e4dveqj5cpq" path="res://scenes/ui/ui.tscn" id="5_b0vvs"]
+[ext_resource type="Script" uid="uid://4ux7812oiigt" path="res://Scenes/Levels/level.gd" id="1_d5djh"]
+[ext_resource type="Script" uid="uid://ni6hj67xhu56" path="res://Scenes/Levels/range_preview.gd" id="3_ok6xr"]
+[ext_resource type="PackedScene" uid="uid://k2uh63vandnx" path="res://Scenes/Ui/player_camera.tscn" id="4_k0mew"]
+[ext_resource type="PackedScene" uid="uid://4e4dveqj5cpq" path="res://Scenes/Ui/ui.tscn" id="5_b0vvs"]
 [ext_resource type="Texture2D" uid="uid://dsy5olpb0ol8h" path="res://graphics/sol's stuff/1 (1).png" id="5_d5djh"]
 
 [sub_resource type="Curve2D" id="Curve2D_ok6xr"]
