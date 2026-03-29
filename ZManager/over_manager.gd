@@ -23,7 +23,7 @@ func _ready() -> void:
 	
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
-	#plant_data.connect(determine_towers)
+	plant_data.connect(determine_towers)
 
 #Money functions might be deprecated. Centralizing currency for a programmer is anethema I suppose.
 # wave/day logic will all be controlled via over_manager for simplicity
@@ -52,13 +52,43 @@ func set_new_turn():
 	turn += 1
 	NewTurn.emit(turn)
 
-#func determine_towers(plant_dic : Dictionary) -> Dictionary:
-	#var tower_allot = {}
-	#for crop_name in plant_dic.keys():
-		#match crop_name:
-			#"mushroom":
-				
-	
+func determine_towers(plant_dic : Dictionary) -> Dictionary:
+	var tower_allot = {}
+	var tower : String
+	for crop_name in plant_dic.keys():
+		match crop_name:
+			"mushroom":
+				if plant_dic[crop_name] != null:
+					tower = "Basic"
+					tower_allot[tower] = plant_dic[crop_name]
+				else:
+					tower_allot[tower] = 0
+			"pepper":
+				if plant_dic[crop_name] != null:
+					tower = "Blaster"
+					tower_allot[tower] = plant_dic[crop_name]
+				else:
+					tower_allot[tower] = 0
+			"pumpkin":
+				if plant_dic[crop_name] != null:
+					tower = "Mortar"
+					tower_allot[tower] = plant_dic[crop_name]
+				else:
+					tower_allot[tower] = 0
+			"blackberry":
+				if plant_dic[crop_name] != null:
+					tower = "Slow"
+					tower_allot[tower] = plant_dic[crop_name]
+				else:
+					tower_allot[tower] = 0
+			"pineapple":
+				if plant_dic[crop_name] != null:
+					tower = "Bomb"
+					tower_allot[tower] = plant_dic[crop_name]
+				else:
+					tower_allot[tower] = 0
+	print(tower_allot)
+	return tower_allot
 #Signals to transmit updated currency to each part of the game
 #Later implementation of tower to plant tracking via unique id's with dic
 
