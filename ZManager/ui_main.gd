@@ -20,7 +20,7 @@ func _health_ui(health : int):
 	healthUi.text = str(health)
 
 func _wave_ui(wave : int):
-	waveUi.text = str(wave)
+	waveUi.text = "Wave: " + str(wave)
 	
 func _tower(money : int):
 	tower_Money.text = str(money)

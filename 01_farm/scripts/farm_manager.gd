@@ -22,7 +22,7 @@ var tile_atlas_coords : Dictionary[TileType, Vector2i] = {
 	TileType.TILLED: Vector2i(1,0),
 	TileType.TILLED_WATERED: Vector2i(0, 1)
 }
-
+@onready var plant_group: Node2D = $"../Plants"
 @onready var till_sound : AudioStreamPlayer = $TillSound
 @onready var water_sound : AudioStreamPlayer = $WaterSound
 @onready var plant_seed_sound : AudioStreamPlayer = $PlantSeedSound
@@ -61,6 +61,7 @@ func try_till_tile (player_pos : Vector2):
 		return
 	if info.tilled:
 		return
+	
 	_set_tile_state(coords, TileType.TILLED)
 	till_sound.play()
 
@@ -90,7 +91,7 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 		return
 	
 	var crop : Crop = crop_scene.instantiate()
-	add_child(crop)
+	plant_group.add_child(crop)
 	crop.global_position = tile_map.map_to_local(coords)
 	crop._set_crop(crop_data, is_tile_watered(coords), coords)
 	

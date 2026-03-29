@@ -8,7 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="5_05bje"]
 [ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="6_05bje"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="7_dllyt"]
-[ext_resource type="Texture2D" uid="uid://dllsijplo7lbt" path="res://01_farm/Sprites/Crops/Pumpkin/Pumpkin_2.png" id="8_w8ugq"]
+[ext_resource type="Texture2D" uid="uid://bbocmqcf00176" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Old/Fruits/Fall/Icons.png" id="9_w8ugq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dvod"]
+atlas = ExtResource("9_w8ugq")
+region = Rect2(16.54691, 0, 15.453091, 16)
 
 [node name="combined_Main" type="Node2D" unique_id=1877780561]
 script = ExtResource("1_xnitx")
@@ -203,6 +207,6 @@ offset_top = -20.0
 offset_right = 52.0
 offset_bottom = 20.0
 grow_vertical = 2
-texture = ExtResource("8_w8ugq")
+texture = SubResource("AtlasTexture_5dvod")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true

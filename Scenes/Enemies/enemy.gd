@@ -106,7 +106,7 @@ func hit(ref):
 	if health <=0 :
 		_emit_special_death_effects()
 		
-		overManager.give_money_farm(reward)
+		GameFarmManager.money += reward
 		#print_debug("Reward ", reward)
 		queue_free.call_deferred()
 

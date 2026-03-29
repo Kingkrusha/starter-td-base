@@ -17,7 +17,8 @@ func _ready() -> void:
 	
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
-	
+
+#Money functions might be deprecated. Centralizing currency for a programmer is anethema I suppose.
 # wave/day logic will all be controlled via over_manager for simplicity
 func _update_tower_money (amount : int):
 	tower_money = amount

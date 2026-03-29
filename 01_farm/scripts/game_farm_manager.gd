@@ -7,7 +7,13 @@ signal ChangeSeedQuantity (crop_data : CropData, quantity : int)
 signal money_changed(new_value : int)
 
 #var day : int = 0
-var money : int = 0
+var money : int = 0:
+	set(value):
+		money = value
+		print("Current Val: ", money)
+		money_changed.emit(money)
+	
+		
 	
 	
 
@@ -24,13 +30,13 @@ var owned_seeds : Dictionary[CropData, int] = {}
 	
 
 func _ready ():
-	overManager.ChangeFarmMoney.connect(update_money)
+	#overManager.ChangeFarmMoney.connect(update_money)
 	get_tree().scene_changed.connect(_on_change_scene)
 	GameFarmManager._on_change_scene()
 	#print(owned_seeds)
 
-func update_money(new_money : int):
-	money = new_money
+#func update_money(new_money : int):
+	#money = new_money
 	
 func _on_change_scene ():
 	#if get_node_or_null("res://01_farm/scenes/main.tscn") == null:
@@ -51,7 +57,6 @@ func try_buy_seed (crop_data):
 		return
 	
 	money -= crop_data.seed_price
-	money_changed.emit(money)
 	owned_seeds[crop_data] += 1
 	ChangeSeedQuantity.emit(crop_data, owned_seeds[crop_data])
 	
