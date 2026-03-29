@@ -1,6 +1,7 @@
 class_name CropData
 extends Resource
 
+@export var crop_name: String 
 @export var growth_sprites : Array[Texture]
 @export var days_to_grow  : int = 8
 @export var seed_price : int = 10
@@ -8,3 +9,4 @@ extends Resource
 @export var sell_price_second : int  = 30
 @export var sell_price_third : int = 40
 @export var sell_price_final : int = 0
+@export var growth_stage: int = 0

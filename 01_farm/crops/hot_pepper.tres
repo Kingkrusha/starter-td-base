@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dm8smxisygpx8"]
+
+[ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_cekh0"]
+[ext_resource type="Texture2D" uid="uid://c6u1js8pagmm" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Summer/Hot Pepper.png" id="1_wnlsb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_di78x"]
+atlas = ExtResource("1_wnlsb")
+region = Rect2(16, 8, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2cjar"]
+atlas = ExtResource("1_wnlsb")
+region = Rect2(52, 6, 8, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1a8ka"]
+atlas = ExtResource("1_wnlsb")
+region = Rect2(99, 2, 11, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pnqtn"]
+atlas = SubResource("AtlasTexture_1a8ka")
+
+[resource]
+script = ExtResource("1_cekh0")
+crop_name = "pepper"
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_di78x"), SubResource("AtlasTexture_2cjar"), SubResource("AtlasTexture_pnqtn")])
+days_to_grow = 2
+metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

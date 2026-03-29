@@ -10,20 +10,20 @@ signal money_changed(new_value : int)
 var money : int = 0:
 	set(value):
 		money = value
-		print("Current Val: ", money)
+		#print("Current Val: ", money)
 		money_changed.emit(money)
-	
-		
-	
-	
+
+
+var plant: Crop
+var plant_inv: int
+var plant_dict = {plant : plant_inv}
 
 var all_crop_data : Array[CropData] = [
-	#preload("res://01_farm/crops/corn.tres"),
-	#preload("res://01_farm/crops/tomato.tres"),
 	preload("res://01_farm/crops/blackberry.tres"),
-	preload("res://01_farm/crops/firecracker.tres"),
+	preload("res://01_farm/crops/hot_pepper.tres"),
 	preload("res://01_farm/crops/mushroom.tres"),
-	preload("res://01_farm/crops/pumpkin.tres")
+	preload("res://01_farm/crops/pumpkin.tres"),
+	preload("res://01_farm/crops/pineapple.tres")
 ]
 
 var owned_seeds : Dictionary[CropData, int] = {}
@@ -34,7 +34,6 @@ func _ready ():
 	get_tree().scene_changed.connect(_on_change_scene)
 	GameFarmManager._on_change_scene()
 	#print(owned_seeds)
-
 #func update_money(new_money : int):
 	#money = new_money
 	
@@ -43,6 +42,7 @@ func _on_change_scene ():
 		#return
 	for cd in all_crop_data:
 		give_seed.call_deferred(cd, 2)
+		print(owned_seeds)
 	money += 10
 	
 func harvest_crop (crop : Crop, reward : int):

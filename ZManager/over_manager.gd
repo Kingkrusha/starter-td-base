@@ -1,11 +1,17 @@
 extends Node
 
+signal plant_data(plant : Dictionary)
 signal ChangeFarmMoney (money : int)
 signal ChangeTowerMoney (money : int)
 signal NewTurn (turn : int)
 signal toggleMode()
+
+
 # Two var to track currency from each aspect of the game (farm and tower)
 #var  : int = 0 - to do tower library with unique id's
+
+#var tower_inv = Dictionary(String, int)
+#var tower_points = Dictionary(String, int)
 var plant_money : int = 0
 var tower_money : int = 0
 var turn : int = 0
@@ -13,6 +19,7 @@ var turn : int = 0
 func _ready() -> void:
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
+	#plant_data.connect(determine_towers)
 
 #Money functions might be deprecated. Centralizing currency for a programmer is anethema I suppose.
 # wave/day logic will all be controlled via over_manager for simplicity
@@ -28,7 +35,7 @@ func _update_farm_money (amount : int):
 func give_money_farm (amount : int):
 	#print("Farm money given ", plant_money)
 	plant_money += amount
-	print(plant_money)
+	#print(plant_money)
 	ChangeFarmMoney.emit(plant_money)
 	
 func give_money_tower (amount : int):
@@ -40,14 +47,15 @@ func set_new_turn():
 	#print("New Turn")
 	turn += 1
 	NewTurn.emit(turn)
-	
+
+#func determine_towers(plant_dic : Dictionary) -> Dictionary:
+	#var tower_allot = {}
+	#for crop_name in plant_dic.keys():
+		#match crop_name:
+			#"mushroom":
+				
 	
 #Signals to transmit updated currency to each part of the game
 #Later implementation of tower to plant tracking via unique id's with dic
 
 #functions to update and then transmit updates to currency.
-
-#List
-#Relink money transfers (rewards / ui)
-#Add ui button to switch between the main scenes
-#Recode and recombine day/wave as the same int to allow for clear progression.

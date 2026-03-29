@@ -3,6 +3,7 @@ signal current_speed(timescale : float, tick_rate : int)
 
 @export var sceneFarm: PackedScene
 @export var sceneTower: PackedScene
+
 var farm: Dictionary
 var td: Dictionary
 var engine_speed: float = 1.0

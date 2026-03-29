@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dl581qkddd3tt"]
+
+[ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_433a1"]
+[ext_resource type="Texture2D" uid="uid://ch7cet0ttdmu2" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Summer/Pineapple.png" id="1_g36fw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cvg2"]
+atlas = ExtResource("1_g36fw")
+region = Rect2(3, 20, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkowi"]
+atlas = ExtResource("1_g36fw")
+region = Rect2(19, 23, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8m4g"]
+atlas = ExtResource("1_g36fw")
+region = Rect2(49, 16, 14, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vc8gi"]
+atlas = ExtResource("1_g36fw")
+region = Rect2(81, 13, 14, 19)
+
+[resource]
+script = ExtResource("1_433a1")
+crop_name = "pineapple"
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_7cvg2"), SubResource("AtlasTexture_nkowi"), SubResource("AtlasTexture_o8m4g"), SubResource("AtlasTexture_vc8gi")])
+days_to_grow = 6
+metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

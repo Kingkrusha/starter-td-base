@@ -1,12 +1,27 @@
 [gd_resource type="Resource" script_class="CropData" format=3 uid="uid://bvayuh65caxgx"]
 
-[ext_resource type="Texture2D" uid="uid://c606gwfd21wif" path="res://01_farm/Sprites/Crops/Tomato/tomato_growth_0.tres" id="1_cgekl"]
+[ext_resource type="Texture2D" uid="uid://7s0yuplh48wa" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Fall/Pumpkin.png" id="1_lmsa4"]
 [ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_nuelj"]
-[ext_resource type="Texture2D" uid="uid://dllsijplo7lbt" path="res://01_farm/Sprites/Crops/Pumpkin/Pumpkin_2.png" id="2_ybygs"]
-[ext_resource type="Texture2D" uid="uid://dvuoctfc7me2c" path="res://01_farm/Sprites/Crops/Pumpkin/Pumpkin_3.png" id="3_axufg"]
-[ext_resource type="Texture2D" uid="uid://caryq0tqf3s5l" path="res://01_farm/Sprites/Crops/Pumpkin/Pumpkin_4.png" id="4_obuvc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_he1yb"]
+atlas = ExtResource("1_lmsa4")
+region = Rect2(4, 13, 7, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4gdc"]
+atlas = ExtResource("1_lmsa4")
+region = Rect2(35, 9, 9, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgekl"]
+atlas = ExtResource("1_lmsa4")
+region = Rect2(66, 5, 12, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybygs"]
+atlas = ExtResource("1_lmsa4")
+region = Rect2(80, 2, 15, 14)
 
 [resource]
 script = ExtResource("1_nuelj")
-growth_sprites = Array[Texture]([ExtResource("1_cgekl"), ExtResource("2_ybygs"), ExtResource("3_axufg"), ExtResource("4_obuvc")])
+crop_name = "pumpkin"
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_he1yb"), SubResource("AtlasTexture_w4gdc"), SubResource("AtlasTexture_cgekl"), SubResource("AtlasTexture_ybygs")])
+days_to_grow = 4
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

@@ -1,6 +1,8 @@
 class_name FarmManager
 extends Node
 
+
+
 enum TileType
 {
 	GRASS,
@@ -12,17 +14,30 @@ class TileInfo:
 	var tilled : bool
 	var watered : bool
 	var crop : Crop
-
+@onready var plantNode : Node2D = $Plants
 @onready var tile_map : TileMapLayer = $FarmTileMap
 var tile_info : Dictionary[Vector2i,TileInfo]
 var crop_scene: PackedScene = preload("res://01_farm/scenes/crop.tscn")
+
+var plant_info : Dictionary[String,int] = {
+	"pepper" : 0,
+	"pepperIndex": 0,
+	"blackberry" : 0,
+	"blackberryIndex": 0,
+	"mushroom": 0,
+	"mushroomIndex":0,
+	"pineapple":0,
+	"pineappleIndex":0,
+	"pumpkin":0,
+	"pumpkinIndex":0
+}
 
 var tile_atlas_coords : Dictionary[TileType, Vector2i] = {
 	TileType.GRASS: Vector2i(0,0),
 	TileType.TILLED: Vector2i(1,0),
 	TileType.TILLED_WATERED: Vector2i(0, 1)
 }
-@onready var plant_group: Node2D = $"../Plants"
+@onready var plant_group: Node2D = $Plants
 @onready var till_sound : AudioStreamPlayer = $TillSound
 @onready var water_sound : AudioStreamPlayer = $WaterSound
 @onready var plant_seed_sound : AudioStreamPlayer = $PlantSeedSound
@@ -31,16 +46,49 @@ func _ready ():
 	#GameFarmManager.NewDay.connect(_on_new_day)
 	overManager.NewTurn.connect(_on_new_day)
 	GameFarmManager.HarvestCrop.connect(_on_harvest_crop)
+	overManager.toggleMode.connect(track_plants_num)
+	overManager.toggleMode.connect(track_plants_index)
 	tile_info = {}
 	for cell in tile_map.get_used_cells():
 		tile_info[cell] = TileInfo.new()
+	
+	create_starting_crops(Vector2i(1, 1), preload("res://01_farm/crops/hot_pepper.tres"), 2)
+	track_plants_num()
+	track_plants_index()
 
+func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_point: int):
+	 # Create crop
+	var new_crop : Crop = crop_scene.instantiate() 
+	plant_group.add_child(new_crop)
+	
+	# Configure manually (bypassing set_crop)
+	new_crop.crop_data = crop_data
+	new_crop.days_until_grown = new_crop.days_until_grown - starting_point
+	new_crop.watered = false
+	new_crop.harvestable = false
+	new_crop.tile_map_coords = tile_coords
+	new_crop.crop_data.growth_stage = starting_point
+	
+	# Set sprite
+	#var growth_index = crop_data.days_to_grow - days_left
+	#growth_index = clamp(growth_index, 0, crop_data.growth_sprites.size() - 1)
+	new_crop.sprite.texture = crop_data.growth_sprites[new_crop.crop_data.growth_stage]
+	
+	# Position
+	new_crop.position = tile_map.map_to_local(tile_coords)
+	
+	# Update tile info
+	if tile_info.has(tile_coords):
+		tile_info[tile_coords].crop = new_crop
+		_set_tile_state(tile_coords, TileType.TILLED)
+	
 func _get_tile_info(coords: Vector2i) -> TileInfo:
 	if not tile_info.has(coords):
 		tile_info[coords] = TileInfo.new()
 	return tile_info[coords]
 		
 func _on_new_day (day: int):
+	print("New Day!")
 	for tile_pos in tile_map.get_used_cells():
 		var info := _get_tile_info(tile_pos)
 		if info.watered:
@@ -71,6 +119,7 @@ func try_water_tile(player_pos : Vector2):
 
 	# return if the tile is not tilled
 	if not info.tilled:
+		
 		return
 
 	_set_tile_state(coords, TileType.TILLED_WATERED)
@@ -78,7 +127,9 @@ func try_water_tile(player_pos : Vector2):
 
 	# if there's a crop on the tile, water it
 	if info.crop:
+		#print_debug(info.crop)
 		info.crop.watered = true
+		
 func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
 	var info := _get_tile_info(coords)
@@ -91,7 +142,8 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 		return
 	
 	var crop : Crop = crop_scene.instantiate()
-	plant_group.add_child(crop)
+	#plant_group.
+	add_child(crop)
 	crop.global_position = tile_map.map_to_local(coords)
 	crop._set_crop(crop_data, is_tile_watered(coords), coords)
 	
@@ -133,6 +185,20 @@ func _set_tile_state (coords :Vector2i, tile_type : TileType):
 			tile_info[coords].tilled = true
 			tile_info[coords].watered = true
 
+func track_plants_num() -> Dictionary:
+	var counts = {}
+	for child in plantNode.get_children():
+		if child is Crop :
+			var crop_name = child.crop_data.crop_name
+			counts[crop_name] = counts.get(crop_name, 0) +1
+				
+	overManager.plant_data.emit(counts)
+	return counts
 
-func _on_buy_seed_button_mouse_entered() -> void:
-	pass # Replace with function body.
+func track_plants_index() -> Dictionary:
+	var indexCount = {}
+	for child in plantNode.get_children():
+		if child is Crop:
+			var crop_name = child.crop_data.crop_name
+			indexCount[crop_name] = indexCount.get(crop_name, 0) + child.crop_data.growth_stage
+	return(indexCount)

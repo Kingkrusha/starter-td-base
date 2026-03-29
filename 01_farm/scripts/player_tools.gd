@@ -11,7 +11,7 @@ enum Tool
 }
 
 var current_tool : Tool
-var current_seed : CropData = preload("res://01_farm/crops/tomato.tres")
+var current_seed : CropData = preload("res://01_farm/crops/mushroom.tres")
 
 @onready var farm_manager : FarmManager = $"../../FarmManager"
 

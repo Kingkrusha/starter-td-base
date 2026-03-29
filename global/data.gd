@@ -41,6 +41,7 @@ const SPECIAL_ENEMY_POOL: Array = [
 	Enemy.SPECIAL_FLAT_REDUCTION,
 	Enemy.SPECIAL_DEATH_DISABLE,
 ]
+
 func get_scaled_health(enemy : Data.Enemy, wave: int):
 	var base_hp: int = ENEMY_DATA[enemy]['health']
 	return base_hp * (1 + (HP_MULT_PER_WAVE * wave))

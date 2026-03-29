@@ -1,12 +1,24 @@
 [gd_resource type="Resource" script_class="CropData" format=3 uid="uid://doxfxus6xtpj4"]
 
+[ext_resource type="Texture2D" uid="uid://rt4rt0df2cvv" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Spring/Asparagus.png" id="1_25roa"]
 [ext_resource type="Script" uid="uid://b7psnp6bo1gm8" path="res://01_farm/scripts/prop_data.gd" id="1_indsd"]
-[ext_resource type="Texture2D" uid="uid://cqinv51ifeab5" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_1_seed.png" id="1_lihfw"]
-[ext_resource type="Texture2D" uid="uid://c6rtkl4c8vyeh" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_2.png" id="2_h5sm7"]
-[ext_resource type="Texture2D" uid="uid://b2v0tguefeyi8" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_3.png" id="3_pt44p"]
-[ext_resource type="Texture2D" uid="uid://bco2w2ooifb5o" path="res://01_farm/Sprites/Crops/Mushroom/Mushroom_4.png" id="4_q3rxx"]
+[ext_resource type="Texture2D" uid="uid://y0se1b8xyhgy" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tree/Deep Forest/Fantasy Mushroom.png" id="2_0dpfs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lihfw"]
+atlas = ExtResource("1_25roa")
+region = Rect2(3, 7, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5sm7"]
+atlas = ExtResource("2_0dpfs")
+region = Rect2(12, 133, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pt44p"]
+atlas = ExtResource("2_0dpfs")
+region = Rect2(40, 116, 15, 24)
 
 [resource]
 script = ExtResource("1_indsd")
-growth_sprites = Array[Texture]([ExtResource("1_lihfw"), ExtResource("2_h5sm7"), ExtResource("3_pt44p"), ExtResource("4_q3rxx")])
+crop_name = "mushroom"
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_lihfw"), SubResource("AtlasTexture_h5sm7"), SubResource("AtlasTexture_pt44p")])
+days_to_grow = 2
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"
