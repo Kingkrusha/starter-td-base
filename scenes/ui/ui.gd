@@ -268,3 +268,4 @@ func _update_alert_text() -> void:
 	else:
 		# If already unlocked, keep showing latest enemy info but omit countdown text.
 		alert_text_label.text = description
+		

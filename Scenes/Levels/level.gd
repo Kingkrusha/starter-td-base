@@ -48,6 +48,7 @@ signal special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int)
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
+	Data.reset_run_stats()
 	$UI.connect("start_wave", spawn_wave)
 	special_enemy_approaching.connect(_on_special_enemy_approaching)
 	_print_debug_bindings()

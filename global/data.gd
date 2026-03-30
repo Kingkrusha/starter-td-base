@@ -589,6 +589,106 @@ var ENEMY_DATA = {
 }
 
 
+var stats_enemies_defeated: int = 0
+var stats_damage_dealt: int = 0
+var stats_tower_money_generated: int = 0
+var stats_plant_money_generated: int = 0
+var stats_plants_harvested: int = 0
+var _stats_tower_damage_by_id: Dictionary = {}
+
+
+func reset_run_stats() -> void:
+	stats_enemies_defeated = 0
+	stats_damage_dealt = 0
+	stats_tower_money_generated = 0
+	stats_plant_money_generated = 0
+	stats_plants_harvested = 0
+	_stats_tower_damage_by_id.clear()
+
+
+func record_enemy_defeated(count: int = 1) -> void:
+	if count <= 0:
+		return
+	stats_enemies_defeated += count
+
+
+func record_damage_dealt(amount: int, tower_ref: Node = null) -> void:
+	if amount <= 0:
+		return
+	stats_damage_dealt += amount
+	if tower_ref == null or not (tower_ref is Tower):
+		return
+
+	var tower_id := tower_ref.get_instance_id()
+	if not _stats_tower_damage_by_id.has(tower_id):
+		_stats_tower_damage_by_id[tower_id] = {
+			"damage": 0,
+			"tower": tower_ref
+		}
+	_stats_tower_damage_by_id[tower_id]["damage"] += amount
+
+
+func record_tower_money_generated(amount: int) -> void:
+	if amount <= 0:
+		return
+	stats_tower_money_generated += amount
+
+
+func record_plant_money_generated(amount: int) -> void:
+	if amount <= 0:
+		return
+	stats_plant_money_generated += amount
+
+
+func record_plants_harvested(count: int = 1) -> void:
+	if count <= 0:
+		return
+	stats_plants_harvested += count
+
+
+func get_best_tower_summary() -> String:
+	var best_damage := -1
+	var best_tower: Tower = null
+	for entry in _stats_tower_damage_by_id.values():
+		var tower: Tower = entry.get("tower")
+		if tower == null or not is_instance_valid(tower):
+			continue
+		var dealt: int = int(entry.get("damage", 0))
+		if dealt > best_damage:
+			best_damage = dealt
+			best_tower = tower
+
+	if best_tower == null:
+		return "None"
+
+	var tower_key: String = Tower.keys()[int(best_tower.type)]
+	var track_values: Array = []
+	var track_order: Array = ["damage", "range", "area", "attack_speed"]
+	for track_name in track_order:
+		if UPGRADE_DATA[best_tower.type]["tracks"].has(track_name):
+			track_values.append(int(best_tower.track_levels.get(track_name, 0)))
+	while track_values.size() < 3:
+		track_values.append(0)
+
+	var result := "%s, %d,%d,%d" % [tower_key, track_values[0], track_values[1], track_values[2]]
+	if String(best_tower.big_upgrade_chosen) != "":
+		var big_key := String(best_tower.big_upgrade_chosen)
+		if UPGRADE_DATA[best_tower.type]["big"].has(big_key):
+			result += " %s" % String(UPGRADE_DATA[best_tower.type]["big"][big_key].get("name", ""))
+	return result
+
+
+func get_run_stats() -> Dictionary:
+	return {
+		"enemies_defeated": stats_enemies_defeated,
+		"damage_dealt": stats_damage_dealt,
+		"tower_money_generated": stats_tower_money_generated,
+		"plant_money_generated": stats_plant_money_generated,
+		"plants_harvested": stats_plants_harvested,
+		"best_tower": get_best_tower_summary()
+	}
+
+
 var health: int = 100:
 	set(value):
 		health = value

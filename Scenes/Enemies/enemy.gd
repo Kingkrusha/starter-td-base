@@ -42,6 +42,8 @@ var burn_duration: float = 0.0
 var burn_tick_speed: float = 0.2
 var burn_elapsed: float = 0.0
 var burn_next_tick: float = 0.0
+var burn_source_tower: Tower = null
+var is_dying: bool = false
 
 signal special_death_effect(effect_id: String, payload: Dictionary)
 
@@ -104,6 +106,8 @@ func _on_area_entered(bullet: Area2D):
 		bullet.queue_free.call_deferred()
 		
 func hit(ref):
+	if is_dying:
+		return
 	if _is_temporarily_invulnerable():
 		return
 	flash()
@@ -115,15 +119,23 @@ func hit(ref):
 	var damage_to_apply := _compute_incoming_damage(bullet_data)
 	health -= damage_to_apply
 	$ProgressBar.value += damage_to_apply
+	var source_tower: Tower = null
+	if ref is Tower:
+		source_tower = ref
+	elif ref != null and "parent_tower" in ref and ref.parent_tower is Tower:
+		source_tower = ref.parent_tower
+	Data.record_damage_dealt(damage_to_apply, source_tower)
 	_on_damage_taken(bullet_data, damage_to_apply)
 	if ref.dmg_type == "slow":
 		apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
 	elif ref.dmg_type == "burn":
-		apply_burn(ref.burn_damage, ref.burn_duration, ref.burn_tick_speed)
+		apply_burn(ref.burn_damage, ref.burn_duration, ref.burn_tick_speed, source_tower)
 	#print("Dealing ", ref.damage, " damage")
 	if health <=0 :
+		is_dying = true
 		_emit_special_death_effects()
-		
+		Data.record_enemy_defeated()
+		Data.record_plant_money_generated(reward)
 		GameFarmManager.money += reward
 		#print_debug("Reward ", reward)
 		queue_free.call_deferred()
@@ -145,12 +157,13 @@ func _on_slow_timer_timeout():
 	slow_mult = 1.0
 
 
-func apply_burn(damage_per_tick: int, duration: float, tick_speed: float) -> void:
+func apply_burn(damage_per_tick: int, duration: float, tick_speed: float, source_tower: Tower = null) -> void:
 	burn_damage_per_tick = damage_per_tick
 	burn_duration = duration
 	burn_tick_speed = tick_speed
 	burn_elapsed = 0.0
 	burn_next_tick = 0.0
+	burn_source_tower = source_tower
 
 
 func _initialize_special_state() -> void:
@@ -328,12 +341,18 @@ func _process_burn_damage(delta: float) -> void:
 	if burn_elapsed >= burn_next_tick:
 		health -= burn_damage_per_tick
 		$ProgressBar.value += burn_damage_per_tick
+		Data.record_damage_dealt(burn_damage_per_tick, burn_source_tower)
 		burn_next_tick += burn_tick_speed
 		
 		# Check if enemy died from burn
 		if health <= 0:
+			if is_dying:
+				return
+			is_dying = true
 			_emit_special_death_effects()
-			overManager.give_money_farm(reward)
+			Data.record_enemy_defeated()
+			Data.record_plant_money_generated(reward)
+			GameFarmManager.money += reward
 			queue_free.call_deferred()
 
 

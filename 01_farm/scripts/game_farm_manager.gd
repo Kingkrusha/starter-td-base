@@ -47,6 +47,7 @@ func _on_change_scene ():
 	
 func harvest_crop (crop : Crop, reward : int):
 	overManager.give_money_tower(reward)
+	Data.record_plants_harvested()
 	print("Harvested!")
 	HarvestCrop.emit(crop)
 	crop.queue_free()
