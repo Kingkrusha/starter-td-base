@@ -20,6 +20,7 @@ var warmup_wave_start_reload: float = 0.0
 func _ready():
 	type = Data.Tower.BLAST
 	init_stats()
+	dmg_type = 'fire'
 	twr_range = Data.UPGRADE_DATA[type]['tracks']['range']['base']
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]['tracks']['attack_speed']['base']
 	if not overManager.NewTurn.is_connected(_on_new_turn):

@@ -125,12 +125,17 @@ func _on_big_upgrade_pressed(key: String):
 
 
 func _on_texture_button_pressed():
-	# Legacy signal connection from the scene file; kept as a no-op.
+	# Legacy signal connection from the scene file
 	pass
 
 
 func _on_exit_button_pressed():
 	self.visible = false
-	tower_ref.show_range = false
-	tower_ref.queue_redraw()
+	if tower_ref:
+		tower_ref.show_range = false
+		tower_ref.queue_redraw()
 	close.emit()
+
+
+func _on_remove_button_pressed():
+	tower_ref.queue_free()

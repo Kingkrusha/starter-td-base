@@ -20,8 +20,21 @@ var shield_max: float = 0.0
 var last_hit_time: float = 0.0
 var first_hit_triggered: bool = false
 var invulnerable_until: float = 0.0
-var full_hp_speed_mult: float = 1.0
 var special_elapsed_time: float = 0.0
+var phantom_speed_mult: float = 1.0
+
+var slow_mult: float = 1.0
+var external_boost_mult: float = 1.0
+var external_boost_until: float = 0.0
+
+var protector_aura_radius: float = 120.0
+var protector_aura_resistance_mult: float = 0.35
+var protector_aura_types: Array = []
+var protector_aura_active: bool = false
+var protector_aura_ring: Line2D
+
+var adaptive_immunity_locked: bool = false
+var adaptive_immunity_type: String = ""
 
 # Burn effect tracking
 var burn_damage_per_tick: int = 0
@@ -61,13 +74,18 @@ func _process(delta):
 	special_elapsed_time += delta
 	_process_special_state(delta)
 	_process_burn_damage(delta)
+	_update_external_speed_boost_state()
+	_update_protector_aura_state()
+	_update_speed_state()
 	path_follow.progress += ((speed * delta) * speed_mult)
 	$ProgressBar.rotation = -path_follow.rotation 
 	$ProgressBar.position = Vector2(0,-12)
 	if _is_temporarily_invulnerable():
-		$Sprite.modulate = Color.YELLOW
+		$Sprite.modulate = Color(1.0, 1.0, 1.0, 0.6)
 	elif shield_current > 0:
-		$Sprite.modulate = Color.LIGHT_BLUE
+		$Sprite.modulate = Color.YELLOW
+	elif speed_mult > 1.0:
+		$Sprite.modulate = Color(0.72, 0.5, 1.0, 1.0)
 	elif speed_mult < 1.0:
 		$Sprite.modulate = Color.CADET_BLUE
 	else:
@@ -99,7 +117,7 @@ func hit(ref):
 	$ProgressBar.value += damage_to_apply
 	_on_damage_taken(bullet_data, damage_to_apply)
 	if ref.dmg_type == "slow":
-		apply_slow(ref.slow, ref.slow_duration)
+		apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
 	elif ref.dmg_type == "burn":
 		apply_burn(ref.burn_damage, ref.burn_duration, ref.burn_tick_speed)
 	#print("Dealing ", ref.damage, " damage")
@@ -116,13 +134,15 @@ func flash():
 	tween.tween_property($Sprite.material, 'shader_parameter/progress', 0.0, 0.1)
 
 func apply_slow( new_speed: float, duration: float ):
-	speed_mult = min(speed_mult, new_speed)
+	if "slow" in immunities:
+		return
+	slow_mult = min(slow_mult, new_speed)
 	$SlowTimer.wait_time = duration
 	$SlowTimer.start()
 
 
 func _on_slow_timer_timeout():
-	speed_mult = 1.0
+	slow_mult = 1.0
 
 
 func apply_burn(damage_per_tick: int, duration: float, tick_speed: float) -> void:
@@ -139,11 +159,18 @@ func _initialize_special_state() -> void:
 		"shield_recharge":
 			shield_max = float(special_params.get("shield_max", 0))
 			shield_current = shield_max
-		"full_health_speed_boost":
-			full_hp_speed_mult = float(special_params.get("speed_mult_at_full_hp", 1.0))
-		"first_hit_invuln":
+		"phantom_phase":
 			first_hit_triggered = false
 			invulnerable_until = 0.0
+			phantom_speed_mult = float(special_params.get("speed_mult", 1.0))
+		"protector_aura":
+			protector_aura_radius = float(special_params.get("aura_radius", 120.0))
+			protector_aura_resistance_mult = float(special_params.get("aura_resistance_mult", 0.35))
+			protector_aura_types = special_params.get("aura_types", ["slow", "fire", "explosion"])
+			_create_protector_aura_visual()
+		"adaptive_defense":
+			adaptive_immunity_locked = false
+			adaptive_immunity_type = ""
 		_:
 			pass
 
@@ -158,12 +185,8 @@ func _process_special_state(delta: float) -> void:
 			if special_elapsed_time - last_hit_time >= recharge_delay:
 				shield_current += recharge_rate * delta
 				shield_current = min(shield_current, shield_max)
-		"full_health_speed_boost":
-			# Apply speed boost only at full health
-			if health >= max_health:
-				speed_mult = full_hp_speed_mult
-			else:
-				speed_mult = 1.0
+		"phantom_phase":
+			pass
 		_:
 			pass
 
@@ -179,6 +202,10 @@ func _compute_incoming_damage(ref: Dictionary) -> int:
 	# Apply resistances
 	if dmg_type in resistances:
 		incoming_damage = int(float(incoming_damage) * resistances[dmg_type])
+
+	# Protector aura: nearby protector grants non-stacking resistance to configured types.
+	if protector_aura_active and dmg_type in protector_aura_types:
+		incoming_damage = int(float(incoming_damage) * protector_aura_resistance_mult)
 	
 	# Apply flat reduction
 	if special_id == "flat_damage_reduction":
@@ -199,14 +226,90 @@ func _on_damage_taken(_ref: Dictionary, _damage_amount: int) -> void:
 	last_hit_time = special_elapsed_time
 	
 	# Trigger first-hit invulnerability window
-	if special_id == "first_hit_invuln" and not first_hit_triggered:
+	if special_id == "phantom_phase" and not first_hit_triggered:
 		first_hit_triggered = true
 		var duration = float(special_params.get("invuln_duration", 1.0))
 		invulnerable_until = special_elapsed_time + duration
 
+	if special_id == "adaptive_defense" and not adaptive_immunity_locked:
+		var dmg_type := String(_ref.get("dmg_type", "normal"))
+		if dmg_type != "":
+			adaptive_immunity_locked = true
+			adaptive_immunity_type = dmg_type
+			if adaptive_immunity_type not in immunities:
+				immunities.append(adaptive_immunity_type)
+
 
 func _is_temporarily_invulnerable() -> bool:
 	return special_elapsed_time < invulnerable_until
+
+
+func _update_speed_state() -> void:
+	var phantom_mult := 1.0
+	if special_id == "phantom_phase" and _is_temporarily_invulnerable():
+		phantom_mult = max(1.0, phantom_speed_mult)
+
+	var combined := slow_mult * phantom_mult * external_boost_mult
+	if special_id == "booster_on_death":
+		combined = max(1.0, combined)
+
+	speed_mult = combined
+
+
+func _update_external_speed_boost_state() -> void:
+	if external_boost_until > 0.0 and special_elapsed_time >= external_boost_until:
+		external_boost_until = 0.0
+		external_boost_mult = 1.0
+
+
+func apply_external_speed_boost(mult: float, duration: float) -> void:
+	if mult <= 1.0 or duration <= 0.0:
+		return
+	# Non-stacking: ignore new boosts while one is active.
+	if special_elapsed_time < external_boost_until:
+		return
+	external_boost_mult = mult
+	external_boost_until = special_elapsed_time + duration
+
+
+func _update_protector_aura_state() -> void:
+	protector_aura_active = false
+	for node in get_tree().get_nodes_in_group("enemies"):
+		if node == self:
+			continue
+		if not (node is Area2D):
+			continue
+		if not node.has_method("_is_protector_enemy"):
+			continue
+		if not node._is_protector_enemy():
+			continue
+		var radius := float(node.get("protector_aura_radius"))
+		if node.global_position.distance_to(global_position) <= radius:
+			protector_aura_active = true
+			break
+
+
+func _is_protector_enemy() -> bool:
+	return special_id == "protector_aura"
+
+
+func _create_protector_aura_visual() -> void:
+	if protector_aura_ring and is_instance_valid(protector_aura_ring):
+		return
+
+	var ring := Line2D.new()
+	var points := PackedVector2Array()
+	var segment_count := 48
+	for i in range(segment_count):
+		var angle := TAU * float(i) / float(segment_count)
+		points.append(Vector2.RIGHT.rotated(angle) * protector_aura_radius)
+	ring.points = points
+	ring.closed = true
+	ring.width = 1.4
+	ring.default_color = Color(0.95, 0.85, 0.2, 0.65)
+	ring.antialiased = true
+	add_child(ring)
+	protector_aura_ring = ring
 
 
 func _process_burn_damage(delta: float) -> void:
@@ -256,6 +359,16 @@ func _emit_special_death_effects() -> void:
 				"origin": global_position,
 				"pulse_radius": pulse_radius,
 				"disable_duration": disable_duration
+			})
+		"booster_on_death":
+			var boost_radius := float(special_params.get("boost_radius", 120.0))
+			var boost_duration := float(special_params.get("boost_duration", 1.0))
+			var boost_mult := float(special_params.get("boost_mult", 1.7))
+			special_death_effect.emit("death_speed_boost", {
+				"origin": global_position,
+				"boost_radius": boost_radius,
+				"boost_duration": boost_duration,
+				"boost_mult": boost_mult
 			})
 		_:
 			pass

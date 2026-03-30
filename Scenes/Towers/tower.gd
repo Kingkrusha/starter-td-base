@@ -36,6 +36,17 @@ func _ready():
 
 func _physics_process(_delta: float) -> void:
 	_update_disable_state()
+	_update_speed_boost_visual()
+
+
+func _update_speed_boost_visual() -> void:
+	if is_temp_disabled:
+		return
+	var speed_mult_value = get("speed_mult")
+	if speed_mult_value != null and float(speed_mult_value) > 1.0:
+		modulate = Color(0.72, 0.5, 1.0, 1.0)
+	else:
+		modulate = Color.WHITE
 
 func _on_enemy_detection_area_area_entered(area):
 	if area not in enemies:
