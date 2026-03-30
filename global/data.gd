@@ -2,6 +2,7 @@ extends Node
 
 signal money_changed(new_value : int)
 signal health_changed(new_value : int)
+signal tower_constraints_changed()
 enum Tower {BASIC, BLAST, MORTAR, SLOW, BOMB}
 enum Bullet {SINGLE, FIRE, MORTAR_EXPLOSION, BOMB}
 enum Enemy {
@@ -62,6 +63,7 @@ const TOWER_DATA = {
 		'cost': 20,
 		'reload_time': 1.0,
 		'bullet': Bullet.SINGLE,
+		'plant_type': 'mushroom',
 		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
 	Tower.BLAST: {
@@ -69,6 +71,7 @@ const TOWER_DATA = {
 		'cost': 30,
 		'reload_time': 1.5,
 		'bullet': Bullet.FIRE,
+		'plant_type': 'pepper',
 		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
 		'portrait': "res://graphics/ui/tower thumbnails/blaster.png"},
 	Tower.MORTAR: {
@@ -76,6 +79,7 @@ const TOWER_DATA = {
 		'cost': 30,
 		'reload_time': 2.0,
 		'bullet': Bullet.MORTAR_EXPLOSION,
+		'plant_type': 'pineapple',
 		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
 		'portrait': "res://graphics/ui/tower thumbnails/mortar.png"},
 	Tower.SLOW: {
@@ -83,6 +87,7 @@ const TOWER_DATA = {
 		'cost': 25,
 		'reload_time': 1.2,
 		'bullet': Bullet.SINGLE,
+		'plant_type': 'blackberry',
 		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
 	Tower.BOMB: {
@@ -91,8 +96,173 @@ const TOWER_DATA = {
 		'reload_time': 1.2,
 		'twr_range': 60,
 		'bullet': Bullet.SINGLE,
+		'plant_type': 'pumpkin',
 		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"}}
+
+
+func notify_tower_constraint_state_changed() -> void:
+	tower_constraints_changed.emit()
+
+
+func get_tower_plant_type(tower_type: Data.Tower) -> String:
+	return String(TOWER_DATA.get(tower_type, {}).get("plant_type", ""))
+
+
+func _collect_tower_nodes() -> Array:
+	var towers: Array = []
+	var roots := get_tree().get_nodes_in_group("Towers")
+	if roots.is_empty():
+		roots = get_tree().get_root().find_children("Towers", "Node", true, false)
+	for root in roots:
+		for child in root.get_children():
+			if child is Tower:
+				towers.append(child)
+	return towers
+
+
+func _collect_crop_nodes() -> Array:
+	var crops: Array = []
+	var roots := get_tree().get_nodes_in_group("Plants")
+	if roots.is_empty():
+		roots = get_tree().get_root().find_children("Plants", "Node", true, false)
+	for root in roots:
+		for child in root.get_children():
+			if child is Crop:
+				crops.append(child)
+	return crops
+
+
+func get_plant_stage_count(crop_name: String, growth_stage: int) -> int:
+	var count := 0
+	for crop in _collect_crop_nodes():
+		if crop.crop_data == null:
+			continue
+		if String(crop.crop_data.crop_name) == crop_name and int(crop.crop_data.growth_stage) == growth_stage:
+			count += 1
+	return count
+
+
+func get_tower_type_count(tower_type: Data.Tower) -> int:
+	var count := 0
+	for tower in _collect_tower_nodes():
+		if tower.type == tower_type:
+			count += 1
+	return count
+
+
+func get_associated_towers_at_or_above_tier(crop_name: String, tier: int) -> int:
+	var count := 0
+	for tower in _collect_tower_nodes():
+		var tower_crop := get_tower_plant_type(tower.type)
+		if tower_crop != crop_name:
+			continue
+		var current_tier: int = max(1, int(tower.get("tower_tier")))
+		if current_tier >= tier:
+			count += 1
+	return count
+
+
+func can_place_tower_from_plants(tower_type: Data.Tower) -> Dictionary:
+	var crop_name := get_tower_plant_type(tower_type)
+	if crop_name == "":
+		return {"allowed": false, "reason": "No crop mapping configured for this tower."}
+
+	var stage_needed := 1
+	var plant_count := get_plant_stage_count(crop_name, stage_needed)
+	var existing_towers := get_tower_type_count(tower_type)
+	var required := existing_towers + 1
+	if plant_count > existing_towers:
+		return {
+			"allowed": true,
+			"reason": "",
+			"plant_count": plant_count,
+			"required": required,
+			"crop_name": crop_name,
+			"stage": stage_needed
+		}
+
+	return {
+		"allowed": false,
+		"reason": "Need more %s crops at growth stage %d (%d/%d)." % [crop_name, stage_needed, plant_count, required],
+		"plant_count": plant_count,
+		"required": required,
+		"crop_name": crop_name,
+		"stage": stage_needed
+	}
+
+
+func can_upgrade_tower_from_plants(tower: Tower, target_tier: int = -1) -> Dictionary:
+	if tower == null:
+		return {"allowed": false, "reason": "Tower reference is invalid."}
+
+	var crop_name := get_tower_plant_type(tower.type)
+	if crop_name == "":
+		return {"allowed": false, "reason": "No crop mapping configured for this tower."}
+
+	var current_tier = clamp(int(tower.get("tower_tier")), 1, 3)
+	var next_tier = target_tier if target_tier > 0 else current_tier + 1
+	next_tier = clamp(next_tier, 1, 3)
+
+	# If this action does not increase effective tier, no additional plant slot is required.
+	if next_tier <= current_tier:
+		return {
+			"allowed": true,
+			"reason": "",
+			"crop_name": crop_name,
+			"tier": next_tier
+		}
+
+	var plant_count := get_plant_stage_count(crop_name, next_tier)
+	var towers_at_or_above := get_associated_towers_at_or_above_tier(crop_name, next_tier)
+	var required := towers_at_or_above + 1
+	if plant_count > towers_at_or_above:
+		return {
+			"allowed": true,
+			"reason": "",
+			"plant_count": plant_count,
+			"required": required,
+			"crop_name": crop_name,
+			"tier": next_tier
+		}
+
+	return {
+		"allowed": false,
+		"reason": "Need more %s crops at growth stage %d (%d/%d)." % [crop_name, next_tier, plant_count, required],
+		"plant_count": plant_count,
+		"required": required,
+		"crop_name": crop_name,
+		"tier": next_tier
+	}
+
+
+func can_harvest_crop_for_towers(crop: Crop) -> Dictionary:
+	if crop == null or crop.crop_data == null:
+		return {"allowed": false, "reason": "Crop data is invalid."}
+
+	var crop_name := String(crop.crop_data.crop_name)
+	var stage := int(crop.crop_data.growth_stage)
+	var before_count = get_plant_stage_count(crop_name, stage)
+	var after_count = max(0, before_count - 1)
+	var required_towers := get_associated_towers_at_or_above_tier(crop_name, stage)
+	if after_count >= required_towers:
+		return {
+			"allowed": true,
+			"reason": "",
+			"crop_name": crop_name,
+			"stage": stage,
+			"after_count": after_count,
+			"required": required_towers
+		}
+
+	return {
+		"allowed": false,
+		"reason": "Cannot harvest: %s stage %d would drop to %d, but %d tower(s) require that stage." % [crop_name, stage, after_count, required_towers],
+		"crop_name": crop_name,
+		"stage": stage,
+		"after_count": after_count,
+		"required": required_towers
+	}
 var UPGRADE_DATA = {
 	Tower.BASIC: {
 		"tracks": {

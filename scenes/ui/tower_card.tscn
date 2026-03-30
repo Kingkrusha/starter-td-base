@@ -92,17 +92,17 @@ theme_override_font_sizes/font_size = 20
 text = "Tower Name"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control/VBoxContainer" unique_id=1793079610]
+[node name="CostBox" type="HBoxContainer" parent="VBoxContainer/Control/VBoxContainer" unique_id=1793079610]
 layout_mode = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Control/VBoxContainer/HBoxContainer" unique_id=25537346]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Control/VBoxContainer/CostBox" unique_id=25537346]
 self_modulate = Color(1, 0.89411765, 0.19607843, 1)
 layout_mode = 2
 texture = ExtResource("5_4rgsa")
 expand_mode = 3
 
-[node name="CostLabel" type="Label" parent="VBoxContainer/Control/VBoxContainer/HBoxContainer" unique_id=1709576223]
+[node name="CostLabel" type="Label" parent="VBoxContainer/Control/VBoxContainer/CostBox" unique_id=1709576223]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_ensqj")
 theme_override_font_sizes/font_size = 20

@@ -14,6 +14,7 @@ var twr_range: float
 var damage_area: float
 var type: Data.Tower
 var track_levels: Dictionary = { "damage": 0, "range": 0, "attack_speed": 0 }
+var tower_tier: int = 1
 var big_upgrade_chosen: String = ""   # "", "A", or "B"
 var show_range: bool = false
 var is_temp_disabled: bool = false
@@ -30,6 +31,7 @@ signal select (tower: Tower)
 	#pass
 func _ready():
 	init_stats()
+	_sync_tower_tier_for_state()
 
 
 func _physics_process(_delta: float) -> void:
@@ -62,8 +64,68 @@ func get_upgrade_data():
 func upgrade_check(): # Used in subclasses for changing stats not included in track, can also be used for sfx later
 	pass
 
+
+func _has_any_track_upgrades() -> bool:
+	for track in track_levels.keys():
+		if int(track_levels[track]) > 0:
+			return true
+	return false
+
+
+func _sync_tower_tier_for_state() -> void:
+	if big_upgrade_chosen != "":
+		tower_tier = 3
+	elif _has_any_track_upgrades():
+		tower_tier = 2
+	else:
+		tower_tier = 1
+
+
+func can_apply_track_upgrade(track: String) -> Dictionary:
+	if not Data.UPGRADE_DATA[type]["tracks"].has(track):
+		return {"allowed": false, "reason": "Invalid upgrade track."}
+
+	var track_data = Data.UPGRADE_DATA[type]["tracks"][track]
+	if track_levels[track] >= track_data["max"]:
+		return {"allowed": false, "reason": "Track already at max level."}
+
+	var cost: int = int(track_data["costs"][track_levels[track]])
+	if Data.money < cost:
+		return {"allowed": false, "reason": "Not enough tower money (%d/%d)." % [Data.money, cost]}
+
+	var gate: Dictionary = Data.can_upgrade_tower_from_plants(self, 2)
+	if not bool(gate.get("allowed", false)):
+		return {"allowed": false, "reason": String(gate.get("reason", "Plant requirement not met."))}
+
+	return {"allowed": true, "reason": "", "cost": cost}
+
+
+func can_apply_big_upgrade(key: String) -> Dictionary:
+	if big_upgrade_chosen != "":
+		return {"allowed": false, "reason": "A big upgrade is already selected."}
+
+	var gate: Dictionary = Data.can_upgrade_tower_from_plants(self, 3)
+	if not bool(gate.get("allowed", false)):
+		return {"allowed": false, "reason": String(gate.get("reason", "Big upgrades require growth stage 3 plants."))}
+
+	if not Data.UPGRADE_DATA[type]["big"].has(key):
+		return {"allowed": false, "reason": "Invalid big upgrade option."}
+
+	var upgrade = Data.UPGRADE_DATA[type]["big"][key]
+	var cost: int = int(upgrade["cost"])
+	if Data.money < cost:
+		return {"allowed": false, "reason": "Not enough tower money (%d/%d)." % [Data.money, cost]}
+
+	return {"allowed": true, "reason": "", "cost": cost}
+
+
+func _apply_tier_increase_after_upgrade() -> void:
+	_sync_tower_tier_for_state()
+	Data.notify_tower_constraint_state_changed()
+
 func apply_track_upgrade(track : String):
-	if track_levels[track] >= Data.UPGRADE_DATA[type]['tracks'][track]['max'] or Data.money < Data.UPGRADE_DATA[type]['tracks'][track]['costs'][track_levels[track]]:
+	var status := can_apply_track_upgrade(track)
+	if not bool(status.get("allowed", false)):
 		return
 	var increase_amount
 	if Data.UPGRADE_DATA[type]['tracks'][track]['type'] == 'percent':
@@ -91,8 +153,9 @@ func apply_track_upgrade(track : String):
 			bullet_speed += increase_amount
 			
 	upgrade_check()
-	Data.money -= Data.UPGRADE_DATA[type]['tracks'][track]['costs'][track_levels[track]]
+	Data.money -= int(status.get("cost", 0))
 	track_levels[track] += 1
+	_apply_tier_increase_after_upgrade()
 	
 	
 

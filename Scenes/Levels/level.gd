@@ -86,6 +86,10 @@ func tower_selection(tower:Tower):
 
 
 func _on_ui_place_tower(tower_type: Data.Tower):
+	var placement_gate: Dictionary = Data.can_place_tower_from_plants(tower_type)
+	if not bool(placement_gate.get("allowed", false)):
+		print(String(placement_gate.get("reason", "Cannot place tower.")))
+		return
 	place_tower = true
 	selected_tower = tower_type
 	print('tower placement ', place_tower , tower_type)
@@ -112,6 +116,11 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_mask == 1 and place_tower:
 		#var tile_data =($BG/TileMapLayer.get_cell_tile_data(pos))
 		if event.button_index == 1 and valid_placement == true: #and pos not in used_cells and tile_data is TileData and tile_data.get_custom_data("useable"):
+			var placement_gate: Dictionary = Data.can_place_tower_from_plants(selected_tower)
+			if not bool(placement_gate.get("allowed", false)):
+				print(String(placement_gate.get("reason", "Cannot place tower.")))
+				place_tower = false
+				return
 			#used_cells.append(pos)
 			var tower = load(tower_scenes[selected_tower]).instantiate()
 			tower.position = pos #*16 + Vector2i(8,8)
@@ -119,7 +128,7 @@ func _input(event: InputEvent):
 			tower.connect('select', tower_selection)
 			$Towers.add_child(tower)
 			place_tower = false
-			Data.money -= Data.TOWER_DATA[selected_tower]['cost']
+			Data.notify_tower_constraint_state_changed()
 	
 	if event is InputEventMouseButton and event.button_mask == 1 and current_tower:
 		if current_tower.type == Data.Tower.MORTAR:

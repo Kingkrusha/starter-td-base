@@ -55,24 +55,19 @@ func _ready ():
 	create_starting_crops(Vector2i(1, 1), preload("res://01_farm/crops/hot_pepper.tres"), 2)
 	track_plants_num()
 	track_plants_index()
+	Data.notify_tower_constraint_state_changed()
 
 func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_point: int):
 	 # Create crop
 	var new_crop : Crop = crop_scene.instantiate() 
 	plant_group.add_child(new_crop)
-	
-	# Configure manually (bypassing set_crop)
-	new_crop.crop_data = crop_data
-	new_crop.days_until_grown = new_crop.days_until_grown - starting_point
-	new_crop.watered = false
-	new_crop.harvestable = false
-	new_crop.tile_map_coords = tile_coords
-	new_crop.crop_data.growth_stage = starting_point
-	
-	# Set sprite
-	#var growth_index = crop_data.days_to_grow - days_left
-	#growth_index = clamp(growth_index, 0, crop_data.growth_sprites.size() - 1)
-	new_crop.sprite.texture = crop_data.growth_sprites[new_crop.crop_data.growth_stage]
+	new_crop._set_crop(crop_data, false, tile_coords)
+
+	var target_stage := starting_point
+	if overManager.turn == 0:
+		target_stage = max(target_stage, 1)
+	if new_crop.has_method("_apply_growth_stage"):
+		new_crop._apply_growth_stage(target_stage)
 	
 	# Position
 	new_crop.position = tile_map.map_to_local(tile_coords)
@@ -96,10 +91,12 @@ func _on_new_day (day: int):
 		elif info.tilled:
 			if info.crop == null:
 				_set_tile_state(tile_pos, TileType.GRASS)
+	Data.notify_tower_constraint_state_changed.call_deferred()
 				
 func _on_harvest_crop(crop : Crop):
 	_get_tile_info(crop.tile_map_coords).crop = null
 	_set_tile_state(crop.tile_map_coords, TileType.TILLED)
+	Data.notify_tower_constraint_state_changed()
 
 func try_till_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
@@ -142,8 +139,7 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 		return
 	
 	var crop : Crop = crop_scene.instantiate()
-	#plant_group.
-	add_child(crop)
+	plant_group.add_child(crop)
 	crop.global_position = tile_map.map_to_local(coords)
 	crop._set_crop(crop_data, is_tile_watered(coords), coords)
 	
@@ -151,6 +147,7 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	
 	GameFarmManager.consume_seed(crop_data)
 	plant_seed_sound.play()
+	Data.notify_tower_constraint_state_changed()
 
 func try_harvest_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
@@ -162,10 +159,16 @@ func try_harvest_tile (player_pos : Vector2):
 	if not tile_info[coords].crop.harvestable:
 		print_debug("Whoops!")
 		return
+
+	var harvest_gate: Dictionary = Data.can_harvest_crop_for_towers(tile_info[coords].crop)
+	if not bool(harvest_gate.get("allowed", false)):
+		print(String(harvest_gate.get("reason", "Cannot harvest this crop right now.")))
+		return
 	
 	GameFarmManager.harvest_crop(tile_info[coords].crop, tile_info[coords].crop.sell_price)
 	tile_info[coords].crop = null
 	harvest_sound.play()
+	Data.notify_tower_constraint_state_changed()
 
 func is_tile_watered (pos :Vector2) -> bool:
 	var coords : Vector2i = tile_map.local_to_map(pos)

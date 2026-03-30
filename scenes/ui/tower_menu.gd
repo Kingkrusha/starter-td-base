@@ -43,8 +43,21 @@ func setup(tower):
 	big_buttons.append([big_btn_b, big_b_cb])
 
 	var selected_big : String = tower.big_upgrade_chosen
-	big_btn_a.disabled = selected_big != "" and selected_big != "A"
-	big_btn_b.disabled = selected_big != "" and selected_big != "B"
+	var big_a_status: Dictionary = tower_ref.can_apply_big_upgrade("A")
+	var big_b_status: Dictionary = tower_ref.can_apply_big_upgrade("B")
+	big_btn_a.disabled = not bool(big_a_status.get("allowed", false))
+	big_btn_b.disabled = not bool(big_b_status.get("allowed", false))
+	var big_a_desc := String(upgrade_data['big']['A']['description'])
+	var big_b_desc := String(upgrade_data['big']['B']['description'])
+	if big_btn_a.disabled:
+		big_btn_a.tooltip_text = "%s\n%s" % [big_a_desc, String(big_a_status.get("reason", "Unavailable."))]
+	else:
+		big_btn_a.tooltip_text = big_a_desc
+	if big_btn_b.disabled:
+		big_btn_b.tooltip_text = "%s\n%s" % [big_b_desc, String(big_b_status.get("reason", "Unavailable."))]
+	else:
+		big_btn_b.tooltip_text = big_b_desc
+
 	if selected_big == "A":
 		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer/Cost.text = "OWNED"
 		$PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2/Cost.text = "LOCKED"
@@ -69,6 +82,9 @@ func setup(tower):
 
 		bar.max_value = track_data['max']
 		bar.value = tower.track_levels[track]
+		var track_status: Dictionary = tower_ref.can_apply_track_upgrade(track)
+		btn.disabled = not bool(track_status.get("allowed", false))
+		btn.tooltip_text = String(track_status.get("reason", "Upgrade available.")) if btn.disabled else ""
 		if tower.track_levels[track] < track_data["max"]:
 			cost.text = str(track_data['costs'][tower.track_levels[track]])
 		else:
