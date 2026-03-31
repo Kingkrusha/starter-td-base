@@ -206,7 +206,7 @@ func track_plants_num() -> Dictionary:
 	var all_crops = get_tree().get_nodes_in_group("crops")
 	var counts = {}
 	for child in all_crops:
-		if child is Crop :
+		if child is Crop && child.crop_data.growth_stage > 0:
 			var crop_name = child.crop_data.crop_name
 			counts[crop_name] = counts.get(crop_name, 0) +1
 				
