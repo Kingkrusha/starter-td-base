@@ -22,7 +22,7 @@ var plant_money : int = 0
 var tower_money : int = 0
 var turn : int = 0
 var waves : int
-var music_volume_percent: int = 80:
+var music_volume_percent: int = 20:
 	set(value):
 		music_volume_percent = clampi(value, 0, 100)
 		_apply_bgm_volume()
