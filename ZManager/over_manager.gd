@@ -24,7 +24,7 @@ var turn: int = 0:
 	set(value):
 		turn = value
 		if turn == waves:
-			victory()
+			victory.call_deferred()
 	
 var waves : int
 var music_volume_percent: int = 20:
@@ -48,7 +48,7 @@ func _ready() -> void:
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
 	plant_data.connect(determine_towers)
-	Data.defeat.connect(defeat)
+	Data.defeat.connect(defeat, CONNECT_DEFERRED)
 func set_waves(setwaves : int):
 	waves = setwaves 
 

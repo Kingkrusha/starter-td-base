@@ -239,14 +239,17 @@ func _on_turn_changed(_turn: int) -> void:
 
 
 func _on_tower_constraints_changed() -> void:
+	print("is inside tree: ", is_inside_tree())
+	print("self: ", self)
 	if not is_inside_tree():
 		return
-	for tower_card in $Control/TowerCards/TowerCardsContainer.get_children():
-		if tower_card.has_method("toggle_active"):
-			tower_card.toggle_active()
+	for tower_card in get_tree().get_nodes_in_group('TowerCard'):
+		tower_card.toggle_active()
+
 	if $Control/TowerMenu.visible and is_instance_valid($Control/TowerMenu.tower_ref):
 		$Control/TowerMenu.setup($Control/TowerMenu.tower_ref)
 
+	
 
 func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:
 	latest_special_enemy = enemy_type
