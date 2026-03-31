@@ -61,8 +61,10 @@ func set_waves(setwaves : int):
 	waves = setwaves 
 
 func victory():
+	set_td_wave_active(false)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/victory.tscn")
 func defeat():
+	set_td_wave_active(false)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/defeat.tscn")
 func set_td_wave_active(is_active: bool) -> void:
 	if td_wave_active == is_active:

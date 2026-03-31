@@ -27,4 +27,5 @@ func _on_restart_pressed() -> void:
 
 
 func _on_menu_pressed() -> void:
+	overManager.emit_signal("reset")
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/menu.tscn")
