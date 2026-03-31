@@ -1,7 +1,10 @@
 class_name Crop
 extends Node2D
 
-var crop_data : CropData
+var crop_data : CropData:
+	set(value):
+		crop_data = value
+		_update_tooltip()
 var days_until_grown : int
 var watered : bool
 var harvestable : bool
@@ -10,7 +13,7 @@ var sell_price : int
 var growth_stage: int = 0
 
 @onready var sprite : Sprite2D = $Sprite 
-
+@onready var node: Control = $Sprite/Control
 func _ready ():
 	overManager.NewTurn.connect(_on_new_day)
 	
@@ -28,7 +31,9 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	if overManager.turn == 0 and crop_data.growth_sprites.size() > 1 and growth_stage < 1:
 		_apply_growth_stage(1)
 
-
+func _update_tooltip():
+	var growth = crop_data.growth_stage
+	node.tooltip_text = "Growth Stage: %d" % growth
 func _apply_growth_stage(stage: int) -> void:
 	var sprite_count := crop_data.growth_sprites.size()
 	if sprite_count <= 0:
