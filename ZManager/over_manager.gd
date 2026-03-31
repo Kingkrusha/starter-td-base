@@ -54,6 +54,8 @@ func _ready() -> void:
 func reset_manager():
 	print("reset overmanager")
 	turn = 0
+	Engine.time_scale = 1.0
+	Engine.physics_ticks_per_second = 60
 
 func set_waves(setwaves : int):
 	waves = setwaves 
