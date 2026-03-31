@@ -14,7 +14,7 @@ class TileInfo:
 	var tilled : bool
 	var watered : bool
 	var crop : Crop
-@onready var plantNode : Node2D = %Plants
+#@onready var plantNode : Node2D = %Plants
 @onready var tile_map : TileMapLayer = $FarmTileMap
 var tile_info : Dictionary[Vector2i,TileInfo]
 var crop_scene: PackedScene = preload("res://01_farm/scenes/crop.tscn")
@@ -206,7 +206,7 @@ func track_plants_num() -> Dictionary:
 	var all_crops = get_tree().get_nodes_in_group("crops")
 	var counts = {}
 	for child in all_crops:
-		if child is Crop && child.crop_data.growth_stage > 0:
+		if child is Crop:
 			var crop_name = child.crop_data.crop_name
 			counts[crop_name] = counts.get(crop_name, 0) +1
 				

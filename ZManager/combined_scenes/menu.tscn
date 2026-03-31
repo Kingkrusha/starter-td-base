@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://ctx3gqg47sqwa"]
 
-[ext_resource type="Script" path="res://ZManager/menu.gd" id="1_sgx6j"]
+[ext_resource type="Script" uid="uid://cro3x2u2dmh0y" path="res://ZManager/menu.gd" id="1_sgx6j"]
 [ext_resource type="Texture2D" uid="uid://b8scojr0jv3nb" path="res://01_farm/Sprites/Tiles/Tileset.png" id="2_oiafy"]
 [ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_onk1l"]
 [ext_resource type="Texture2D" uid="uid://b7igbw3vsk421" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/button.png" id="3_2k4e5"]

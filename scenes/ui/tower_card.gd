@@ -13,7 +13,8 @@ func _ready():
 	$VBoxContainer/TowerPreview/TextureRect.texture = load(Data.TOWER_DATA[id]['thumbnail'])
 
 func setup(tower_enum: Data.Tower):
-		id = tower_enum
+	print(id)
+	id = tower_enum
 
 
 func _on_pressed():

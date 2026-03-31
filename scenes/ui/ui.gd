@@ -20,7 +20,7 @@ var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 @onready var alert_icon : TextureButton = $Control/AlertIcon
 @onready var alert_text_box: NinePatchRect = $Control/AlertIcon/NinePatchRect
-@onready var alert_text_label: Label = $"Control/AlertIcon/Text Box/Text"
+@onready var alert_text_label: Label = $Control/AlertIcon/NinePatchRect/Text
 
 var current_started_wave: int = 0
 var alert_flash_active: bool = false
@@ -53,7 +53,10 @@ func _ready():
 		tower_card.connect('press', tower_select)
 	_on_tower_constraints_changed()
 
-
+func _exit_tree():
+	print("UI was removed!")
+	print(get_stack())  
+	
 func _process(delta: float) -> void:
 	if alert_flash_active:
 		alert_flash_time += delta
@@ -226,11 +229,17 @@ func _on_turn_changed(_turn: int) -> void:
 
 
 func _on_tower_constraints_changed() -> void:
+	print("is inside tree: ", is_inside_tree())
+	print("self: ", self)
+	if not is_inside_tree():
+		return
 	for tower_card in get_tree().get_nodes_in_group('TowerCard'):
 		tower_card.toggle_active()
+
 	if $Control/TowerMenu.visible and is_instance_valid($Control/TowerMenu.tower_ref):
 		$Control/TowerMenu.setup($Control/TowerMenu.tower_ref)
 
+	
 
 func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:
 	latest_special_enemy = enemy_type
