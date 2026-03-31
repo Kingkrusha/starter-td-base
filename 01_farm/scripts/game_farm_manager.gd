@@ -41,7 +41,7 @@ func _on_change_scene ():
 	#if get_node_or_null("res://01_farm/scenes/main.tscn") == null:
 		#return
 	for cd in all_crop_data:
-		give_seed.call_deferred(cd, 2)
+		give_seed.call_deferred(cd, 0)
 		print(owned_seeds)
 	money += 10
 	

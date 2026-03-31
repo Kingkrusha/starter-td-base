@@ -51,7 +51,7 @@ func _ready ():
 	for cell in tile_map.get_used_cells():
 		tile_info[cell] = TileInfo.new()
 	
-	create_starting_crops(Vector2i(0, 4), preload("res://01_farm/crops/hot_pepper.tres"), 2)
+	#create_starting_crops(Vector2i(0, 4), preload("res://01_farm/crops/hot_pepper.tres"), 2)
 	track_plants_num()
 	track_plants_index()
 	Data.notify_tower_constraint_state_changed()
