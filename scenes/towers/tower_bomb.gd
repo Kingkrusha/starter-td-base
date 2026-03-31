@@ -6,6 +6,7 @@ func _ready():
 	twr_range = 60
 	track_levels = { "damage": 0, "area": 0, "attack_speed": 0 }
 	type = Data.Tower.BOMB
+	pierce = 8
 	dmg_type = 'explosion'
 	init_stats()
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]["tracks"]["attack_speed"]["base"]

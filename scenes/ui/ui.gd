@@ -19,7 +19,7 @@ var game_speed: float = 1.0
 var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 @onready var alert_icon : TextureButton = $Control/AlertIcon
-@onready var alert_text_box: NinePatchRect = $Control/AlertIcon/NinePatchRect
+@onready var alert_text_box: = $Control/AlertIcon/NinePatchRect
 @onready var alert_text_label: Label = $Control/AlertIcon/NinePatchRect/Text
 
 var current_started_wave: int = 0
@@ -81,7 +81,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var click_pos: Vector2 = event.position
 		var icon_rect := alert_icon.get_global_rect()
-		var text_rect := alert_text_box.get_global_rect()
+		var text_rect = alert_text_box.get_global_rect()
 		if not icon_rect.has_point(click_pos) and not text_rect.has_point(click_pos):
 			alert_text_box.visible = false
 

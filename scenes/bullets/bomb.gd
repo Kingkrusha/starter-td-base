@@ -32,7 +32,8 @@ func _on_timer_timeout():
 	explode()
 
 func _on_area_entered(area): 
-	explode()
+	if area != null and area.is_in_group("enemies"):
+		explode()
 
 func explode():
 	var explosion = explosion_scene.instantiate()

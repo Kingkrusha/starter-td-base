@@ -43,6 +43,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="ExitButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Exit" unique_id=674927257]
+self_modulate = Color(1, 0.105882354, 0.101960786, 1)
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 0
 offset_left = 262.0
