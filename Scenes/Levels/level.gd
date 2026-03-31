@@ -26,9 +26,9 @@ var unlocked_special_pool: Array[Data.Enemy] = []
 var pending_special_unlocks: Array[Dictionary] = []
 var selected_specials: Array[Data.Enemy] = []
 var last_special_pick_wave: int = -1
-var DEBUG_ACTIVE: bool = true
-var DEBUG_IGNORE_RESOURCES: bool = true
-const DEBUG_SPECIAL_SCHEDULER: bool = true
+var DEBUG_ACTIVE: bool = false
+var DEBUG_IGNORE_RESOURCES: bool = false
+const DEBUG_SPECIAL_SCHEDULER: bool = false
 const DEBUG_ENEMY_HOTKEY_MAP := {
 	KEY_QUOTELEFT: Data.Enemy.DEFAULT,
 	KEY_1: Data.Enemy.FAST,

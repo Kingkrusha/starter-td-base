@@ -9,6 +9,7 @@ var slow_duration: float = 1.0
 var enemy_type: Data.Enemy
 var wave_idx: int = 0
 var max_health: int
+var spawn_cost: int
 
 var resistances: Dictionary = {}
 var immunities: Array = []
@@ -61,7 +62,7 @@ func setup(new_path_follow : PathFollow2D, enemy_type: Data.Enemy, wave_idx: int
 	max_health = health
 	$ProgressBar.max_value = max_health
 	$ProgressBar.value = 0
-	var spawn_cost: int = int(enemy_data.get("spawn_cost", 0))
+	spawn_cost = int(enemy_data.get("spawn_cost", 0))
 	if bool(enemy_data.get("is_special", true)):
 		reward = int(floor(float(spawn_cost) * 1.5))
 	else:

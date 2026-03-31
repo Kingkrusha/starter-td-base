@@ -21,7 +21,7 @@ enum Enemy {
 	SPECIAL_FLAT_REDUCTION,
 	SPECIAL_DEATH_DISABLE
 }
-var WAVE_BASE_CREDITS: int = 8
+var WAVE_BASE_CREDITS: int = 4
 var WAVE_CREDIT_GROWTH: int = 4   
 const WAVE_BASE_DELAY: float = 1.0
 const WAVE_MIN_DELAY: float = 0.2      
@@ -122,25 +122,17 @@ func get_tower_plant_type(tower_type: Data.Tower) -> String:
 
 func _collect_tower_nodes() -> Array:
 	var towers: Array = []
-	var roots := get_tree().get_nodes_in_group("Towers")
-	if roots.is_empty():
-		roots = get_tree().get_root().find_children("Towers", "Node", true, false)
-	for root in roots:
-		for child in root.get_children():
-			if child is Tower:
-				towers.append(child)
+	for node in get_tree().get_nodes_in_group("Towers"):
+		if node is Tower:
+			towers.append(node)
 	return towers
 
 
 func _collect_crop_nodes() -> Array:
 	var crops: Array = []
-	var roots := get_tree().get_nodes_in_group("Plants")
-	if roots.is_empty():
-		roots = get_tree().get_root().find_children("Plants", "Node", true, false)
-	for root in roots:
-		for child in root.get_children():
-			if child is Crop:
-				crops.append(child)
+	for node in get_tree().get_nodes_in_group("crops"):
+		if node is Crop:
+			crops.append(node)
 	return crops
 
 
@@ -149,7 +141,9 @@ func get_plant_stage_count(crop_name: String, growth_stage: int) -> int:
 	for crop in _collect_crop_nodes():
 		if crop.crop_data == null:
 			continue
-		if String(crop.crop_data.crop_name) == crop_name and int(crop.crop_data.growth_stage) == growth_stage:
+		var stage_value = crop.get("growth_stage")
+		var crop_stage := int(stage_value) if stage_value != null else int(crop.crop_data.growth_stage)
+		if String(crop.crop_data.crop_name) == crop_name and crop_stage == growth_stage:
 			count += 1
 	return count
 
@@ -267,7 +261,8 @@ func can_harvest_crop_for_towers(crop: Crop) -> Dictionary:
 		return {"allowed": false, "reason": "Crop data is invalid."}
 
 	var crop_name := String(crop.crop_data.crop_name)
-	var stage := int(crop.crop_data.growth_stage)
+	var stage_value = crop.get("growth_stage")
+	var stage := int(stage_value) if stage_value != null else int(crop.crop_data.growth_stage)
 	var before_count = get_plant_stage_count(crop_name, stage)
 	var after_count = max(0, before_count - 1)
 	var required_towers := get_associated_towers_at_or_above_tier(crop_name, stage)

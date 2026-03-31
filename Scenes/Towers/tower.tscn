@@ -8,7 +8,7 @@ radius = 100.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfpy0"]
 size = Vector2(24, 24)
 
-[node name="Tower" type="Node2D" unique_id=2013600930]
+[node name="Tower" type="Node2D" unique_id=2013600930 groups=["Towers"]]
 scale = Vector2(6, 6)
 
 [node name="Base" type="Sprite2D" parent="." unique_id=1033670289]

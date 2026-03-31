@@ -62,19 +62,16 @@ func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_
 	add_child(new_crop)
 	new_crop.add_to_group("crops")
 	print("Sprite is: ",  starting_point)
-	# Configure manually (bypassing set_crop)
-	new_crop.crop_data = crop_data
-	new_crop.days_until_grown = new_crop.days_until_grown - starting_point
-	new_crop.watered = false
-	new_crop.harvestable = false
-	new_crop.tile_map_coords = tile_coords
-	new_crop.crop_data.growth_stage = starting_point
+	# Configure through crop helper so instance state stays consistent.
+	new_crop._set_crop(crop_data, false, tile_coords)
+	if starting_point > 0:
+		new_crop._apply_growth_stage(starting_point)
 	_set_tile_state(tile_coords, TileType.TILLED)
 	
 	# Set sprite
 	#var growth_index = crop_data.days_to_grow - days_left
 	#growth_index = clamp(growth_index, 0, crop_data.growth_sprites.size() - 1)
-	new_crop.sprite.texture = crop_data.growth_sprites[new_crop.crop_data.growth_stage]
+	new_crop.sprite.texture = crop_data.growth_sprites[new_crop.growth_stage]
 	
 	# Position
 	new_crop.position = tile_map.map_to_local(tile_coords)
@@ -222,5 +219,5 @@ func track_plants_index() -> Dictionary:
 	for child in all_crops:
 		if child is Crop:
 			var crop_name = child.crop_data.crop_name
-			indexCount[crop_name] = indexCount.get(crop_name, 0) + child.crop_data.growth_stage
+			indexCount[crop_name] = indexCount.get(crop_name, 0) + child.growth_stage
 	return(indexCount)
