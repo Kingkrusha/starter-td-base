@@ -15,7 +15,7 @@ signal toggleMode()
 var plant_money : int = 0
 var tower_money : int = 0
 var turn : int = 0
-
+var waves : int
 func _ready() -> void:
 	# Initialize from current values before connecting signals
 	tower_money = Data.money
@@ -24,7 +24,9 @@ func _ready() -> void:
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
 	plant_data.connect(determine_towers)
-
+	
+func set_waves(setwaves : int):
+	waves = setwaves 
 #Money functions might be deprecated. Centralizing currency for a programmer is anethema I suppose.
 # wave/day logic will all be controlled via over_manager for simplicity
 func _update_tower_money (amount : int):

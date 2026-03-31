@@ -3,12 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://4ag7rchc255l" path="res://01_farm/scenes/main.tscn" id="1_q02fv"]
 [ext_resource type="Script" uid="uid://b45ieah6pbcj0" path="res://ZManager/combined_main.gd" id="1_xnitx"]
 [ext_resource type="PackedScene" uid="uid://l55pr03rxtvs" path="res://Scenes/Levels/level2.tscn" id="3_xnitx"]
-[ext_resource type="Texture2D" uid="uid://bv03lu74d0rbo" path="res://01_farm/Sprites/UI/ItemBox.png" id="4_pp4ud"]
 [ext_resource type="Script" uid="uid://rv77h16imiti" path="res://ZManager/ui_main.gd" id="4_w8ugq"]
-[ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="5_05bje"]
+[ext_resource type="Texture2D" uid="uid://lqyhlfbjdxva" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/0.2.png" id="5_5dvod"]
+[ext_resource type="Texture2D" uid="uid://by6dpbn1r0gko" path="res://01_farm/Sprites/modified_sprite_farm_addon/new_compressed_texture_2d.tres" id="5_rbfil"]
 [ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="6_05bje"]
+[ext_resource type="Texture2D" uid="uid://ccx5ddof8dl5e" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/weather icons.png" id="6_5dvod"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="7_dllyt"]
+[ext_resource type="Texture2D" uid="uid://xdxsa062t8vr" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/Clock/Clock.png" id="9_o5cex"]
 [ext_resource type="Texture2D" uid="uid://bbocmqcf00176" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Old/Fruits/Fall/Icons.png" id="9_w8ugq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5cex"]
+atlas = ExtResource("6_5dvod")
+region = Rect2(2, 1, 13, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5dvod"]
 atlas = ExtResource("9_w8ugq")
@@ -30,101 +36,133 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -248.0
-offset_top = -153.0
-offset_right = -248.0
-offset_bottom = -153.0
+offset_left = -286.0
+offset_top = -177.99997
+offset_right = -286.0
+offset_bottom = -177.99997
 grow_horizontal = 0
 grow_vertical = 0
+scale = Vector2(1.1564178, 1.1564178)
 script = ExtResource("4_w8ugq")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/Control" unique_id=2110049332]
 layout_mode = 0
 offset_right = 124.0
 offset_bottom = 95.0
-texture = ExtResource("4_pp4ud")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-metadata/_edit_use_anchors_ = true
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/NinePatchRect" unique_id=1438713492]
-modulate = Color(1, 0.21568628, 0.21568628, 1)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -32.0
-offset_right = 64.0
-offset_bottom = 32.0
-grow_vertical = 2
-texture = ExtResource("5_05bje")
-metadata/_edit_use_anchors_ = true
+texture = ExtResource("5_rbfil")
+region_rect = Rect2(1, 1, 46, 46)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="HealthLabel" type="Label" parent="CanvasLayer/Control/NinePatchRect" unique_id=1902513071]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
-anchors_preset = 6
+anchors_preset = -1
 anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
+anchor_top = 0.5947368
+anchor_right = 1.0080645
+anchor_bottom = 0.72105265
 offset_left = -64.0
 offset_top = -11.5
 offset_right = -12.0
 offset_bottom = 11.5
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
 theme_override_fonts/font = ExtResource("6_05bje")
 theme_override_font_sizes/font_size = 25
 text = "Health"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
+
+[node name="HealthLabel2" type="Label" parent="CanvasLayer/Control/NinePatchRect" unique_id=2080673640]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.1048387
+anchor_top = 0.3631579
+anchor_right = 1.1370968
+anchor_bottom = 0.3631579
+offset_left = -77.0
+offset_top = -17.5
+offset_right = -24.0
+offset_bottom = 17.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("6_05bje")
+theme_override_font_sizes/font_size = 25
+text = "Health:"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/NinePatchRect" unique_id=1956053804]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -20.0
+offset_right = 52.0
+offset_bottom = 20.0
+grow_vertical = 2
+texture = SubResource("AtlasTexture_o5cex")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="CanvasLayer/Control" unique_id=2090234235]
 layout_mode = 0
 offset_left = 123.0
 offset_right = 247.0
 offset_bottom = 95.0
-texture = ExtResource("4_pp4ud")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-metadata/_edit_use_anchors_ = true
+texture = ExtResource("5_5dvod")
+region_rect = Rect2(1, 1, 46, 46)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="WaveLabel" type="Label" parent="CanvasLayer/Control/NinePatchRect2" unique_id=1768996957]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -112.0
-offset_top = -17.5
-offset_right = -12.0
-offset_bottom = 17.5
+anchors_preset = -1
+anchor_left = 1.0806452
+anchor_top = 0.52105266
+anchor_right = 1.0806452
+anchor_bottom = 0.52105266
+offset_left = -112.58849
+offset_top = -5.398327
+offset_right = -37.077446
+offset_bottom = 29.601673
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
 theme_override_fonts/font = ExtResource("6_05bje")
 theme_override_font_sizes/font_size = 25
 text = "Wave:"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/NinePatchRect2" unique_id=439473330]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 38.706284
+offset_top = -39.71736
+offset_right = 78.70628
+offset_bottom = 0.28263855
+grow_vertical = 2
+texture = ExtResource("9_o5cex")
 
 [node name="NinePatchRect3" type="NinePatchRect" parent="CanvasLayer/Control" unique_id=464454319]
 layout_mode = 0
 offset_top = 95.0
 offset_right = 124.0
 offset_bottom = 153.0
-texture = ExtResource("4_pp4ud")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-metadata/_edit_use_anchors_ = true
+texture = ExtResource("5_5dvod")
+region_rect = Rect2(1, 1, 46, 46)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="TowerMoney" type="Label" parent="CanvasLayer/Control/NinePatchRect3" unique_id=447768279]
 modulate = Color(0, 0, 0, 1)
@@ -142,6 +180,7 @@ grow_horizontal = 0
 grow_vertical = 2
 tooltip_text = "Tower Currency"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
 theme_override_fonts/font = ExtResource("6_05bje")
 theme_override_font_sizes/font_size = 25
 text = "Money"
@@ -168,11 +207,12 @@ offset_left = 123.0
 offset_top = 95.0
 offset_right = 247.0
 offset_bottom = 153.0
-texture = ExtResource("4_pp4ud")
-patch_margin_left = 10
+texture = ExtResource("5_5dvod")
+region_rect = Rect2(0, 0, 47, 47)
+patch_margin_left = 5
 patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
+patch_margin_right = 4
+patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="PlantMoney" type="Label" parent="CanvasLayer/Control/NinePatchRect4" unique_id=272488276]
@@ -191,6 +231,7 @@ grow_horizontal = 0
 grow_vertical = 2
 tooltip_text = "Farm Currency"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
 theme_override_fonts/font = ExtResource("6_05bje")
 theme_override_font_sizes/font_size = 25
 text = "Money"

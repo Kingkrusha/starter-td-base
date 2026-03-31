@@ -1,7 +1,7 @@
 [gd_resource type="AtlasTexture" format=3 uid="uid://c606gwfd21wif"]
 
-[ext_resource type="Texture2D" uid="uid://byimno3ralivo" path="res://01_farm/Sprites/Crops/Crops.png" id="1_8j75t"]
+[ext_resource type="Texture2D" uid="uid://rt4rt0df2cvv" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm Crops/Spring/Asparagus.png" id="1_8j75t"]
 
 [resource]
 atlas = ExtResource("1_8j75t")
-region = Rect2(80, 4, 10, 10)
+region = Rect2(3, 7, 8, 8)

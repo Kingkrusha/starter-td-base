@@ -378,7 +378,7 @@ var health: int = 100:
 	set(value):
 		health = value
 		health_changed.emit(health)
-		#get_tree().get_first_node_in_group("UI").update_stats(money, health)
+		
 var money = 500:
 	set(value):
 		money = value

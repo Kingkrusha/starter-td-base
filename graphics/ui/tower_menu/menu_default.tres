@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://b1ei7tof5px1"]
+
+[ext_resource type="Texture2D" uid="uid://d3lavenj1btbr" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/HUD.png" id="1_1087d"]
+
+[resource]
+atlas = ExtResource("1_1087d")
+region = Rect2(194, 65, 11, 13)

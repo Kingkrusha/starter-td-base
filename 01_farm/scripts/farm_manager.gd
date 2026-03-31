@@ -14,7 +14,7 @@ class TileInfo:
 	var tilled : bool
 	var watered : bool
 	var crop : Crop
-@onready var plantNode : Node2D = $Plants
+@onready var plantNode : Node2D = %Plants
 @onready var tile_map : TileMapLayer = $FarmTileMap
 var tile_info : Dictionary[Vector2i,TileInfo]
 var crop_scene: PackedScene = preload("res://01_farm/scenes/crop.tscn")
@@ -32,12 +32,11 @@ var plant_info : Dictionary[String,int] = {
 	"pumpkinIndex":0
 }
 
-var tile_atlas_coords : Dictionary[TileType, Vector2i] = {
-	TileType.GRASS: Vector2i(0,0),
-	TileType.TILLED: Vector2i(1,0),
-	TileType.TILLED_WATERED: Vector2i(0, 1)
+var tile_atlas_coords : Dictionary[TileType, Array] = {
+	TileType.GRASS: [1,Vector2i(9,10)],
+	TileType.TILLED: [3, Vector2i(0,3)],
+	TileType.TILLED_WATERED: [3, Vector2i(0, 7)]
 }
-@onready var plant_group: Node2D = $Plants
 @onready var till_sound : AudioStreamPlayer = $TillSound
 @onready var water_sound : AudioStreamPlayer = $WaterSound
 @onready var plant_seed_sound : AudioStreamPlayer = $PlantSeedSound
@@ -52,15 +51,16 @@ func _ready ():
 	for cell in tile_map.get_used_cells():
 		tile_info[cell] = TileInfo.new()
 	
-	create_starting_crops(Vector2i(1, 1), preload("res://01_farm/crops/hot_pepper.tres"), 2)
+	create_starting_crops(Vector2i(0, 4), preload("res://01_farm/crops/hot_pepper.tres"), 2)
 	track_plants_num()
 	track_plants_index()
 
 func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_point: int):
 	 # Create crop
 	var new_crop : Crop = crop_scene.instantiate() 
-	plant_group.add_child(new_crop)
-	
+	add_child(new_crop)
+	new_crop.add_to_group("crops")
+	print("Sprite is: ",  starting_point)
 	# Configure manually (bypassing set_crop)
 	new_crop.crop_data = crop_data
 	new_crop.days_until_grown = new_crop.days_until_grown - starting_point
@@ -68,6 +68,7 @@ func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_
 	new_crop.harvestable = false
 	new_crop.tile_map_coords = tile_coords
 	new_crop.crop_data.growth_stage = starting_point
+	_set_tile_state(tile_coords, TileType.TILLED)
 	
 	# Set sprite
 	#var growth_index = crop_data.days_to_grow - days_left
@@ -83,9 +84,7 @@ func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_
 		_set_tile_state(tile_coords, TileType.TILLED)
 	
 func _get_tile_info(coords: Vector2i) -> TileInfo:
-	if not tile_info.has(coords):
-		tile_info[coords] = TileInfo.new()
-	return tile_info[coords]
+	return tile_info.get(coords, null)
 		
 func _on_new_day (day: int):
 	print("New Day!")
@@ -105,10 +104,13 @@ func try_till_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
 	var info := _get_tile_info(coords)
 	
+	if info == null:
+		return
 	if info.crop:
 		return
 	if info.tilled:
 		return
+	
 	
 	_set_tile_state(coords, TileType.TILLED)
 	till_sound.play()
@@ -117,7 +119,8 @@ func try_water_tile(player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
 	var info := _get_tile_info(coords)
 
-	# return if the tile is not tilled
+	if info == null:
+		return
 	if not info.tilled:
 		
 		return
@@ -134,6 +137,8 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
 	var info := _get_tile_info(coords)
 	
+	if info == null:
+		return
 	if not info.tilled:
 		return
 	if info.crop:
@@ -142,8 +147,8 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 		return
 	
 	var crop : Crop = crop_scene.instantiate()
-	#plant_group.
 	add_child(crop)
+	crop.add_to_group("crops")
 	crop.global_position = tile_map.map_to_local(coords)
 	crop._set_crop(crop_data, is_tile_watered(coords), coords)
 	
@@ -156,6 +161,8 @@ func try_harvest_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
 	var info := _get_tile_info(coords)
 	
+	if info == null:
+		return
 	if not info.crop:
 		return
 	
@@ -169,11 +176,14 @@ func try_harvest_tile (player_pos : Vector2):
 
 func is_tile_watered (pos :Vector2) -> bool:
 	var coords : Vector2i = tile_map.local_to_map(pos)
-	return _get_tile_info(coords).watered
+	var info = _get_tile_info(coords)
+	if info == null:
+		return false
+	return info.watered
 	
 func _set_tile_state (coords :Vector2i, tile_type : TileType):
 	var info := _get_tile_info(coords)
-	tile_map.set_cell(coords, 0, tile_atlas_coords[tile_type])
+	tile_map.set_cell(coords, tile_atlas_coords[tile_type][0], tile_atlas_coords[tile_type][1])
 	match tile_type:
 		TileType.GRASS:
 			info.tilled = false
@@ -186,8 +196,9 @@ func _set_tile_state (coords :Vector2i, tile_type : TileType):
 			tile_info[coords].watered = true
 
 func track_plants_num() -> Dictionary:
+	var all_crops = get_tree().get_nodes_in_group("crops")
 	var counts = {}
-	for child in plantNode.get_children():
+	for child in all_crops:
 		if child is Crop :
 			var crop_name = child.crop_data.crop_name
 			counts[crop_name] = counts.get(crop_name, 0) +1
@@ -196,8 +207,9 @@ func track_plants_num() -> Dictionary:
 	return counts
 
 func track_plants_index() -> Dictionary:
+	var all_crops = get_tree().get_nodes_in_group("crops")
 	var indexCount = {}
-	for child in plantNode.get_children():
+	for child in all_crops:
 		if child is Crop:
 			var crop_name = child.crop_data.crop_name
 			indexCount[crop_name] = indexCount.get(crop_name, 0) + child.crop_data.growth_stage

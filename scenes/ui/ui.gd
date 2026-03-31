@@ -6,20 +6,20 @@ signal closemenu()
 signal current_speed(timescale : float, tick_rate : int)
 enum MenuState {CLOSED, OPEN}
 const MENU_BUTTON_TEXTURES = {MenuState.CLOSED: {
-	'normal': "res://graphics/ui/menu.png", 
-	'pressed':"res://graphics/ui/menu.png" ,
-	'hover':"res://graphics/ui/menu_hover.png"}
+	'normal': "res://graphics/ui/tower_menu/menu_default.tres", 
+	'pressed':"res://graphics/ui/tower_menu/menu_default.tres",
+	'hover':"res://graphics/ui/tower_menu/menu_default_hover.tres"}
 	,MenuState.OPEN: {
-		'normal':"res://graphics/ui/close_normal.png",
-		'pressed':"res://graphics/ui/close_normal.png",
-		'hover': "res://graphics/ui/close_hover.png"}}
+		'normal':"res://graphics/ui/tower_menu/menu_close.tres",
+		'pressed':"res://graphics/ui/tower_menu/menu_close.tres",
+		'hover': "res://graphics/ui/tower_menu/menu_close_hover.tres"}}
 var current_state: MenuState = MenuState.CLOSED
 var wave = overManager.turn
 var game_speed: float = 1.0
 var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 @onready var alert_icon : TextureButton = $Control/AlertIcon
-@onready var alert_text_box: PanelContainer = $"Control/AlertIcon/Text Box"
+@onready var alert_text_box: NinePatchRect = $Control/AlertIcon/NinePatchRect
 @onready var alert_text_label: Label = $"Control/AlertIcon/Text Box/Text"
 
 var current_started_wave: int = 0
