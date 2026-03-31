@@ -25,6 +25,7 @@ var WAVE_CREDIT_GROWTH: int = 4
 const WAVE_BASE_DELAY: float = 1.0
 const WAVE_MIN_DELAY: float = 0.2      
 var WAVE_DELAY_REDUCTION: float = 0.05
+var DEBUG_IGNORE_RESOURCES: bool = false
 var SPECIAL_PICK_INTERVAL: int = 5
 var SPECIAL_PREP_DELAY: int = 2
 const SPECIAL_PICK_START_WAVE: int = 5
@@ -172,7 +173,14 @@ func get_associated_towers_at_or_above_tier(crop_name: String, tier: int) -> int
 	return count
 
 
+func is_debug_ignore_resources_enabled() -> bool:
+	return DEBUG_IGNORE_RESOURCES
+
+
 func can_place_tower_from_plants(tower_type: Data.Tower) -> Dictionary:
+	if is_debug_ignore_resources_enabled():
+		return {"allowed": true, "reason": ""}
+
 	var crop_name := get_tower_plant_type(tower_type)
 	if crop_name == "":
 		return {"allowed": false, "reason": "No crop mapping configured for this tower."}
@@ -208,6 +216,14 @@ func can_upgrade_tower_from_plants(tower: Tower, target_tier: int = -1) -> Dicti
 	var crop_name := get_tower_plant_type(tower.type)
 	if crop_name == "":
 		return {"allowed": false, "reason": "No crop mapping configured for this tower."}
+
+	if is_debug_ignore_resources_enabled():
+		return {
+			"allowed": true,
+			"reason": "",
+			"crop_name": crop_name,
+			"tier": target_tier if target_tier > 0 else clamp(int(tower.get("tower_tier")) + 1, 1, 3)
+		}
 
 	var current_tier = clamp(int(tower.get("tower_tier")), 1, 3)
 	var next_tier = target_tier if target_tier > 0 else current_tier + 1
@@ -277,7 +293,7 @@ var UPGRADE_DATA = {
 		"tracks": {
 			"damage":       { "base": 1 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
 			"range":        { "base": 70,  "per_level": 10, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
-			"attack_speed": { "base": 1.5, "per_level": 0.12, "type": "flat", "max": 5, "costs": [10, 20, 35, 50, 70] },
+			"attack_speed": { "base": 1.3, "per_level": 0.15, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
@@ -300,24 +316,24 @@ var UPGRADE_DATA = {
 		"tracks": {
 			"damage":       { "base": 1,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
 			"range":        { "base": 35,  "per_level": 5, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
-			"attack_speed": { "base": 2.6, "per_level": 0.12, "type": "flat", "max": 5, "costs": [10, 20, 35, 50, 70] },
+			"attack_speed": { "base": 2.4, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
 				"name": "Feel the Burn",
 				"description": "Applies Burn damage over time effect",
-				"cost": 180,
+				"cost": 160,
 				"texture": "res://graphics/ui/bigup_normal.png",
 				"effects": { "burn_duration": 3.0, "burn_tick_speed": 0.5, "burn_damage": 1 }
 			},
 			"B": {
 				"name": "Just Warming Up",
-				"description": "During waves, gains +5% range and attack speed per second, up to +150%",
+				"description": "During waves, gains +1% range and attack speed per second, up to +150%",
 				"cost": 175,
 				"texture": "res://graphics/ui/bigup_normal.png",
 				"effects": {
 					"tick_interval_seconds": 1.0,
-					"gain_percent_per_second": 0.05,
+					"gain_percent_per_second": 0.01,
 					"max_bonus_percent": 1.5
 				}
 			}
@@ -326,23 +342,23 @@ var UPGRADE_DATA = {
 	Tower.MORTAR: {
 		"tracks": {
 			"damage":       { "base": 3,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
-			"area":        { "base": 45,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"area":        { "base": 30,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 3.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
-				"name": "Big Game Blaster",
+				"name": "Big Game Buster",
 				"description": "Deals more damage the more health the enemy has",
 				"cost": 180,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "percentile_damage" : 10, "Percentile_damage_cap" : 35 }
+				"effects": { "percentile_damage" : 15.0, "Percentile_damage_cap" : 35 }
 			},
 			"B": {
 				"name": "Concussive Shells",
 				"description": "Hit enemies are stunned for a short time",
 				"cost": 175,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "stun_duration": 0.2}
+				"effects": { "stun_duration": 0.8}
 			}
 		}
 	},
@@ -350,22 +366,22 @@ var UPGRADE_DATA = {
 		"tracks": {
 			"damage":       { "base": 0 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [15, 25, 40, 50, 70] },
 			"range":        { "base": 70,  "per_level": 10, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
-			"attack_speed": { "base": 1.7, "per_level": 0.12, "type": "flat", "max": 5, "costs": [10, 20, 35, 50, 70] },
+			"attack_speed": { "base": 1.5, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
 				"name": "Impact Gel",
 				"description": "Slowed enemies take extra damage",
-				"cost": 150,
+				"cost": 170,
 				"texture": "res://graphics/ui/bigup_normal.png",
 				"effects": { "bonus_damage": 1 }
 			},
 			"B": {
 				"name": "Glue bomb",
 				"description": "Projectiles now explode on impact",
-				"cost": 175,
+				"cost": 130,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "area":30 }
+				"effects": { "area":45, "pierce_bonus": 8 }
 			}
 		}
 	},
@@ -373,20 +389,20 @@ var UPGRADE_DATA = {
 		"tracks": {
 			"damage":       { "base": 2 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [15, 25, 40, 50, 70] },
 			"area":        { "base": 30,  "per_level": 5, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
-			"attack_speed": { "base": 2.6, "per_level": 0.12, "type": "flat", "max": 5, "costs": [10, 20, 35, 50, 70] },
+			"attack_speed": { "base": 2.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
 				"name": "Plunder",
 				"description": "Killed enemies award extra cash",
-				"cost": 150,
+				"cost": 180,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "bonus_money" : 5 }
+				"effects": { "bonus_money" : 2 }
 			},
 			"B": {
 				"name": "Overwhelming offense",
 				"description": "Hit enemies temporarally lose damage resistances",
-				"cost": 175,
+				"cost": 140,
 				"texture": "res://graphics/ui/bigup_normal.png",
 				"effects": { "duration": 8 }
 			}
@@ -395,7 +411,7 @@ var UPGRADE_DATA = {
 }
 var ENEMY_DATA = {
 	Enemy.DEFAULT: {
-		'health': 3,
+		'health': 4,
 		'texture': "res://graphics/ships/ship_0001.png",
 		'speed': 190,
 		'spawn_cost': 1,
@@ -419,7 +435,7 @@ var ENEMY_DATA = {
 		'special_params': {}
 	},
 	Enemy.STRONG: {
-		'health': 6,
+		'health': 8,
 		'texture': "res://graphics/ships/ship_0000.png",
 		'speed': 225,
 		'spawn_cost': 2,
@@ -431,7 +447,7 @@ var ENEMY_DATA = {
 		'special_params': {}
 	},
 	Enemy.BIG: {
-		'health': 20,
+		'health': 24,
 		'texture': "res://graphics/ships/ship_0005.png",
 		'speed': 170,
 		'spawn_cost': 5,
@@ -452,9 +468,9 @@ var ENEMY_DATA = {
 		'resistances': {},
 		'immunities': [],
 		'special_id': "behemoth",
-		'special_description': "Behemoth: Replaces boss-tier pressure with extreme scaling health.",
+		'special_description': "Behemoth: Has a LOT of health.",
 		'special_params': {
-			'scaling_multiplier': 2.0
+			'scaling_multiplier': 1.5
 		}
 	},
 	Enemy.SPECIAL_SHIELD: {
@@ -469,19 +485,19 @@ var ENEMY_DATA = {
 		'special_id': "shield_recharge",
 		'special_description': "Recharging Shield: Regenerates a protective shield after avoiding damage for a short time.",
 		'special_params': {
-			'shield_max': 8,
+			'shield_max': 9,
 			'recharge_delay': 2.5,
-			'recharge_rate': 3.0
+			'recharge_rate': 2.0
 		}
 	},
 	Enemy.SPECIAL_PHANTOM: {
-		'health': 10,
+		'health': 11,
 		'texture': "res://graphics/ships/ship_0012.png",
 		'speed': 220,
 		'spawn_cost': 8,
 		'spawn_weight': 2,
 		'is_special': true,
-		'resistances': {"slow": 0.5},
+		'resistances': {"exlosion": 0.5},
 		'immunities': [],
 		'special_id': "phantom_phase",
 		'special_description': "Phantom: First hit triggers brief invulnerability and a speed surge.",
@@ -491,7 +507,7 @@ var ENEMY_DATA = {
 		}
 	},
 	Enemy.SPECIAL_PROTECTOR: {
-		'health': 14,
+		'health': 16,
 		'texture': "res://graphics/ships/ship_0018.png",
 		'speed': 175,
 		'spawn_cost': 9,
@@ -502,16 +518,16 @@ var ENEMY_DATA = {
 		'special_id': "protector_aura",
 		'special_description': "Protector: Shares partial resistance to slow, fire, and explosion with nearby enemies.",
 		'special_params': {
-			'aura_radius': 60.0,
+			'aura_radius': 55.0,
 			'aura_resistance_mult': 0.35,
 			'aura_types': ["slow", "fire", "explosion"]
 		}
 	},
 	Enemy.SPECIAL_ADAPTIVE_DEFENSE: {
-		'health': 13,
+		'health': 14,
 		'texture': "res://graphics/ships/ship_0013.png",
 		'speed': 190,
-		'spawn_cost': 9,
+		'spawn_cost': 8,
 		'spawn_weight': 2,
 		'is_special': true,
 		'resistances': {},
@@ -523,7 +539,7 @@ var ENEMY_DATA = {
 	Enemy.SPECIAL_BOOSTER: {
 		'health': 9,
 		'texture': "res://graphics/ships/ship_0010.png",
-		'speed': 310,
+		'speed': 315,
 		'spawn_cost': 9,
 		'spawn_weight': 2,
 		'is_special': true,
@@ -533,14 +549,14 @@ var ENEMY_DATA = {
 		'special_description': "Booster: On death, grants nearby enemies a temporary speed burst.",
 		'special_params': {
 			'boost_radius': 150.0,
-			'boost_duration': 1.0,
-			'boost_mult': 1.7
+			'boost_duration': 0.5,
+			'boost_mult': 3.0
 		}
 	},
 	Enemy.SPECIAL_DEATH_SPAWN: {
-		'health': 16,
+		'health': 18,
 		'texture': "res://graphics/ships/ship_0014.png",
-		'speed': 170,
+		'speed': 180,
 		'spawn_cost': 10,
 		'spawn_weight': 1,
 		'is_special': true,
@@ -571,19 +587,19 @@ var ENEMY_DATA = {
 		}
 	},
 	Enemy.SPECIAL_DEATH_DISABLE: {
-		'health': 15,
+		'health': 14,
 		'texture': "res://graphics/ships/ship_0017.png",
 		'speed': 190,
-		'spawn_cost': 11,
-		'spawn_weight': 1,
+		'spawn_cost': 10,
+		'spawn_weight': 2,
 		'is_special': true,
 		'resistances': {"fire": 0.5},
-		'immunities': ["slow"],
+		'immunities': [],
 		'special_id': "death_disable_pulse",
 		'special_description': "EMP Pulse: On death, sends out a disabling pulse that temporarily shuts down nearby towers.",
 		'special_params': {
-			'pulse_radius': 220.0,
-			'disable_duration': 2.5
+			'pulse_radius': 300.0,
+			'disable_duration': 2.2
 		}
 	}
 }

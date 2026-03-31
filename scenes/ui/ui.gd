@@ -32,7 +32,7 @@ var has_alert_data: bool = false
 func _ready():
 	wave = overManager.turn
 	current_started_wave = wave
-	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))
+	$Control/WaveButton.text = ("Start Wave")
 	update_stats(Data.money,Data.health)
 	if not Data.money_changed.is_connected(_on_tower_money_changed):
 		Data.money_changed.connect(_on_tower_money_changed)
@@ -44,6 +44,7 @@ func _ready():
 		Data.tower_constraints_changed.connect(_on_tower_constraints_changed)
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = false
+	alert_icon.visible = false
 	alert_text_box.visible = false
 	alert_icon.pressed.connect(_on_alert_icon_pressed)
 	for tower in Data.Tower.values():
@@ -235,6 +236,7 @@ func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) ->
 	latest_special_enemy = enemy_type
 	latest_special_unlock_wave = unlock_wave
 	has_alert_data = true
+	alert_icon.visible = true
 
 	# A newly scheduled special should re-arm flashing and hide the textbox until clicked.
 	alert_text_box.visible = false

@@ -27,6 +27,7 @@ var pending_special_unlocks: Array[Dictionary] = []
 var selected_specials: Array[Data.Enemy] = []
 var last_special_pick_wave: int = -1
 var DEBUG_ACTIVE: bool = true
+var DEBUG_IGNORE_RESOURCES: bool = true
 const DEBUG_SPECIAL_SCHEDULER: bool = true
 const DEBUG_ENEMY_HOTKEY_MAP := {
 	KEY_QUOTELEFT: Data.Enemy.DEFAULT,
@@ -49,9 +50,12 @@ signal special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int)
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
 	Data.reset_run_stats()
+	Data.DEBUG_IGNORE_RESOURCES = DEBUG_IGNORE_RESOURCES
+	overManager.set_td_wave_active(false)
 	$UI.connect("start_wave", spawn_wave)
 	special_enemy_approaching.connect(_on_special_enemy_approaching)
 	_print_debug_bindings()
+	Data.notify_tower_constraint_state_changed()
 	#$"Player Camera".limit_bottom = $Background/WorldBounds/Bottom.global_position.y
 	#$"Player Camera".limit_top = $Background/WorldBounds/Top.global_position.y
 	#$"Player Camera".limit_left = $Background/WorldBounds/Left.global_position.x
@@ -63,6 +67,10 @@ func _print_debug_bindings() -> void:
 		return
 
 	print("[DEBUG] Debug features enabled")
+	if DEBUG_IGNORE_RESOURCES:
+		Data.money = 999999
+		GameFarmManager.money = 999999
+		print("[DEBUG] Infinite resources mode ENABLED")
 	var debug_sections := [
 		{
 			"title": "Enemy spawn keys",
@@ -96,9 +104,17 @@ func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_r
 		bullet.setup(pos, angle, bullet_enum, tower_ref)
 
 	elif bullet_enum == Data.Bullet.FIRE:
-		for enemy in get_tree().get_nodes_in_group('enemies'):
-			if enemy in tower_ref.enemies:
-				enemy.hit(tower_ref)
+		if tower_ref == null:
+			return
+		var max_hits = tower_ref.pierce + 1
+		var hits_done := 0
+		for enemy in tower_ref.enemies:
+			if hits_done >= max_hits:
+				break
+			if not is_instance_valid(enemy):
+				continue
+			enemy.hit(tower_ref)
+			hits_done += 1
 	elif bullet_enum == Data.Bullet.MORTAR_EXPLOSION:
 		var explosion = explosion_scene.instantiate()
 		explosion.setup(pos, tower_ref)
@@ -165,6 +181,8 @@ func _input(event: InputEvent):
 			$Towers.add_child(tower)
 			place_tower = false
 			Data.notify_tower_constraint_state_changed()
+		if DEBUG_ACTIVE and DEBUG_IGNORE_RESOURCES:
+			print("[DEBUG] Infinite resources mode ENABLED")
 	
 	if event is InputEventMouseButton and event.button_mask == 1 and current_tower:
 		if current_tower.type == Data.Tower.MORTAR:
@@ -218,6 +236,7 @@ func spawn_wave(wave_idx):
 	if not ongoing_wave:
 		spawning_enemies = true
 		ongoing_wave = true
+		overManager.set_td_wave_active(true)
 		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("\n=== WAVE %d START ===" % wave_idx)
 			print("[SPECIAL] Pending before processing: %s" % [pending_special_unlocks])
@@ -299,6 +318,7 @@ func _spawn_enemy_now(enemy_type: Data.Enemy, wave_idx: int, path_progress: floa
 func _process(_delta):
 	if get_tree().get_nodes_in_group("enemies").size() == 0 and not spawning_enemies and ongoing_wave == true:
 		ongoing_wave = false
+		overManager.set_td_wave_active(false)
 		$UI.enable_wave_button()
 
 

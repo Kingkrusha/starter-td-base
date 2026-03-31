@@ -22,9 +22,15 @@ func _ready():
 	init_stats()
 	dmg_type = 'fire'
 	twr_range = Data.UPGRADE_DATA[type]['tracks']['range']['base']
+	upgrade_check()
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]['tracks']['attack_speed']['base']
 	if not overManager.NewTurn.is_connected(_on_new_turn):
 		overManager.NewTurn.connect(_on_new_turn)
+
+
+func upgrade_check():
+	var range_level := int(track_levels.get("range", 0))
+	pierce = 4 + (range_level * 2)
 
 
 func _on_reload_timer_timeout():

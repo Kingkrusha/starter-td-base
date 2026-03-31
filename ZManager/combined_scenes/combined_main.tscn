@@ -251,3 +251,6 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_5dvod")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1083952295]
+volume_db = -60.0
