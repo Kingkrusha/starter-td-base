@@ -6,6 +6,12 @@ signal ChangeTowerMoney (money : int)
 signal NewTurn (turn : int)
 signal toggleMode()
 
+const MUSIC_F_HEAD: AudioStream = preload("res://01_farm/Audio/F_head.mp3")
+const MUSIC_F_BODY: AudioStream = preload("res://01_farm/Audio/F_body.mp3")
+const MUSIC_TD_HEAD: AudioStream = preload("res://01_farm/Audio/TD_head.mp3")
+const MUSIC_TD_BODY: AudioStream = preload("res://01_farm/Audio/TD_body.mp3")
+enum MusicMode { FARM, TD }
+
 
 # Two var to track currency from each aspect of the game (farm and tower)
 #var  : int = 0 - to do tower library with unique id's
@@ -15,8 +21,20 @@ signal toggleMode()
 var plant_money : int = 0
 var tower_money : int = 0
 var turn : int = 0
+var music_volume_percent: int = 80:
+	set(value):
+		music_volume_percent = clampi(value, 0, 100)
+		_apply_bgm_volume()
+var bgm_head_player: AudioStreamPlayer
+var bgm_body_player: AudioStreamPlayer
+var current_music_mode: int = -1
+var pending_body_mode: int = -1
+var td_wave_active: bool = false
 
 func _ready() -> void:
+	_setup_bgm_players()
+	_sync_music_to_wave_state(true)
+
 	# Initialize from current values before connecting signals
 	tower_money = Data.money
 	plant_money = GameFarmManager.money
@@ -24,6 +42,84 @@ func _ready() -> void:
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
 	plant_data.connect(determine_towers)
+
+
+func set_td_wave_active(is_active: bool) -> void:
+	if td_wave_active == is_active:
+		return
+	td_wave_active = is_active
+	_sync_music_to_wave_state()
+
+
+func _setup_bgm_players() -> void:
+	bgm_head_player = AudioStreamPlayer.new()
+	bgm_head_player.name = "BGMHeadPlayer"
+	bgm_head_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(bgm_head_player)
+
+	bgm_body_player = AudioStreamPlayer.new()
+	bgm_body_player.name = "BGMBodyPlayer"
+	bgm_body_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(bgm_body_player)
+
+	if not bgm_head_player.finished.is_connected(_on_bgm_head_finished):
+		bgm_head_player.finished.connect(_on_bgm_head_finished)
+	if not bgm_body_player.finished.is_connected(_on_bgm_body_finished):
+		bgm_body_player.finished.connect(_on_bgm_body_finished)
+
+	_apply_bgm_volume()
+
+
+func _apply_bgm_volume() -> void:
+	var volume_db: float = -80.0 if music_volume_percent <= 0 else linear_to_db(float(music_volume_percent) / 100.0)
+	if bgm_head_player != null:
+		bgm_head_player.volume_db = volume_db
+	if bgm_body_player != null:
+		bgm_body_player.volume_db = volume_db
+
+
+func _music_mode_from_wave_state() -> int:
+	return MusicMode.TD if td_wave_active else MusicMode.FARM
+
+
+func _sync_music_to_wave_state(force: bool = false) -> void:
+	var desired_mode := _music_mode_from_wave_state()
+	if not force and desired_mode == current_music_mode:
+		return
+	_start_music_transition(desired_mode)
+
+
+func _music_head_stream(mode: int) -> AudioStream:
+	return MUSIC_TD_HEAD if mode == MusicMode.TD else MUSIC_F_HEAD
+
+
+func _music_body_stream(mode: int) -> AudioStream:
+	return MUSIC_TD_BODY if mode == MusicMode.TD else MUSIC_F_BODY
+
+
+func _start_music_transition(mode: int) -> void:
+	current_music_mode = mode
+	pending_body_mode = mode
+
+	if bgm_head_player.playing:
+		bgm_head_player.stop()
+	if bgm_body_player.playing:
+		bgm_body_player.stop()
+
+	bgm_head_player.stream = _music_head_stream(mode)
+	bgm_head_player.play()
+
+
+func _on_bgm_head_finished() -> void:
+	if pending_body_mode != current_music_mode:
+		return
+	bgm_body_player.stream = _music_body_stream(current_music_mode)
+	bgm_body_player.play()
+
+
+func _on_bgm_body_finished() -> void:
+	if bgm_body_player.stream != null:
+		bgm_body_player.play()
 
 #Money functions might be deprecated. Centralizing currency for a programmer is anethema I suppose.
 # wave/day logic will all be controlled via over_manager for simplicity

@@ -43,6 +43,10 @@ var burn_tick_speed: float = 0.2
 var burn_elapsed: float = 0.0
 var burn_next_tick: float = 0.0
 var burn_source_tower: Tower = null
+var stunned_until: float = 0.0
+var resistance_strip_until: float = 0.0
+var sedative_bonus_active: bool = false
+var sedative_bonus_damage: int = 0
 var is_dying: bool = false
 
 signal special_death_effect(effect_id: String, payload: Dictionary)
@@ -111,34 +115,42 @@ func hit(ref):
 	if _is_temporarily_invulnerable():
 		return
 	flash()
-	# Convert bullet object to Dictionary for damage computation
-	var bullet_data: Dictionary = {
-		"damage": ref.damage,
-		"dmg_type": ref.dmg_type
-	}
-	var damage_to_apply := _compute_incoming_damage(bullet_data)
-	health -= damage_to_apply
-	$ProgressBar.value += damage_to_apply
 	var source_tower: Tower = null
 	if ref is Tower:
 		source_tower = ref
 	elif ref != null and "parent_tower" in ref and ref.parent_tower is Tower:
 		source_tower = ref.parent_tower
+
+	# Convert bullet object to Dictionary for damage computation
+	var bullet_data: Dictionary = {
+		"damage": ref.damage,
+		"dmg_type": ref.dmg_type,
+		"tower_ref": source_tower
+	}
+	var damage_to_apply := _compute_incoming_damage(bullet_data)
+	health -= damage_to_apply
+	$ProgressBar.value += damage_to_apply
 	Data.record_damage_dealt(damage_to_apply, source_tower)
 	_on_damage_taken(bullet_data, damage_to_apply)
 	if ref.dmg_type == "slow":
-		apply_slow(ref.parent_tower.slow, ref.parent_tower.slow_duration)
+		if source_tower != null:
+			apply_slow(float(source_tower.get("slow")), float(source_tower.get("slow_duration")))
+			apply_sedative_bonus(int(source_tower.get("sedative_bonus_damage")))
 	elif ref.dmg_type == "burn":
 		apply_burn(ref.burn_damage, ref.burn_duration, ref.burn_tick_speed, source_tower)
+
+	if source_tower != null:
+		var stun_duration = (source_tower.get("stun_duration"))
+		if stun_duration and damage_to_apply > 0:
+			apply_stun(stun_duration)
+
+		var strip_duration = (source_tower.get("resistance_strip_duration"))
+		if strip_duration and String(ref.dmg_type) == "explosion" and not ("explosion" in immunities):
+			apply_resistance_strip(strip_duration)
 	#print("Dealing ", ref.damage, " damage")
 	if health <=0 :
 		is_dying = true
-		_emit_special_death_effects()
-		Data.record_enemy_defeated()
-		Data.record_plant_money_generated(reward)
-		GameFarmManager.money += reward
-		#print_debug("Reward ", reward)
-		queue_free.call_deferred()
+		_handle_death(source_tower)
 
 func flash():
 	var tween = create_tween()
@@ -155,6 +167,8 @@ func apply_slow( new_speed: float, duration: float ):
 
 func _on_slow_timer_timeout():
 	slow_mult = 1.0
+	sedative_bonus_active = false
+	sedative_bonus_damage = 0
 
 
 func apply_burn(damage_per_tick: int, duration: float, tick_speed: float, source_tower: Tower = null) -> void:
@@ -164,6 +178,27 @@ func apply_burn(damage_per_tick: int, duration: float, tick_speed: float, source
 	burn_elapsed = 0.0
 	burn_next_tick = 0.0
 	burn_source_tower = source_tower
+
+
+func apply_sedative_bonus(bonus_damage: int) -> void:
+	if bonus_damage <= 0:
+		return
+	sedative_bonus_active = true
+	sedative_bonus_damage = max(sedative_bonus_damage, bonus_damage)
+
+
+func apply_stun(duration: float) -> void:
+	if duration <= 0.0:
+		return
+	# Non-stacking behavior: only extend expiration.
+	stunned_until = max(stunned_until, special_elapsed_time + duration)
+
+
+func apply_resistance_strip(duration: float) -> void:
+	if duration <= 0.0:
+		return
+	# Non-stacking behavior: only extend expiration.
+	resistance_strip_until = max(resistance_strip_until, special_elapsed_time + duration)
 
 
 func _initialize_special_state() -> void:
@@ -206,22 +241,35 @@ func _process_special_state(delta: float) -> void:
 
 func _compute_incoming_damage(ref: Dictionary) -> int:
 	var incoming_damage: int = int(ref.get("damage", 0))
-	var dmg_type = ref.get("dmg_type", "normal")
+	var dmg_type: String = String(ref.get("dmg_type", "normal"))
+	var source_tower: Tower = ref.get("tower_ref")
 	
 	# Check immunities first
 	if dmg_type in immunities:
 		return 0
+
+	if source_tower != null:
+		var pct_bonus = (source_tower.get("mortar_percentile_damage"))
+		var pct_cap = (source_tower.get("mortar_percentile_damage_cap"))
+		if pct_bonus and pct_cap:
+			var bonus_from_health := int(floor(float(max(health, 0)) * (pct_bonus / 100.0)))
+			incoming_damage += min(max(0, bonus_from_health), pct_cap)
+
+	if sedative_bonus_active and slow_mult < 1.0 and sedative_bonus_damage > 0:
+		incoming_damage += sedative_bonus_damage
+
+	var resistance_strip_active = special_elapsed_time < resistance_strip_until
 	
 	# Apply resistances
-	if dmg_type in resistances:
+	if not resistance_strip_active and dmg_type in resistances:
 		incoming_damage = int(float(incoming_damage) * resistances[dmg_type])
 
 	# Protector aura: nearby protector grants non-stacking resistance to configured types.
-	if protector_aura_active and dmg_type in protector_aura_types:
+	if not resistance_strip_active and protector_aura_active and dmg_type in protector_aura_types:
 		incoming_damage = int(float(incoming_damage) * protector_aura_resistance_mult)
 	
 	# Apply flat reduction
-	if special_id == "flat_damage_reduction":
+	if not resistance_strip_active and special_id == "flat_damage_reduction":
 		var reduce_by = int(special_params.get("reduce_by", 0))
 		var min_damage = int(special_params.get("min_damage", 1))
 		incoming_damage = max(min_damage, incoming_damage - reduce_by)
@@ -258,6 +306,10 @@ func _is_temporarily_invulnerable() -> bool:
 
 
 func _update_speed_state() -> void:
+	if special_elapsed_time < stunned_until:
+		speed_mult = 0.0
+		return
+
 	var phantom_mult := 1.0
 	if special_id == "phantom_phase" and _is_temporarily_invulnerable():
 		phantom_mult = max(1.0, phantom_speed_mult)
@@ -349,11 +401,19 @@ func _process_burn_damage(delta: float) -> void:
 			if is_dying:
 				return
 			is_dying = true
-			_emit_special_death_effects()
-			Data.record_enemy_defeated()
-			Data.record_plant_money_generated(reward)
-			GameFarmManager.money += reward
-			queue_free.call_deferred()
+			_handle_death(burn_source_tower)
+
+
+func _handle_death(killer_tower: Tower = null) -> void:
+	_emit_special_death_effects()
+	var total_reward := reward
+	if killer_tower != null:
+		if killer_tower.extra_money :
+			total_reward += killer_tower.extra_money
+	Data.record_enemy_defeated()
+	Data.record_plant_money_generated(total_reward)
+	GameFarmManager.money += total_reward
+	queue_free.call_deferred()
 
 
 func _emit_special_death_effects() -> void:

@@ -20,6 +20,7 @@ texture = ExtResource("2_g767u")
 
 [node name="EnemyDetectionArea" type="Area2D" parent="." unique_id=37526851]
 collision_layer = 0
+collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea" unique_id=1380349703]
 shape = SubResource("CircleShape2D_g767u")

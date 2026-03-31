@@ -94,6 +94,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ja3lj")
 text = "Start Wave"
 
 [node name="AlertIcon" type="TextureButton" parent="Control" unique_id=1577874511]
+visible = false
 layout_mode = 0
 offset_left = 860.0
 offset_top = 22.0

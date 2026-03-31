@@ -21,6 +21,7 @@ bg_color = Color(1, 0.18039216, 0.1882353, 1)
 [node name="Enemy" type="Area2D" unique_id=1273139506 groups=["enemies"]]
 z_index = 2
 scale = Vector2(6, 6)
+collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_jcvw6")
 
@@ -49,6 +50,7 @@ fill_mode = 1
 show_percentage = false
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1289995579]
+visible = false
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="timeout" from="SlowTimer" to="." method="_on_slow_timer_timeout"]

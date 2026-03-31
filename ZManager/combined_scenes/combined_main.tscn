@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://4ag7rchc255l" path="res://01_farm/scenes/main.tscn" id="1_q02fv"]
 [ext_resource type="Script" uid="uid://b45ieah6pbcj0" path="res://ZManager/combined_main.gd" id="1_xnitx"]
-[ext_resource type="PackedScene" uid="uid://l55pr03rxtvs" path="res://Scenes/Levels/level2.tscn" id="3_xnitx"]
+[ext_resource type="PackedScene" uid="uid://l55pr03rxtvs" path="res://scenes/levels/level2.tscn" id="3_xnitx"]
 [ext_resource type="Texture2D" uid="uid://bv03lu74d0rbo" path="res://01_farm/Sprites/UI/ItemBox.png" id="4_pp4ud"]
 [ext_resource type="Script" uid="uid://rv77h16imiti" path="res://ZManager/ui_main.gd" id="4_w8ugq"]
 [ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="5_05bje"]
@@ -210,3 +210,6 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_5dvod")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1083952295]
+volume_db = -60.0

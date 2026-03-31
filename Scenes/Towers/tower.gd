@@ -20,6 +20,7 @@ var show_range: bool = false
 var is_temp_disabled: bool = false
 var disabled_until_time: float = 0.0
 var disable_visual_alpha: float = 0.45
+var extra_money: int = 0
 
 @warning_ignore("unused_signal")
 signal shoot(pos: Vector2, direction: float, bullet_enum: Data.Bullet, tower_ref: Node)
@@ -49,11 +50,15 @@ func _update_speed_boost_visual() -> void:
 		modulate = Color.WHITE
 
 func _on_enemy_detection_area_area_entered(area):
+	if not is_instance_valid(area) or not area.is_in_group("enemies"):
+		return
 	if area not in enemies:
 		enemies.append(area)
 
 
 func _on_enemy_detection_area_area_exited(area):
+	if not is_instance_valid(area) or not area.is_in_group("enemies"):
+		return
 	if area in enemies:
 		enemies.erase(area)
 
@@ -93,12 +98,17 @@ func _sync_tower_tier_for_state() -> void:
 
 
 func can_apply_track_upgrade(track: String) -> Dictionary:
+	var debug_ignore_resources = Data.is_debug_ignore_resources_enabled()
+
 	if not Data.UPGRADE_DATA[type]["tracks"].has(track):
 		return {"allowed": false, "reason": "Invalid upgrade track."}
 
 	var track_data = Data.UPGRADE_DATA[type]["tracks"][track]
 	if track_levels[track] >= track_data["max"]:
 		return {"allowed": false, "reason": "Track already at max level."}
+
+	if debug_ignore_resources:
+		return {"allowed": true, "reason": "", "cost": 0}
 
 	var cost: int = int(track_data["costs"][track_levels[track]])
 	if Data.money < cost:
@@ -112,8 +122,15 @@ func can_apply_track_upgrade(track: String) -> Dictionary:
 
 
 func can_apply_big_upgrade(key: String) -> Dictionary:
+	var debug_ignore_resources = Data.is_debug_ignore_resources_enabled()
+
 	if big_upgrade_chosen != "":
 		return {"allowed": false, "reason": "A big upgrade is already selected."}
+
+	if debug_ignore_resources:
+		if not Data.UPGRADE_DATA[type]["big"].has(key):
+			return {"allowed": false, "reason": "Invalid big upgrade option."}
+		return {"allowed": true, "reason": "", "cost": 0}
 
 	var gate: Dictionary = Data.can_upgrade_tower_from_plants(self, 3)
 	if not bool(gate.get("allowed", false)):
@@ -138,11 +155,12 @@ func apply_track_upgrade(track : String):
 	var status := can_apply_track_upgrade(track)
 	if not bool(status.get("allowed", false)):
 		return
-	var increase_amount
-	if Data.UPGRADE_DATA[type]['tracks'][track]['type'] == 'percent':
-		increase_amount = Data.UPGRADE_DATA[type]['tracks'][track]['base'] * Data.UPGRADE_DATA[type]['tracks'][track]['per_level'] * (track_levels[track] + 1)
-	if Data.UPGRADE_DATA[type]['tracks'][track]['type'] == 'flat':
-		increase_amount = Data.UPGRADE_DATA[type]['tracks'][track]['per_level']
+	var track_data: Dictionary = Data.UPGRADE_DATA[type]['tracks'][track]
+	var increase_amount = 0.0
+	if track_data['type'] == 'percent':
+		increase_amount = track_data['base'] * track_data['per_level'] * (track_levels[track] + 1)
+	if track_data['type'] == 'flat':
+		increase_amount = track_data['per_level']
 	match track:
 		'damage':
 			damage += increase_amount
@@ -153,7 +171,10 @@ func apply_track_upgrade(track : String):
 			queue_redraw()
 			print("Range is ", twr_range)
 		'attack_speed':
-			reload_speed -= (increase_amount * 1)
+			if track_data['type'] == 'percent':
+				reload_speed = max(0.1, reload_speed * (1.0 - float(track_data['per_level'])))
+			else:
+				reload_speed = max(0.1, reload_speed - increase_amount)
 			print("Attack speed is ", reload_speed)
 			$ReloadTimer.wait_time = reload_speed
 		'pierce':
