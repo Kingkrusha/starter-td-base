@@ -8,7 +8,7 @@ func _ready() -> void:
 
 
 func _on_easy_pressed() -> void:
-	wave_num.emit(20)
+	wave_num.emit(1)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/combined_main.tscn")
 
 
@@ -19,3 +19,11 @@ func _on_normal_pressed() -> void:
 func _on_hard_pressed() -> void:
 	wave_num.emit(60)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/combined_main.tscn")
+
+
+func _on_restart_pressed() -> void:
+	get_tree().change_scene_to_file("res://ZManager/combined_scenes/combined_main.tscn")
+
+
+func _on_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://ZManager/combined_scenes/menu.tscn")

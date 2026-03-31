@@ -20,7 +20,12 @@ enum MusicMode { FARM, TD }
 #var tower_points = Dictionary(String, int)
 var plant_money : int = 0
 var tower_money : int = 0
-var turn : int = 0
+var turn: int = 0:
+	set(value):
+		turn = value
+		if turn == waves:
+			victory()
+	
 var waves : int
 var music_volume_percent: int = 20:
 	set(value):
@@ -43,11 +48,14 @@ func _ready() -> void:
 	GameFarmManager.money_changed.connect(_update_farm_money)
 	Data.money_changed.connect(_update_tower_money)
 	plant_data.connect(determine_towers)
-	
+	Data.defeat.connect(defeat)
 func set_waves(setwaves : int):
 	waves = setwaves 
 
-
+func victory():
+	get_tree().change_scene_to_file("res://ZManager/combined_scenes/victory.tscn")
+func defeat():
+	get_tree().change_scene_to_file("res://ZManager/combined_scenes/defeat.tscn")
 func set_td_wave_active(is_active: bool) -> void:
 	if td_wave_active == is_active:
 		return

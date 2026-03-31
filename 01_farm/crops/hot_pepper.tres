@@ -23,4 +23,5 @@ script = ExtResource("1_cekh0")
 crop_name = "pepper"
 growth_sprites = Array[Texture]([SubResource("AtlasTexture_di78x"), SubResource("AtlasTexture_2cjar"), SubResource("AtlasTexture_pnqtn")])
 days_to_grow = 2
+seed_price = 15
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

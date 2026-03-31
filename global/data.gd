@@ -3,6 +3,7 @@ extends Node
 signal money_changed(new_value : int)
 signal health_changed(new_value : int)
 signal tower_constraints_changed()
+signal defeat()
 enum Tower {BASIC, BLAST, MORTAR, SLOW, BOMB}
 enum Bullet {SINGLE, FIRE, MORTAR_EXPLOSION, BOMB}
 enum Enemy {
@@ -709,6 +710,8 @@ var health: int = 100:
 	set(value):
 		health = value
 		health_changed.emit(health)
+		if health == 0:
+			defeat.emit()
 		
 var money = 500:
 	set(value):

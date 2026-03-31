@@ -24,4 +24,5 @@ script = ExtResource("1_nuelj")
 crop_name = "pumpkin"
 growth_sprites = Array[Texture]([SubResource("AtlasTexture_he1yb"), SubResource("AtlasTexture_w4gdc"), SubResource("AtlasTexture_cgekl"), SubResource("AtlasTexture_ybygs")])
 days_to_grow = 4
+seed_price = 25
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

@@ -24,4 +24,5 @@ script = ExtResource("1_433a1")
 crop_name = "pineapple"
 growth_sprites = Array[Texture]([SubResource("AtlasTexture_7cvg2"), SubResource("AtlasTexture_nkowi"), SubResource("AtlasTexture_o8m4g"), SubResource("AtlasTexture_vc8gi")])
 days_to_grow = 6
+seed_price = 25
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

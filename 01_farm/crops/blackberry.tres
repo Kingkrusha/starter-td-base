@@ -24,4 +24,5 @@ script = ExtResource("1_urbiv")
 crop_name = "blackberry"
 growth_sprites = Array[Texture]([SubResource("AtlasTexture_ot0dt"), SubResource("AtlasTexture_p46cn"), SubResource("AtlasTexture_22847"), SubResource("AtlasTexture_d5165")])
 days_to_grow = 4
+seed_price = 12
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"
