@@ -18,9 +18,41 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	watered = already_watered
 	tile_map_coords = tile_coords
 	harvestable = false
-	
+
 	days_until_grown = data.days_to_grow
-	sprite.texture = crop_data.growth_sprites[0]
+	_apply_growth_stage(0)
+
+	# Any crop created before wave/day progression starts gets a free bump to stage 1.
+	if overManager.turn == 0 and crop_data.growth_sprites.size() > 1 and int(crop_data.growth_stage) < 1:
+		_apply_growth_stage(1)
+
+
+func _apply_growth_stage(stage: int) -> void:
+	var sprite_count := crop_data.growth_sprites.size()
+	if sprite_count <= 0:
+		return
+
+	var clamped_stage = clamp(stage, 0, sprite_count - 1)
+	crop_data.growth_stage = clamped_stage
+	sprite.texture = crop_data.growth_sprites[clamped_stage]
+
+	if clamped_stage <= 0:
+		harvestable = false
+		sell_price = 0
+	elif clamped_stage == 1:
+		harvestable = true
+		sell_price = crop_data.sell_price_initial
+	elif clamped_stage == 2:
+		harvestable = true
+		sell_price = crop_data.sell_price_second
+	elif clamped_stage == 3:
+		harvestable = true
+		sell_price = crop_data.sell_price_third
+	else:
+		harvestable = true
+		sell_price = crop_data.sell_price_final
+
+	days_until_grown = max(0, crop_data.days_to_grow - clamped_stage)
 	
 func _on_new_day (_day:int):
 	print("Crop ", crop_data)
@@ -33,8 +65,7 @@ func _on_new_day (_day:int):
 	var growth_percent : float = (crop_data.days_to_grow - days_until_grown) / float(crop_data.days_to_grow)	
 	var index : int = floor(growth_percent * sprite_count)
 	index = clamp(index, 0, sprite_count - 1)
-	crop_data.growth_stage = index
-	sprite.texture = crop_data.growth_sprites[index]
+	_apply_growth_stage(index)
 	print_debug("index is: ", index)
 	
 	if crop_data.growth_stage == 0:
@@ -42,23 +73,16 @@ func _on_new_day (_day:int):
 		days_until_grown -= 1
 	elif crop_data.growth_stage == 1:
 		print_debug("First Stage")
-		harvestable = true
-		sell_price = crop_data.sell_price_initial
 		days_until_grown -= 1
 	elif crop_data.growth_stage == 2 :
 		print_debug("Second Stage")
-		harvestable = true
-		sell_price = crop_data.sell_price_second
 		days_until_grown -= 1
 	elif crop_data.growth_stage == 3 :
 		print_debug("Third Stage")
-		harvestable = true
-		sell_price = crop_data.sell_price_third
 		days_until_grown -= 1
 	else:
 		print_debug("Final Stage")
-		harvestable = true
-		sell_price = crop_data.sell_price_final
+		pass
 		
 		
 	

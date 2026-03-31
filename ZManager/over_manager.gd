@@ -41,11 +41,13 @@ func _update_farm_money (amount : int):
 func give_money_farm (amount : int):
 	#print("Farm money given ", plant_money)
 	plant_money += amount
+	Data.record_plant_money_generated(amount)
 	#print(plant_money)
 	ChangeFarmMoney.emit(plant_money)
 	
 func give_money_tower (amount : int):
 	tower_money += amount
+	Data.record_tower_money_generated(amount)
 	Data.money = tower_money
 	ChangeTowerMoney.emit(tower_money)
 	

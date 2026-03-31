@@ -26,31 +26,67 @@ var unlocked_special_pool: Array[Data.Enemy] = []
 var pending_special_unlocks: Array[Dictionary] = []
 var selected_specials: Array[Data.Enemy] = []
 var last_special_pick_wave: int = -1
+var DEBUG_ACTIVE: bool = true
 const DEBUG_SPECIAL_SCHEDULER: bool = true
 const DEBUG_ENEMY_HOTKEY_MAP := {
 	KEY_QUOTELEFT: Data.Enemy.DEFAULT,
 	KEY_1: Data.Enemy.FAST,
 	KEY_2: Data.Enemy.STRONG,
 	KEY_3: Data.Enemy.BIG,
-	KEY_4: Data.Enemy.BOSS,
+	KEY_4: Data.Enemy.SPECIAL_BEHEMOTH,
 	KEY_5: Data.Enemy.SPECIAL_SHIELD,
-	KEY_6: Data.Enemy.SPECIAL_FULL_HP_BOOST,
-	KEY_7: Data.Enemy.SPECIAL_FIRST_HIT_INVULN,
+	KEY_6: Data.Enemy.SPECIAL_PHANTOM,
+	KEY_7: Data.Enemy.SPECIAL_PROTECTOR,
 	KEY_8: Data.Enemy.SPECIAL_DEATH_SPAWN,
 	KEY_9: Data.Enemy.SPECIAL_FLAT_REDUCTION,
 	KEY_0: Data.Enemy.SPECIAL_DEATH_DISABLE,
+	KEY_Q: Data.Enemy.SPECIAL_ADAPTIVE_DEFENSE,
+	KEY_W: Data.Enemy.SPECIAL_BOOSTER,
 }
 signal enable_wave_button()
 signal special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int)
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color('#e0f6f4')
+	Data.reset_run_stats()
 	$UI.connect("start_wave", spawn_wave)
 	special_enemy_approaching.connect(_on_special_enemy_approaching)
+	_print_debug_bindings()
 	#$"Player Camera".limit_bottom = $Background/WorldBounds/Bottom.global_position.y
 	#$"Player Camera".limit_top = $Background/WorldBounds/Top.global_position.y
 	#$"Player Camera".limit_left = $Background/WorldBounds/Left.global_position.x
 	#$"Player Camera".limit_right = $Background/WorldBounds/Right.global_position.x
+
+
+func _print_debug_bindings() -> void:
+	if not DEBUG_ACTIVE:
+		return
+
+	print("[DEBUG] Debug features enabled")
+	var debug_sections := [
+		{
+			"title": "Enemy spawn keys",
+			"bindings": DEBUG_ENEMY_HOTKEY_MAP,
+			"formatter": func(keycode: int, value: Variant) -> String: return "%s -> %s" % [OS.get_keycode_string(keycode), _enemy_debug_name(value)]
+		},
+		{
+			"title": "Wave controls",
+			"bindings": {
+				KEY_EQUAL: "Increase wave",
+				KEY_MINUS: "Decrease wave",
+				KEY_KP_ADD: "Increase wave",
+				KEY_KP_SUBTRACT: "Decrease wave"
+			},
+			"formatter": func(keycode: int, value: Variant) -> String: return "%s -> %s" % [OS.get_keycode_string(keycode), String(value)]
+		}
+	]
+
+	for section in debug_sections:
+		print("[DEBUG] %s:" % section["title"])
+		var keys = section["bindings"].keys()
+		keys.sort()
+		for keycode in keys:
+			print("  " + section["formatter"].call(keycode, section["bindings"][keycode]))
 
 
 func create_bullet(pos: Vector2, angle: float, bullet_enum: Data.Bullet, tower_ref: Node = null):
@@ -86,6 +122,10 @@ func tower_selection(tower:Tower):
 
 
 func _on_ui_place_tower(tower_type: Data.Tower):
+	var placement_gate: Dictionary = Data.can_place_tower_from_plants(tower_type)
+	if not bool(placement_gate.get("allowed", false)):
+		print(String(placement_gate.get("reason", "Cannot place tower.")))
+		return
 	place_tower = true
 	selected_tower = tower_type
 	print('tower placement ', place_tower , tower_type)
@@ -112,6 +152,11 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_mask == 1 and place_tower:
 		#var tile_data =($BG/TileMapLayer.get_cell_tile_data(pos))
 		if event.button_index == 1 and valid_placement == true: #and pos not in used_cells and tile_data is TileData and tile_data.get_custom_data("useable"):
+			var placement_gate: Dictionary = Data.can_place_tower_from_plants(selected_tower)
+			if not bool(placement_gate.get("allowed", false)):
+				print(String(placement_gate.get("reason", "Cannot place tower.")))
+				place_tower = false
+				return
 			#used_cells.append(pos)
 			var tower = load(tower_scenes[selected_tower]).instantiate()
 			tower.position = pos #*16 + Vector2i(8,8)
@@ -119,7 +164,7 @@ func _input(event: InputEvent):
 			tower.connect('select', tower_selection)
 			$Towers.add_child(tower)
 			place_tower = false
-			Data.money -= Data.TOWER_DATA[selected_tower]['cost']
+			Data.notify_tower_constraint_state_changed()
 	
 	if event is InputEventMouseButton and event.button_mask == 1 and current_tower:
 		if current_tower.type == Data.Tower.MORTAR:
@@ -138,24 +183,27 @@ func _input(event: InputEvent):
 
 
 func _handle_debug_key_input(event: InputEventKey) -> bool:
+	if not DEBUG_ACTIVE:
+		return false
+
 	if DEBUG_ENEMY_HOTKEY_MAP.has(event.keycode):
 		var enemy_type: Data.Enemy = DEBUG_ENEMY_HOTKEY_MAP[event.keycode]
 		_spawn_enemy_now(enemy_type, overManager.turn)
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("[DEBUG] Spawned enemy %s at wave %d" % [_enemy_debug_name(enemy_type), overManager.turn])
 		return true
 
 	if event.keycode == KEY_PLUS or event.keycode == KEY_KP_ADD or event.keycode == KEY_EQUAL:
 		overManager.turn += 1
 		_sync_wave_label()
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("[DEBUG] Wave set to %d" % overManager.turn)
 		return true
 
 	if event.keycode == KEY_MINUS or event.keycode == KEY_KP_SUBTRACT:
 		overManager.turn = max(0, overManager.turn - 1)
 		_sync_wave_label()
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("[DEBUG] Wave set to %d" % overManager.turn)
 		return true
 
@@ -170,13 +218,13 @@ func spawn_wave(wave_idx):
 	if not ongoing_wave:
 		spawning_enemies = true
 		ongoing_wave = true
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("\n=== WAVE %d START ===" % wave_idx)
 			print("[SPECIAL] Pending before processing: %s" % [pending_special_unlocks])
 			print("[SPECIAL] Unlocked before processing: %s" % [_enemy_list_debug_names(unlocked_special_pool)])
 		_process_pending_special_unlocks(wave_idx)
 		_schedule_next_special_pick(wave_idx)
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("[SPECIAL] Pending after processing/pick: %s" % [pending_special_unlocks])
 			print("[SPECIAL] Selected set: %s" % [_enemy_list_debug_names(selected_specials)])
 		var wave_data = Data.get_wave_data(wave_idx)
@@ -187,7 +235,6 @@ func spawn_wave(wave_idx):
 
 		# Build spawn list by spending credits
 		var enemy_list: Array = []
-		var boss_list: Array = []
 		var available_specials: Array[Data.Enemy] = []
 		for enemy_type in pool:
 			if bool(Data.ENEMY_DATA[enemy_type].get("is_special", false)) and enemy_type not in available_specials:
@@ -196,10 +243,7 @@ func spawn_wave(wave_idx):
 		# Ensure each available special appears at least once per wave.
 		for special_type in available_specials:
 			credits -= int(Data.ENEMY_DATA[special_type]["spawn_cost"])
-			if special_type == Data.Enemy.BOSS:
-				boss_list.append(special_type)
-			else:
-				enemy_list.append(special_type)
+			enemy_list.append(special_type)
 
 		var basic_spent: int = 0
 		var enforce_basic_cap: bool = pool.size() >= 3
@@ -229,15 +273,11 @@ func spawn_wave(wave_idx):
 			credits -= int(Data.ENEMY_DATA[picked]["spawn_cost"])
 			if picked == Data.Enemy.DEFAULT:
 				basic_spent += int(Data.ENEMY_DATA[picked]["spawn_cost"])
-			if picked == Data.Enemy.BOSS:
-				boss_list.append(picked)
-			else:
-				enemy_list.append(picked)
+			enemy_list.append(picked)
 
 		enemy_list.shuffle()
 
 		await _spawn_enemies_with_delay(enemy_list, delay, wave_idx)
-		await _spawn_enemies_with_delay(boss_list, delay, wave_idx)
 		spawning_enemies = false
 
 func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) -> void:
@@ -311,7 +351,7 @@ func _schedule_next_special_pick(current_wave: int) -> void:
 		
 		# Emit warning
 		special_enemy_approaching.emit(picked_special, unlock_wave)
-		if DEBUG_SPECIAL_SCHEDULER:
+		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("[SPECIAL] Picked %s (enum=%d) on wave %d, unlocks on wave %d" % [_enemy_debug_name(picked_special), picked_special, current_wave, unlock_wave])
 			print("[SPECIAL] Selected so far: %s" % [_enemy_list_debug_names(selected_specials)])
 
@@ -324,14 +364,14 @@ func _process_pending_special_unlocks(current_wave: int) -> void:
 		if current_wave >= entry["unlock_wave"]:
 			unlocked_special_pool.append(entry["enemy_type"])
 			to_remove.append(i)
-			if DEBUG_SPECIAL_SCHEDULER:
+			if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 				print("[SPECIAL] Unlocked %s at wave %d" % [_enemy_debug_name(entry["enemy_type"]), current_wave])
 	
 	# Remove in reverse order to preserve indices
 	for idx in range(to_remove.size() - 1, -1, -1):
 		pending_special_unlocks.remove_at(to_remove[idx])
 
-	if DEBUG_SPECIAL_SCHEDULER and not to_remove.is_empty():
+	if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER and not to_remove.is_empty():
 		print("[SPECIAL] Active unlocked pool: %s" % [_enemy_list_debug_names(unlocked_special_pool)])
 
 
@@ -339,7 +379,7 @@ func _build_spawn_pool(base_pool: Array) -> Array:
 	# Return base pool plus any unlocked special enemies
 	var combined_pool = base_pool.duplicate()
 	combined_pool.append_array(unlocked_special_pool)
-	if DEBUG_SPECIAL_SCHEDULER:
+	if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 		print("[SPECIAL] Spawn pool built. Base=%s UnlockedSpecial=%s Final=%s" % [
 			_enemy_list_debug_names(base_pool),
 			_enemy_list_debug_names(unlocked_special_pool),
@@ -359,6 +399,8 @@ func _on_enemy_special_death_effect(_effect_id: String, _payload: Dictionary) ->
 			_spawn_children_from_death(_payload)
 		"death_disable_pulse":
 			_disable_nearby_towers(_payload)
+		"death_speed_boost":
+			_boost_nearby_enemies(_payload)
 		_:
 			pass
 
@@ -389,6 +431,21 @@ func _disable_nearby_towers(_payload: Dictionary) -> void:
 			tower.apply_temporary_disable(disable_duration)
 
 	_spawn_disable_pulse_visual(origin, pulse_radius)
+
+
+func _boost_nearby_enemies(_payload: Dictionary) -> void:
+	var origin: Vector2 = _payload.get("origin", Vector2.ZERO)
+	var boost_radius: float = float(_payload.get("boost_radius", 0.0))
+	var boost_duration: float = float(_payload.get("boost_duration", 0.0))
+	var boost_mult: float = float(_payload.get("boost_mult", 1.0))
+
+	if boost_radius <= 0.0 or boost_duration <= 0.0 or boost_mult <= 1.0:
+		return
+
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy is Area2D and enemy.global_position.distance_to(origin) <= boost_radius:
+			if enemy.has_method("apply_external_speed_boost"):
+				enemy.apply_external_speed_boost(boost_mult, boost_duration)
 
 
 func _spawn_children_from_death_async(spawn_enemy_type: Data.Enemy, spawn_count: int, spawn_delay: float, path_progress: float, wave_idx: int) -> void:

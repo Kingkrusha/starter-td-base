@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dmtxtff77og3a"
-path="res://.godot/imported/Tangerine-Regular.ttf-5edecf75e241f467e27fd1acdf41972b.fontdata"
+uid="uid://dtuy81ay80vax"
+path="res://.godot/imported/Arimo-VariableFont_wght.ttf-3bb07398950f394d8b7fcfc57cb5bb78.fontdata"
 
 [deps]
 
-source_file="res://scenes/ui/Tangerine-Regular.ttf"
-dest_files=["res://.godot/imported/Tangerine-Regular.ttf-5edecf75e241f467e27fd1acdf41972b.fontdata"]
+source_file="res://scenes/ui/Arimo-VariableFont_wght.ttf"
+dest_files=["res://.godot/imported/Arimo-VariableFont_wght.ttf-3bb07398950f394d8b7fcfc57cb5bb78.fontdata"]
 
 [params]
 

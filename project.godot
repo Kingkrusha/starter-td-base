@@ -34,6 +34,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/script_splitter/plugin.cfg")
 
+[gui]
+
+theme/custom_font="uid://dtuy81ay80vax"
+
 [input]
 
 exit={

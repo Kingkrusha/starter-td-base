@@ -40,6 +40,8 @@ func _ready():
 		Data.health_changed.connect(_on_tower_health_changed)
 	if not overManager.NewTurn.is_connected(_on_turn_changed):
 		overManager.NewTurn.connect(_on_turn_changed)
+	if not Data.tower_constraints_changed.is_connected(_on_tower_constraints_changed):
+		Data.tower_constraints_changed.connect(_on_tower_constraints_changed)
 	change_button_texture(current_state)
 	$Control/TowerCards/TowerCardsContainer.visible = false
 	alert_text_box.visible = false
@@ -49,6 +51,7 @@ func _ready():
 		tower_card.setup(tower)
 		$Control/TowerCards/TowerCardsContainer.add_child(tower_card)
 		tower_card.connect('press', tower_select)
+	_on_tower_constraints_changed()
 
 
 func _process(delta: float) -> void:
@@ -104,6 +107,9 @@ func _on_menu_toggle_button_pressed():
 	$Control/TowerCards/TowerCardsContainer.visible = true if current_state == MenuState.OPEN else false
 
 func _on_toggle_scene_button_pressed() -> void:
+	if game_speed != 1.0:
+		Engine.time_scale = 1.0
+		game_speed = 1.0
 	overManager.toggleMode.emit()
 
 
@@ -215,6 +221,14 @@ func _on_tower_health_changed(new_health: int) -> void:
 
 func _on_turn_changed(_turn: int) -> void:
 	sync_wave_display()
+	_on_tower_constraints_changed()
+
+
+func _on_tower_constraints_changed() -> void:
+	for tower_card in get_tree().get_nodes_in_group('TowerCard'):
+		tower_card.toggle_active()
+	if $Control/TowerMenu.visible and is_instance_valid($Control/TowerMenu.tower_ref):
+		$Control/TowerMenu.setup($Control/TowerMenu.tower_ref)
 
 
 func show_special_enemy_approaching(enemy_type: Data.Enemy, unlock_wave: int) -> void:
@@ -254,3 +268,4 @@ func _update_alert_text() -> void:
 	else:
 		# If already unlocked, keep showing latest enemy info but omit countdown text.
 		alert_text_label.text = description
+		

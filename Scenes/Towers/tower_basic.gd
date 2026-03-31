@@ -35,16 +35,12 @@ func _on_reload_timer_timeout():
 			shoot.emit($Turret/BulletSpawn.global_position + dir, shot_angle, Data.Bullet.SINGLE, self)
 		
 func apply_big_upgrade(key : String):
-	if big_upgrade_chosen != "":
-		return
-
-	if not Data.UPGRADE_DATA[type]["big"].has(key):
+	var status := can_apply_big_upgrade(key)
+	if not bool(status.get("allowed", false)):
 		return
 
 	var upgrade = Data.UPGRADE_DATA[type]["big"][key]
-	var cost: int = upgrade["cost"]
-	if Data.money < cost:
-		return
+	var cost: int = int(status.get("cost", 0))
 
 	var effects: Dictionary = upgrade.get("effects", {})
 	match key:
@@ -59,3 +55,5 @@ func apply_big_upgrade(key : String):
 
 	Data.money -= cost
 	big_upgrade_chosen = key
+	_sync_tower_tier_for_state()
+	Data.notify_tower_constraint_state_changed()

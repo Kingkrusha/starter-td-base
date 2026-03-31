@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://5wltcegg83o"
-path="res://.godot/imported/Tangerine-Bold.ttf-d1f0d04969e854147f70051f62086395.fontdata"
+path="res://.godot/imported/Tangerine-Bold.ttf-038c46fab032771bd0705174282d010c.fontdata"
 
 [deps]
 
-source_file="res://Scenes/Ui/Tangerine-Bold.ttf"
-dest_files=["res://.godot/imported/Tangerine-Bold.ttf-d1f0d04969e854147f70051f62086395.fontdata"]
+source_file="res://scenes/ui/Tangerine-Bold.ttf"
+dest_files=["res://.godot/imported/Tangerine-Bold.ttf-038c46fab032771bd0705174282d010c.fontdata"]
 
 [params]
 

@@ -54,6 +54,7 @@ func _ready ():
 	create_starting_crops(Vector2i(0, 4), preload("res://01_farm/crops/hot_pepper.tres"), 2)
 	track_plants_num()
 	track_plants_index()
+	Data.notify_tower_constraint_state_changed()
 
 func create_starting_crops(tile_coords: Vector2i, crop_data: CropData, starting_point: int):
 	 # Create crop
@@ -95,10 +96,12 @@ func _on_new_day (day: int):
 		elif info.tilled:
 			if info.crop == null:
 				_set_tile_state(tile_pos, TileType.GRASS)
+	Data.notify_tower_constraint_state_changed.call_deferred()
 				
 func _on_harvest_crop(crop : Crop):
 	_get_tile_info(crop.tile_map_coords).crop = null
 	_set_tile_state(crop.tile_map_coords, TileType.TILLED)
+	Data.notify_tower_constraint_state_changed()
 
 func try_till_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
@@ -156,6 +159,7 @@ func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	
 	GameFarmManager.consume_seed(crop_data)
 	plant_seed_sound.play()
+	Data.notify_tower_constraint_state_changed()
 
 func try_harvest_tile (player_pos : Vector2):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
@@ -169,10 +173,16 @@ func try_harvest_tile (player_pos : Vector2):
 	if not tile_info[coords].crop.harvestable:
 		print_debug("Whoops!")
 		return
+
+	var harvest_gate: Dictionary = Data.can_harvest_crop_for_towers(tile_info[coords].crop)
+	if not bool(harvest_gate.get("allowed", false)):
+		print(String(harvest_gate.get("reason", "Cannot harvest this crop right now.")))
+		return
 	
 	GameFarmManager.harvest_crop(tile_info[coords].crop, tile_info[coords].crop.sell_price)
 	tile_info[coords].crop = null
 	harvest_sound.play()
+	Data.notify_tower_constraint_state_changed()
 
 func is_tile_watered (pos :Vector2) -> bool:
 	var coords : Vector2i = tile_map.local_to_map(pos)
