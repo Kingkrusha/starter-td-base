@@ -62,6 +62,28 @@ func _ready() -> void:
 	#$"Player Camera".limit_right = $Background/WorldBounds/Right.global_position.x
 
 
+func _exit_tree() -> void:
+	if is_instance_valid($UI) and $UI.is_connected("start_wave", Callable(self, "spawn_wave")):
+		$UI.disconnect("start_wave", Callable(self, "spawn_wave"))
+
+
+func _safe_tree() -> SceneTree:
+	var tree := get_tree()
+	if tree != null:
+		return tree
+	var loop := Engine.get_main_loop()
+	if loop is SceneTree:
+		return loop
+	return null
+
+
+func _wait_seconds(seconds: float) -> void:
+	var tree := _safe_tree()
+	if tree == null:
+		return
+	await tree.create_timer(max(0.0, seconds)).timeout
+
+
 func _print_debug_bindings() -> void:
 	if not DEBUG_ACTIVE:
 		return
@@ -233,6 +255,8 @@ func _sync_wave_label() -> void:
 		$UI.sync_wave_display()
 
 func spawn_wave(wave_idx):
+	if not is_inside_tree():
+		return
 	if not ongoing_wave:
 		spawning_enemies = true
 		ongoing_wave = true
@@ -301,8 +325,10 @@ func spawn_wave(wave_idx):
 
 func _spawn_enemies_with_delay(enemy_types: Array, delay: float, wave_idx: int) -> void:
 	for enemy_type in enemy_types:
+		if not is_inside_tree():
+			return
 		_spawn_enemy_now(enemy_type, wave_idx)
-		await get_tree().create_timer(delay).timeout
+		await _wait_seconds(delay)
 
 
 func _spawn_enemy_now(enemy_type: Data.Enemy, wave_idx: int, path_progress: float = 0.0) -> void:
@@ -471,8 +497,10 @@ func _boost_nearby_enemies(_payload: Dictionary) -> void:
 func _spawn_children_from_death_async(spawn_enemy_type: Data.Enemy, spawn_count: int, spawn_delay: float, path_progress: float, wave_idx: int) -> void:
 	var cumulative_offset: float = 0.0
 	for i in range(spawn_count):
+		if not is_inside_tree():
+			return
 		if i > 0 and spawn_delay > 0.0:
-			await get_tree().create_timer(spawn_delay).timeout
+			await _wait_seconds(spawn_delay)
 		var path_follow := PathFollow2D.new()
 		cumulative_offset += randf_range(50.0, 100.0)
 		path_follow.progress = max(0.0, path_progress - cumulative_offset)

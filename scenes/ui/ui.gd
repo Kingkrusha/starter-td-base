@@ -20,7 +20,7 @@ var stored_speed: float = 1.0
 var tower_card_scene = preload("res://scenes/ui/tower_card.tscn")
 @onready var alert_icon : TextureButton = $Control/AlertIcon
 @onready var alert_text_box: NinePatchRect = $Control/AlertIcon/NinePatchRect
-@onready var alert_text_label: Label = $"Control/AlertIcon/Text Box/Text"
+@onready var alert_text_label: Label = $Control/AlertIcon/NinePatchRect/Text
 
 var current_started_wave: int = 0
 var alert_flash_active: bool = false
@@ -52,6 +52,17 @@ func _ready():
 		$Control/TowerCards/TowerCardsContainer.add_child(tower_card)
 		tower_card.connect('press', tower_select)
 	_on_tower_constraints_changed()
+
+
+func _exit_tree() -> void:
+	if Data.money_changed.is_connected(_on_tower_money_changed):
+		Data.money_changed.disconnect(_on_tower_money_changed)
+	if Data.health_changed.is_connected(_on_tower_health_changed):
+		Data.health_changed.disconnect(_on_tower_health_changed)
+	if overManager.NewTurn.is_connected(_on_turn_changed):
+		overManager.NewTurn.disconnect(_on_turn_changed)
+	if Data.tower_constraints_changed.is_connected(_on_tower_constraints_changed):
+		Data.tower_constraints_changed.disconnect(_on_tower_constraints_changed)
 
 
 func _process(delta: float) -> void:
@@ -221,13 +232,18 @@ func _on_tower_health_changed(new_health: int) -> void:
 
 
 func _on_turn_changed(_turn: int) -> void:
+	if not is_inside_tree():
+		return
 	sync_wave_display()
 	_on_tower_constraints_changed()
 
 
 func _on_tower_constraints_changed() -> void:
-	for tower_card in get_tree().get_nodes_in_group('TowerCard'):
-		tower_card.toggle_active()
+	if not is_inside_tree():
+		return
+	for tower_card in $Control/TowerCards/TowerCardsContainer.get_children():
+		if tower_card.has_method("toggle_active"):
+			tower_card.toggle_active()
 	if $Control/TowerMenu.visible and is_instance_valid($Control/TowerMenu.tower_ref):
 		$Control/TowerMenu.setup($Control/TowerMenu.tower_ref)
 
