@@ -5,6 +5,7 @@ signal ChangeFarmMoney (money : int)
 signal ChangeTowerMoney (money : int)
 signal NewTurn (turn : int)
 signal toggleMode()
+signal reset()
 
 const MUSIC_F_HEAD: AudioStream = preload("res://01_farm/Audio/F_head.mp3")
 const MUSIC_F_BODY: AudioStream = preload("res://01_farm/Audio/F_body.mp3")
@@ -49,14 +50,17 @@ func _ready() -> void:
 	Data.money_changed.connect(_update_tower_money)
 	plant_data.connect(determine_towers)
 	Data.defeat.connect(defeat, CONNECT_DEFERRED)
+	overManager.reset.connect(reset_manager)
+func reset_manager():
+	print("reset overmanager")
+	turn = 0
+
 func set_waves(setwaves : int):
 	waves = setwaves 
 
 func victory():
-	
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/victory.tscn")
 func defeat():
-	
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/defeat.tscn")
 func set_td_wave_active(is_active: bool) -> void:
 	if td_wave_active == is_active:

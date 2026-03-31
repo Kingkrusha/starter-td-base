@@ -239,8 +239,8 @@ func _on_turn_changed(_turn: int) -> void:
 
 
 func _on_tower_constraints_changed() -> void:
-	print("is inside tree: ", is_inside_tree())
-	print("self: ", self)
+	#print("is inside tree: ", is_inside_tree())
+	#print("self: ", self)
 	if not is_inside_tree():
 		return
 	for tower_card in get_tree().get_nodes_in_group('TowerCard'):

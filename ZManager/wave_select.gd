@@ -22,6 +22,7 @@ func _on_hard_pressed() -> void:
 
 
 func _on_restart_pressed() -> void:
+	overManager.emit_signal("reset")
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/combined_main.tscn")
 
 
