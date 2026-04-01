@@ -1,7 +1,7 @@
 extends Tower
 
 var slow: float = 0.7
-var slow_duration: float = 3.5
+var slow_duration: float = 4.0
 var sedative_bonus_damage: int = 0
 var use_glue_bomb: bool = false
 var animation_scale: float = 4.0
@@ -73,9 +73,9 @@ func upgrade_check():
 	# Slow duration scales off range track levels.
 	match range_level:
 		0:
-			slow_duration = 3.5
-		1:
 			slow_duration = 4.0
+		1:
+			slow_duration = 5.0
 		2:
 			slow_duration = 6.0
 		3:

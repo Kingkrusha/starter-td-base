@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cq5nmfpm0efcb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0, 0.75, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
+bg_color = Color(1, 0.1, 0.1, 1)
+
+[node name="EnemyHealthBar" type="ProgressBar" unique_id=530636516]
+custom_minimum_size = Vector2(64, 6)
+offset_left = -64.0
+offset_top = -3.0
+offset_bottom = 3.0
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+fill_mode = 1
+show_percentage = false

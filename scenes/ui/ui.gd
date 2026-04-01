@@ -212,6 +212,10 @@ func enable_wave_button():
 	$Control/WaveButton.disabled = false
 
 
+func set_farm_view_button_enabled(is_enabled: bool) -> void:
+	$Control/ToggleSceneButton.disabled = not is_enabled
+
+
 func sync_wave_display() -> void:
 	wave = overManager.turn
 	$Control/WaveButton.text = ("Start Wave " + str(wave + 1))

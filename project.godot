@@ -27,7 +27,6 @@ overManager="*uid://djtedv2gjx1pg"
 
 [display]
 
-window/size/borderless=true
 window/stretch/mode="canvas_items"
 
 [editor_plugins]

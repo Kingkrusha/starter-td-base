@@ -8,6 +8,7 @@ var big_upgrade_pierce_bonus: int = 0
 func _ready():
 	type = Data.Tower.BASIC
 	init_stats()
+	pierce = 1
 	upgrade_check()
 	$ReloadTimer.wait_time = Data.UPGRADE_DATA[type]["tracks"]["attack_speed"]["base"]
 
@@ -64,7 +65,7 @@ func apply_big_upgrade(key : String):
 
 func upgrade_check():
 	var damage_level := int(track_levels.get("damage", 0))
-	pierce = big_upgrade_pierce_bonus
+	pierce = 1 + big_upgrade_pierce_bonus
 
 	# Gain +1 pierce at damage levels 1, 3, and 5.
 	if damage_level >= 1:

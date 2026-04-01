@@ -21,16 +21,16 @@ enum Enemy {
 	SPECIAL_FLAT_REDUCTION,
 	SPECIAL_DEATH_DISABLE
 }
-var WAVE_BASE_CREDITS: int = 4
-var WAVE_CREDIT_GROWTH: int = 4   
+var WAVE_BASE_CREDITS: int = 3
+var WAVE_CREDIT_GROWTH: int = 3   
 const WAVE_BASE_DELAY: float = 1.0
 const WAVE_MIN_DELAY: float = 0.2      
 var WAVE_DELAY_REDUCTION: float = 0.05
 var DEBUG_IGNORE_RESOURCES: bool = false
-var SPECIAL_PICK_INTERVAL: int = 5
+var SPECIAL_PICK_INTERVAL: int = 4
 var SPECIAL_PREP_DELAY: int = 2
 const SPECIAL_PICK_START_WAVE: int = 5
-var HP_MULT_PER_WAVE = 0.07
+var HP_MULT_PER_WAVE = 0.05
 var BASIC_ENEMY_CREDIT_CAP_RATIO: float = 0.30
 const ENEMY_UNLOCK_SCHEDULE: Array = [
 	[0,  Enemy.DEFAULT],
@@ -82,7 +82,7 @@ const TOWER_DATA = {
 	Tower.BLAST: {
 		'name': 'Blaster',
 		'cost': 30,
-		'reload_time': 4,
+		'reload_time': 2.2,
 		'bullet': Bullet.FIRE,
 		'plant_type': 'pepper',
 		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
@@ -101,8 +101,8 @@ const TOWER_DATA = {
 		'reload_time': 1.7,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'blackberry',
-		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
-		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
+		'thumbnail': "res://graphics/towers/basic/slow tower  mockup.png",
+		'portrait': "res://graphics/towers/basic/slow tower  mockup.png"},
 	Tower.BOMB: {
 		'name': 'Bomb',
 		'cost': 40,
@@ -289,7 +289,7 @@ func can_harvest_crop_for_towers(crop: Crop) -> Dictionary:
 var UPGRADE_DATA = {
 	Tower.BASIC: {
 		"tracks": {
-			"damage":       { "base": 1 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
+			"damage":       { "base": 2 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
 			"range":        { "base": 70,  "per_level": 10, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 1.3, "per_level": 0.15, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
@@ -299,7 +299,7 @@ var UPGRADE_DATA = {
 				"description": "Fires 3 bullets in a fan pattern",
 				"cost": 150,
 				"texture": "res://graphics/ui/bigup_normal.png",
-				"effects": { "bullet_count": 3, "spread_angle": 20.0 }
+				"effects": { "bullet_count": 3, "spread_angle": 25.0 }
 			},
 			"B": {
 				"name": "Ricochet",
@@ -313,8 +313,8 @@ var UPGRADE_DATA = {
 	Tower.BLAST: {
 		"tracks": {
 			"damage":       { "base": 1,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
-			"range":        { "base": 35,  "per_level": 5, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
-			"attack_speed": { "base": 2.4, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
+			"range":        { "base": 35,  "per_level": 6, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"attack_speed": { "base": 2.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
@@ -339,13 +339,13 @@ var UPGRADE_DATA = {
 	},
 	Tower.MORTAR: {
 		"tracks": {
-			"damage":       { "base": 3,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
-			"area":        { "base": 30,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"damage":       { "base": 4,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [10, 15, 25, 40, 60] },
+			"area":        { "base": 35,  "per_level": 0.10, "type": "percent", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 3.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
 			"A": {
-				"name": "Big Game Buster",
+				"name": "Big Baddie Blaster",
 				"description": "Deals more damage the more health the enemy has",
 				"cost": 180,
 				"texture": "res://graphics/ui/bigup_normal.png",
@@ -363,7 +363,7 @@ var UPGRADE_DATA = {
 	Tower.SLOW: {
 		"tracks": {
 			"damage":       { "base": 0 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [15, 25, 40, 50, 70] },
-			"range":        { "base": 70,  "per_level": 10, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"range":        { "base": 80,  "per_level": 10, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 1.5, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {
@@ -385,8 +385,8 @@ var UPGRADE_DATA = {
 	},
 	Tower.BOMB: {
 		"tracks": {
-			"damage":       { "base": 2 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [15, 25, 40, 50, 70] },
-			"area":        { "base": 30,  "per_level": 5, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
+			"damage":       { "base": 3 ,   "per_level": 1,   "type": "flat",    "max": 5, "costs": [15, 25, 40, 50, 70] },
+			"area":        { "base": 35,  "per_level": 5, "type": "flat", "max": 5, "costs": [10, 20, 30, 45, 65] },
 			"attack_speed": { "base": 2.0, "per_level": 0.12, "type": "percent", "max": 5, "costs": [10, 20, 35, 50, 70] },
 		},
 		"big": {

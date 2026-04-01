@@ -60,8 +60,6 @@ func setup(new_path_follow : PathFollow2D, enemy_type: Data.Enemy, wave_idx: int
 	speed = enemy_data['speed']
 	health = Data.get_scaled_health(enemy_type, wave_idx)
 	max_health = health
-	$ProgressBar.max_value = max_health
-	$ProgressBar.value = 0
 	spawn_cost = int(enemy_data.get("spawn_cost", 0))
 	if bool(enemy_data.get("is_special", true)):
 		reward = int(floor(float(spawn_cost) * 1.5))
@@ -85,8 +83,7 @@ func _process(delta):
 	_update_protector_aura_state()
 	_update_speed_state()
 	path_follow.progress += ((speed * delta) * speed_mult)
-	$ProgressBar.rotation = -path_follow.rotation 
-	$ProgressBar.position = Vector2(0,-12)
+
 	if _is_temporarily_invulnerable():
 		$Sprite.modulate = Color(1.0, 1.0, 1.0, 0.6)
 	elif shield_current > 0:
@@ -130,7 +127,7 @@ func hit(ref):
 	}
 	var damage_to_apply := _compute_incoming_damage(bullet_data)
 	health -= damage_to_apply
-	$ProgressBar.value += damage_to_apply
+
 	Data.record_damage_dealt(damage_to_apply, source_tower)
 	_on_damage_taken(bullet_data, damage_to_apply)
 	if ref.dmg_type == "slow":

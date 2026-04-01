@@ -1,9 +1,12 @@
 extends Node2D
 
 var enemy_scene = preload("res://scenes/enemies/enemy.tscn")
+var enemy_health_bar_scene = preload("res://scenes/ui/enemy_health_bar.tscn")
 var bullet_scene = preload("res://scenes/bullets/bullet.tscn")
 var explosion_scene = preload("res://scenes/bullets/explosion.tscn")
 var bomb_scene = preload("res://scenes/bullets/bomb.tscn")
+const ENEMY_HEALTH_BAR_OFFSET: Vector2 = Vector2(-6.0, -12.0)
+var enemy_health_bars: Dictionary = {}
 var tower_scenes = {
 	Data.Tower.BASIC: "res://scenes/towers/tower_basic.tscn",
 	Data.Tower.BLAST: "res://scenes/towers/tower_blaster.tscn",
@@ -53,6 +56,8 @@ func _ready() -> void:
 	Data.DEBUG_IGNORE_RESOURCES = DEBUG_IGNORE_RESOURCES
 	overManager.set_td_wave_active(false)
 	$UI.connect("start_wave", spawn_wave)
+	if $UI.has_method("set_farm_view_button_enabled"):
+		$UI.set_farm_view_button_enabled(true)
 	special_enemy_approaching.connect(_on_special_enemy_approaching)
 	_print_debug_bindings()
 	Data.notify_tower_constraint_state_changed()
@@ -65,6 +70,9 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if is_instance_valid($UI) and $UI.is_connected("start_wave", Callable(self, "spawn_wave")):
 		$UI.disconnect("start_wave", Callable(self, "spawn_wave"))
+	for enemy in enemy_health_bars.keys():
+		_cleanup_enemy_health_bar(enemy)
+	enemy_health_bars.clear()
 
 
 func _safe_tree() -> SceneTree:
@@ -260,6 +268,8 @@ func spawn_wave(wave_idx):
 	if not ongoing_wave:
 		spawning_enemies = true
 		ongoing_wave = true
+		if $UI.has_method("set_farm_view_button_enabled"):
+			$UI.set_farm_view_button_enabled(false)
 		overManager.set_td_wave_active(true)
 		if DEBUG_ACTIVE and DEBUG_SPECIAL_SCHEDULER:
 			print("\n=== WAVE %d START ===" % wave_idx)
@@ -337,14 +347,125 @@ func _spawn_enemy_now(enemy_type: Data.Enemy, wave_idx: int, path_progress: floa
 	var enemy := enemy_scene.instantiate()
 	enemy.setup(path_follow, enemy_type, wave_idx)
 	enemy.special_death_effect.connect(_on_enemy_special_death_effect)
+	_register_enemy_health_bar(enemy)
 	path_follow.add_child(enemy)
 	$Path2D.add_child(path_follow)
 
 
+func _create_enemy_health_bar() -> ProgressBar:
+	var health_bar := enemy_health_bar_scene.instantiate()
+	health_bar.z_index = 10
+	add_child(health_bar)
+	return health_bar
+
+
+func _register_enemy_health_bar(enemy: Node) -> void:
+	if enemy == null:
+		return
+	var health_bar := _create_enemy_health_bar()
+	health_bar.visible = false
+	var initial_world_pos := _enemy_health_bar_world_position(enemy)
+	health_bar.global_position = initial_world_pos
+	var sprite_follow_offset := ENEMY_HEALTH_BAR_OFFSET
+	var sprite := _enemy_sprite_node(enemy)
+	if sprite != null:
+		sprite_follow_offset = initial_world_pos - sprite.global_position
+	enemy_health_bars[enemy] = {
+		"bar": health_bar,
+		"sprite_offset": sprite_follow_offset
+	}
+	if enemy.has_signal("hit_registered"):
+		enemy.connect("hit_registered", Callable(self, "_on_enemy_hit_registered"))
+	enemy.tree_exiting.connect(Callable(self, "_on_enemy_tree_exiting").bind(enemy), CONNECT_ONE_SHOT)
+	_sync_enemy_health_bar(enemy)
+
+
+func _on_enemy_hit_registered(enemy: Area2D) -> void:
+	if enemy == null:
+		return
+	if not enemy_health_bars.has(enemy):
+		return
+	var entry: Dictionary = enemy_health_bars[enemy]
+	var health_bar: ProgressBar = entry.get("bar", null)
+	if health_bar != null and is_instance_valid(health_bar):
+		health_bar.visible = true
+
+
+func _on_enemy_tree_exiting(enemy: Node) -> void:
+	_cleanup_enemy_health_bar(enemy)
+
+
+func _cleanup_enemy_health_bar(enemy: Node) -> void:
+	if enemy == null:
+		return
+	if not enemy_health_bars.has(enemy):
+		return
+	var entry: Dictionary = enemy_health_bars[enemy]
+	var health_bar: ProgressBar = entry.get("bar", null)
+	if health_bar != null and is_instance_valid(health_bar):
+		health_bar.queue_free.call_deferred()
+	enemy_health_bars.erase(enemy)
+
+
+func _sync_enemy_health_bar(enemy: Node) -> void:
+	if not enemy_health_bars.has(enemy):
+		return
+	if not is_instance_valid(enemy):
+		_cleanup_enemy_health_bar(enemy)
+		return
+	var entry: Dictionary = enemy_health_bars[enemy]
+	var health_bar: ProgressBar = entry.get("bar", null)
+	if health_bar == null or not is_instance_valid(health_bar):
+		enemy_health_bars.erase(enemy)
+		return
+	var sprite_offset: Vector2 = entry.get("sprite_offset", ENEMY_HEALTH_BAR_OFFSET)
+	var sprite := _enemy_sprite_node(enemy)
+	if sprite != null:
+		health_bar.global_position = sprite.global_position + sprite_offset
+	elif enemy is Node2D:
+		health_bar.global_position = enemy.global_position + sprite_offset
+	else:
+		health_bar.global_position = Vector2.ZERO
+	health_bar.rotation = 0.0
+	if enemy.has_method("get"):
+		var max_health := int(enemy.get("max_health"))
+		var health := int(enemy.get("health"))
+		var last_hit_time := float(enemy.get("last_hit_time"))
+		health_bar.max_value = max(1, max_health)
+		health_bar.value = max(0, health)
+		if last_hit_time > 0.0:
+			health_bar.visible = true
+
+
+func _enemy_health_bar_world_position(enemy: Node2D) -> Vector2:
+	if enemy.has_node("HealthBarPos"):
+		var marker := enemy.get_node_or_null("HealthBarPos")
+		if marker is Node2D:
+			return marker.global_position
+	return enemy.global_position + ENEMY_HEALTH_BAR_OFFSET
+
+
+func _enemy_sprite_node(enemy: Node) -> Node2D:
+	if enemy == null:
+		return null
+	var sprite := enemy.get_node_or_null("Sprite")
+	if sprite is Node2D:
+		return sprite
+	return null
+
+
+func _sync_all_enemy_health_bars() -> void:
+	for enemy in enemy_health_bars.keys():
+		_sync_enemy_health_bar(enemy)
+
+
 func _process(_delta):
+	_sync_all_enemy_health_bars()
 	if get_tree().get_nodes_in_group("enemies").size() == 0 and not spawning_enemies and ongoing_wave == true:
 		ongoing_wave = false
 		overManager.set_td_wave_active(false)
+		if $UI.has_method("set_farm_view_button_enabled"):
+			$UI.set_farm_view_button_enabled(true)
 		$UI.enable_wave_button()
 
 
@@ -507,6 +628,7 @@ func _spawn_children_from_death_async(spawn_enemy_type: Data.Enemy, spawn_count:
 		var enemy := enemy_scene.instantiate()
 		enemy.setup(path_follow, spawn_enemy_type, wave_idx)
 		enemy.special_death_effect.connect(_on_enemy_special_death_effect)
+		_register_enemy_health_bar(enemy)
 		path_follow.call_deferred("add_child", enemy)
 		$Path2D.call_deferred("add_child", path_follow)
 

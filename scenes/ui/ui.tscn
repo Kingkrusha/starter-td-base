@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://4e4dveqj5cpq"]
 
 [ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="1_o3d1f"]
-[ext_resource type="Script" uid="uid://c7te4c7tl4gby" path="res://Scenes/Ui/ui.gd" id="1_pfayw"]
+[ext_resource type="Script" uid="uid://c7te4c7tl4gby" path="res://scenes/ui/ui.gd" id="1_pfayw"]
 [ext_resource type="FontFile" uid="uid://c8n0pscbdsln4" path="res://graphics/ui/PixelifySans-Regular.ttf" id="2_ckmp7"]
 [ext_resource type="Texture2D" uid="uid://5fcgjf624a6x" path="res://graphics/ui/frame.png" id="2_tsrkt"]
 [ext_resource type="Texture2D" uid="uid://dtx2b4ht28ccs" path="res://graphics/ui/suit_hearts.png" id="3_rjvug"]
@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://d3lavenj1btbr" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/HUD.png" id="9_ckmp7"]
 [ext_resource type="Texture2D" uid="uid://dpunof0ashj11" path="res://graphics/ui/plus.png" id="9_uegxj"]
 [ext_resource type="Texture2D" uid="uid://dl0gxnvr6w6fi" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/Clock/Others/Clock 2.png" id="10_5o3km"]
-[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://Scenes/Ui/tower_menu.tscn" id="10_y220t"]
+[ext_resource type="PackedScene" uid="uid://bs7mlpxrwhrat" path="res://scenes/ui/tower_menu.tscn" id="10_y220t"]
 [ext_resource type="Texture2D" uid="uid://b7igbw3vsk421" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/button.png" id="12_2wslt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ckmp7"]
@@ -105,6 +105,7 @@ texture = ExtResource("12_2wslt")
 region_rect = Rect2(0, 16, 48, 16)
 
 [node name="AlertIcon" type="TextureButton" parent="Control" unique_id=1577874511]
+visible = false
 layout_mode = 0
 offset_left = 860.0
 offset_top = 22.0
