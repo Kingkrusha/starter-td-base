@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://k2uh63vandnx" path="res://Scenes/Ui/player_camera.tscn" id="4_k0mew"]
 [ext_resource type="PackedScene" uid="uid://4e4dveqj5cpq" path="res://Scenes/Ui/ui.tscn" id="5_b0vvs"]
 [ext_resource type="Texture2D" uid="uid://dsy5olpb0ol8h" path="res://graphics/sol's stuff/1 (1).png" id="5_d5djh"]
+[ext_resource type="Texture2D" uid="uid://21gc0iws344m" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Exterior/Box.png" id="6_tnuy3"]
 
 [sub_resource type="Curve2D" id="Curve2D_ok6xr"]
 resource_local_to_scene = true
@@ -17,6 +18,14 @@ point_count = 11
 size = Vector2(24, 24)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ok6xr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tnuy3"]
+atlas = ExtResource("6_tnuy3")
+region = Rect2(19, 7, 11, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d15yg"]
+atlas = ExtResource("6_tnuy3")
+region = Rect2(19, 3, 11, 5)
 
 [node name="Level" type="Node2D" unique_id=1689850729]
 script = ExtResource("1_d5djh")
@@ -94,6 +103,28 @@ shape = SubResource("WorldBoundaryShape2D_ok6xr")
 [node name="Bottom" type="CollisionShape2D" parent="Background/WorldBounds" unique_id=1795878919]
 position = Vector2(-2545.1282, 1428.236)
 shape = SubResource("WorldBoundaryShape2D_ok6xr")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1824049140]
+y_sort_enabled = true
+
+[node name="TextureRect" type="TextureRect" parent="Node2D" unique_id=1510836515]
+z_index = 20
+offset_left = -1024.53
+offset_top = -987.92334
+offset_right = -982.4418
+offset_bottom = -947.92334
+rotation = 3.1415927
+scale = Vector2(4.976916, 4.976916)
+texture = SubResource("AtlasTexture_tnuy3")
+
+[node name="TextureRect2" type="TextureRect" parent="Node2D" unique_id=1276286842]
+offset_left = -1024.5302
+offset_top = -897.00006
+offset_right = -982.4419
+offset_bottom = -876.29236
+rotation = -3.1415927
+scale = Vector2(4.976916, 4.976916)
+texture = SubResource("AtlasTexture_d15yg")
 
 [connection signal="area_entered" from="BG/TowerPreview/Tower Footprint" to="." method="_on_tower_footprint_area_entered"]
 [connection signal="area_exited" from="BG/TowerPreview/Tower Footprint" to="." method="_on_tower_footprint_area_exited"]
