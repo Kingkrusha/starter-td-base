@@ -11,7 +11,10 @@ const MUSIC_F_HEAD: AudioStream = preload("res://01_farm/Audio/F_head.mp3")
 const MUSIC_F_BODY: AudioStream = preload("res://01_farm/Audio/F_body.mp3")
 const MUSIC_TD_HEAD: AudioStream = preload("res://01_farm/Audio/TD_head.mp3")
 const MUSIC_TD_BODY: AudioStream = preload("res://01_farm/Audio/TD_body.mp3")
+const MUSIC_END_VICTORY: AudioStream = preload("res://01_farm/Audio/S.O.L (Game version).mp3")
+const MUSIC_END_DEFEAT: AudioStream = preload("res://01_farm/Audio/gameover.mp3")
 enum MusicMode { FARM, TD }
+enum EndMusicMode { NONE, VICTORY, DEFEAT }
 
 
 # Two var to track currency from each aspect of the game (farm and tower)
@@ -37,6 +40,7 @@ var bgm_body_player: AudioStreamPlayer
 var current_music_mode: int = -1
 var pending_body_mode: int = -1
 var td_wave_active: bool = false
+var end_music_mode: int = EndMusicMode.NONE
 
 func _ready() -> void:
 	_setup_bgm_players()
@@ -54,6 +58,7 @@ func _ready() -> void:
 func reset_manager():
 	print("reset overmanager")
 	turn = 0
+	stop_end_music()
 	Engine.time_scale = 1.0
 	Engine.physics_ticks_per_second = 60
 
@@ -62,10 +67,35 @@ func set_waves(setwaves : int):
 
 func victory():
 	set_td_wave_active(false)
+	play_end_music(true)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/victory.tscn")
 func defeat():
 	set_td_wave_active(false)
+	play_end_music(false)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/defeat.tscn")
+
+
+func play_end_music(is_victory: bool) -> void:
+	end_music_mode = EndMusicMode.VICTORY if is_victory else EndMusicMode.DEFEAT
+	if bgm_head_player.playing:
+		bgm_head_player.stop()
+	if bgm_body_player.playing:
+		bgm_body_player.stop()
+	bgm_head_player.stream = MUSIC_END_VICTORY if is_victory else MUSIC_END_DEFEAT
+	bgm_head_player.play()
+
+
+func stop_end_music() -> void:
+	if end_music_mode == EndMusicMode.NONE:
+		return
+	end_music_mode = EndMusicMode.NONE
+	if bgm_head_player.playing:
+		bgm_head_player.stop()
+	if bgm_body_player.playing:
+		bgm_body_player.stop()
+	current_music_mode = -1
+	pending_body_mode = -1
+	_sync_music_to_wave_state(true)
 func set_td_wave_active(is_active: bool) -> void:
 	if td_wave_active == is_active:
 		return
@@ -105,6 +135,8 @@ func _music_mode_from_wave_state() -> int:
 
 
 func _sync_music_to_wave_state(force: bool = false) -> void:
+	if end_music_mode != EndMusicMode.NONE:
+		return
 	var desired_mode := _music_mode_from_wave_state()
 	if not force and desired_mode == current_music_mode:
 		return
@@ -133,6 +165,9 @@ func _start_music_transition(mode: int) -> void:
 
 
 func _on_bgm_head_finished() -> void:
+	if end_music_mode != EndMusicMode.NONE:
+		bgm_head_player.play()
+		return
 	if pending_body_mode != current_music_mode:
 		return
 	bgm_body_player.stream = _music_body_stream(current_music_mode)
@@ -140,6 +175,8 @@ func _on_bgm_head_finished() -> void:
 
 
 func _on_bgm_body_finished() -> void:
+	if end_music_mode != EndMusicMode.NONE:
+		return
 	if bgm_body_player.stream != null:
 		bgm_body_player.play()
 
