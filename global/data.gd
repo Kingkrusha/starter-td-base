@@ -50,6 +50,8 @@ const SPECIAL_ENEMY_POOL: Array = [
 	Enemy.SPECIAL_BEHEMOTH
 ]
 
+func _ready() -> void:
+	overManager.reset.connect(reset)
 func get_scaled_health(enemy : Data.Enemy, wave: int):
 	var base_hp: int = ENEMY_DATA[enemy]['health']
 	var scaled_health: float = float(base_hp) * (1.0 + (HP_MULT_PER_WAVE * float(wave)))
@@ -700,6 +702,13 @@ func get_run_stats() -> Dictionary:
 		"best_tower": get_best_tower_summary()
 	}
 
+func reset():
+	for tower_card in get_tree().get_nodes_in_group('TowerCard'):
+		tower_card.queue_free()
+	reset_run_stats()
+	health = 100
+	money = 500
+	
 
 var health: int = 100:
 	set(value):

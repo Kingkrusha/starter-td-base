@@ -220,3 +220,14 @@ func track_plants_index() -> Dictionary:
 			var crop_name = child.crop_data.crop_name
 			indexCount[crop_name] = indexCount.get(crop_name, 0) + child.growth_stage
 	return(indexCount)
+
+func clear_plant_group():
+	var all_crops = get_tree().get_nodes_in_group("crops")
+	for child in all_crops:
+		child.queue_free()
+	tile_info = {}
+	for cell in tile_map.get_used_cells():
+		tile_info[cell] = TileInfo.new()
+	track_plants_num()
+	track_plants_index()
+	Data.notify_tower_constraint_state_changed()

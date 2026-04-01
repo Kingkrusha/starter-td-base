@@ -15,8 +15,8 @@ var money : int = 0:
 
 
 var plant: Crop
-var plant_inv: int
-var plant_dict = {plant : plant_inv}
+#var plant_inv: int
+#var plant_dict = {plant : plant_inv}
 
 var all_crop_data : Array[CropData] = [
 	preload("res://01_farm/crops/blackberry.tres"),
@@ -30,20 +30,18 @@ var owned_seeds : Dictionary[CropData, int] = {}
 	
 
 func _ready ():
-	#overManager.ChangeFarmMoney.connect(update_money)
-	get_tree().scene_changed.connect(_on_change_scene)
-	GameFarmManager._on_change_scene()
+	_on_change_scene()
+	overManager.reset.connect(reset)
 	#print(owned_seeds)
 #func update_money(new_money : int):
 	#money = new_money
 	
 func _on_change_scene ():
-	#if get_node_or_null("res://01_farm/scenes/main.tscn") == null:
-		#return
+	print_debug("Called!")
 	for cd in all_crop_data:
 		give_seed.call_deferred(cd, 0)
 		print(owned_seeds)
-	money += 20
+	money = 20
 	
 func harvest_crop (crop : Crop, reward : int):
 	overManager.give_money_tower(reward)
@@ -73,3 +71,7 @@ func give_seed (crop_data : CropData, amount : int):
 	else:
 		owned_seeds[crop_data] = amount
 	ChangeSeedQuantity.emit(crop_data, owned_seeds[crop_data])
+
+func reset():
+	_on_change_scene.call_deferred()
+	
