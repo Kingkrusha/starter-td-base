@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://br8ye8n2lcwvw"
-path="res://.godot/imported/ship_0004.png-63240b4b9a08d9c24521eceba10c533a.ctex"
+uid="uid://c27vlexak5trm"
+path="res://.godot/imported/blackberry-top.png-5e0dc6350fc0e334929ff21977c5e56d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/Ships/ship_0004.png"
-dest_files=["res://.godot/imported/ship_0004.png-63240b4b9a08d9c24521eceba10c533a.ctex"]
+source_file="res://graphics/towers/blackberry/blackberry-top.png"
+dest_files=["res://.godot/imported/blackberry-top.png-5e0dc6350fc0e334929ff21977c5e56d.ctex"]
 
 [params]
 

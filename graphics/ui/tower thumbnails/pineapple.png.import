@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://br8ye8n2lcwvw"
-path="res://.godot/imported/ship_0004.png-63240b4b9a08d9c24521eceba10c533a.ctex"
+uid="uid://bjaqmsivf20pm"
+path="res://.godot/imported/pineapple.png-138c0d08678e8980135294e9c75a604f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/Ships/ship_0004.png"
-dest_files=["res://.godot/imported/ship_0004.png-63240b4b9a08d9c24521eceba10c533a.ctex"]
+source_file="res://graphics/ui/tower thumbnails/pineapple.png"
+dest_files=["res://.godot/imported/pineapple.png-138c0d08678e8980135294e9c75a604f.ctex"]
 
 [params]
 

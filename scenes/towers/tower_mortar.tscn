@@ -1,21 +1,19 @@
 [gd_scene format=3 uid="uid://18olvebrbphp"]
 
-[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://scenes/towers/tower.tscn" id="1_oqusg"]
-[ext_resource type="Script" uid="uid://jwtu5b8g2ngd" path="res://scenes/towers/tower_mortar.gd" id="2_3an13"]
-[ext_resource type="Texture2D" uid="uid://1t08v8xyx2kj" path="res://graphics/towers/mortar/mortar tower down.png" id="3_872qs"]
+[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://Scenes/Towers/tower.tscn" id="1_oqusg"]
+[ext_resource type="Script" uid="uid://jwtu5b8g2ngd" path="res://Scenes/Towers/tower_mortar.gd" id="2_3an13"]
+[ext_resource type="Texture2D" uid="uid://bjaqmsivf20pm" path="res://graphics/ui/tower thumbnails/pineapple.png" id="3_7gpmm"]
 [ext_resource type="Texture2D" uid="uid://decyie3x0j0su" path="res://graphics/ui/crosshair.png" id="4_bsoru"]
 
 [node name="tower_moartar" unique_id=2013600930 instance=ExtResource("1_oqusg")]
 script = ExtResource("2_3an13")
 
 [node name="Base" parent="." index="0" unique_id=1033670289]
-texture = ExtResource("3_872qs")
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_7gpmm")
 
 [node name="Turret" parent="." index="1" unique_id=602573845]
 visible = false
-
-[node name="EnemyDetectionArea" parent="." index="2" unique_id=37526851]
-collision_mask = 8
 
 [node name="CrosshairSprite" type="Sprite2D" parent="." index="4" unique_id=461635853]
 visible = false
