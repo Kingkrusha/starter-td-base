@@ -11,6 +11,7 @@ var harvestable : bool
 var tile_map_coords : Vector2i
 var sell_price : int
 var growth_stage: int = 0
+var _last_tooltip_text: String = ""
 
 @onready var sprite : Sprite2D = $Sprite 
 @onready var node: Control = $Sprite/Control
@@ -25,6 +26,7 @@ func _ready ():
 
 func _process(_delta: float) -> void:
 	_sync_tooltip_hitbox()
+	_update_tooltip()
 
 
 func _exit_tree() -> void:
@@ -52,7 +54,9 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 
 func _update_tooltip():
 	if crop_data == null:
-		node.tooltip_text = ""
+		if _last_tooltip_text != "":
+			node.tooltip_text = ""
+			_last_tooltip_text = ""
 		return
 
 	var crop_name := String(crop_data.crop_name).capitalize()
@@ -62,10 +66,25 @@ func _update_tooltip():
 	var tooltip := "%s, Yield %d, Growth stage %d" % [crop_name, yield_value, stage_value]
 
 	if stage_value < max_stage:
-		var waves_until_next = max(0, waves_until_next_stage)
+		var waves_until_next := _display_waves_until_next_stage()
 		tooltip += ", %d waves until next stage" % waves_until_next
+		if not watered:
+			tooltip += ", needs water"
 
-	node.tooltip_text = tooltip
+	if tooltip != _last_tooltip_text:
+		node.tooltip_text = tooltip
+		_last_tooltip_text = tooltip
+
+
+func _display_waves_until_next_stage() -> int:
+	if crop_data == null:
+		return 0
+	var final_stage = max(0, _stage_count() - 1)
+	if growth_stage >= final_stage:
+		return 0
+	if waves_until_next_stage > 0:
+		return max(0, waves_until_next_stage)
+	return max(0, _stage_waves_to_next(growth_stage))
 
 func _apply_growth_stage(stage: int, reset_stage_timer: bool = true) -> void:
 	var stage_count := _stage_count()
@@ -154,6 +173,9 @@ func _stage_is_harvestable(stage: int) -> bool:
 func _stage_wave_or_legacy(stage: int, stage_count: int) -> int:
 	if crop_data.stage_waves_to_next.size() > stage:
 		return max(0, int(crop_data.stage_waves_to_next[stage]))
+	if crop_data.stage_waves_to_next.size() > 0:
+		# If only early stage transitions are configured, reuse the last configured value.
+		return max(0, int(crop_data.stage_waves_to_next[crop_data.stage_waves_to_next.size() - 1]))
 	var transitions = max(1, stage_count - 1)
 	return max(1, int(ceil(float(max(1, crop_data.days_to_grow)) / float(transitions))))
 
@@ -176,6 +198,11 @@ func set_starting_growth_stage(stage: int) -> void:
 	var max_stage = max(0, _stage_count() - 1)
 	var clamped_stage = clamp(stage, 0, max_stage)
 	_apply_growth_stage(clamped_stage, true)
+
+
+func set_watered(value: bool) -> void:
+	watered = value
+	_update_tooltip()
 	
 func _on_new_day (_day:int):
 	print("Crop ", crop_data)

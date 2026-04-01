@@ -125,7 +125,7 @@ func try_water_tile(player_pos : Vector2):
 	# if there's a crop on the tile, water it
 	if info.crop:
 		#print_debug(info.crop)
-		info.crop.watered = true
+		info.crop.set_watered(true)
 		
 func try_seed_tile (player_pos : Vector2, crop_data :CropData):
 	var coords : Vector2i = tile_map.local_to_map(player_pos)
