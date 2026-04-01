@@ -1,16 +1,33 @@
 [gd_scene format=3 uid="uid://bs7mlpxrwhrat"]
 
-[ext_resource type="Script" uid="uid://d103txvrdom45" path="res://scenes/ui/tower_menu.gd" id="1_n2bmw"]
-[ext_resource type="Texture2D" uid="uid://rnnvxeejg1o3" path="res://graphics/ui/bigup_normal.png" id="2_2nd6s"]
-[ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_n2bmw"]
+[ext_resource type="Script" uid="uid://d103txvrdom45" path="res://Scenes/Ui/tower_menu.gd" id="1_n2bmw"]
+[ext_resource type="Texture2D" uid="uid://lqyhlfbjdxva" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/0.2.png" id="2_bxeg5"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="3_10234"]
-[ext_resource type="Texture2D" uid="uid://btkxerqdlusr7" path="res://graphics/ui/bigup_hover.png" id="3_bvfoo"]
-[ext_resource type="FontFile" uid="uid://5wltcegg83o" path="res://scenes/ui/Tangerine-Bold.ttf" id="4_10234"]
+[ext_resource type="FontFile" uid="uid://c8n0pscbdsln4" path="res://graphics/ui/PixelifySans-Regular.ttf" id="5_yd41y"]
 [ext_resource type="Texture2D" uid="uid://duabn1x61wk2j" path="res://graphics/ui/icon.png" id="6_gy57x"]
 [ext_resource type="Texture2D" uid="uid://v2yuex73fti6" path="res://graphics/ui/progress bar_empty2.png" id="7_n2bmw"]
+[ext_resource type="Texture2D" uid="uid://c4eohcuwtd2oc" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Icons/Weapons/All/Gemstones.png" id="7_qmi5a"]
 [ext_resource type="Texture2D" uid="uid://ppuhmtuyh2w5" path="res://graphics/ui/progress bar2.png" id="8_10234"]
 [ext_resource type="Texture2D" uid="uid://dpunof0ashj11" path="res://graphics/ui/plus.png" id="9_t15my"]
 [ext_resource type="Texture2D" uid="uid://dqyf366fw1dd" path="res://graphics/ui/plus proble.png" id="10_agkva"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tx2cu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dui0e"]
+atlas = ExtResource("7_qmi5a")
+region = Rect2(3, 5, 10, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd41y"]
+atlas = ExtResource("7_qmi5a")
+region = Rect2(2, 20, 12, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tx2cu"]
+atlas = ExtResource("7_qmi5a")
+region = Rect2(19, 4, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cl1gr"]
+atlas = ExtResource("7_qmi5a")
+region = Rect2(18, 19, 12, 12)
 
 [node name="TowerMenu" type="Control" unique_id=511109904]
 layout_mode = 3
@@ -33,6 +50,16 @@ offset_left = -40.0
 offset_bottom = 40.0
 grow_horizontal = 0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tx2cu")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer" unique_id=18514593]
+layout_mode = 2
+texture = ExtResource("2_bxeg5")
+region_rect = Rect2(159, 0, 18, 48)
+patch_margin_left = 12
+patch_margin_top = 5
+patch_margin_right = 12
+patch_margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=472667169]
 layout_mode = 2
@@ -61,7 +88,8 @@ stretch_mode = 5
 [node name="TowerName" type="Label" parent="PanelContainer/VBoxContainer" unique_id=941671284]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("4_10234")
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 theme_override_font_sizes/font_size = 32
 text = "Tower Name"
 horizontal_alignment = 1
@@ -83,7 +111,8 @@ layout_mode = 2
 
 [node name="Upgrade" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=1913884888]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 theme_override_font_sizes/font_size = 20
 text = "Upgrade Name"
 horizontal_alignment = 1
@@ -92,14 +121,15 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("2_2nd6s")
-texture_hover = ExtResource("3_bvfoo")
+texture_normal = SubResource("AtlasTexture_dui0e")
+texture_pressed = SubResource("AtlasTexture_yd41y")
 ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer" unique_id=10115328]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 theme_override_font_sizes/font_size = 20
 text = "Cost"
 horizontal_alignment = 1
@@ -110,7 +140,8 @@ layout_mode = 2
 
 [node name="Upgrade" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1551679419]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 theme_override_font_sizes/font_size = 20
 text = "Upgrade Name"
 horizontal_alignment = 1
@@ -119,14 +150,15 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("2_2nd6s")
-texture_hover = ExtResource("3_bvfoo")
+texture_normal = SubResource("AtlasTexture_tx2cu")
+texture_hover = SubResource("AtlasTexture_cl1gr")
 ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/FlowContainer/VBoxContainer2" unique_id=1737141260]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_n2bmw")
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 theme_override_font_sizes/font_size = 20
 text = "Cost"
 horizontal_alignment = 1
@@ -164,6 +196,8 @@ stretch_mode = 5
 [node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=363684890]
 custom_minimum_size = Vector2(35, 20)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 text = "10"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=550489008]
@@ -194,6 +228,8 @@ stretch_mode = 5
 [node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1286798532]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 text = "10"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=1122717005]
@@ -224,11 +260,14 @@ stretch_mode = 5
 [node name="Cost" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1703127882]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_yd41y")
 text = "10"
 
 [node name="RemoveButton" type="Button" parent="PanelContainer/VBoxContainer/VBoxContainer" unique_id=753375082]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("5_yd41y")
 text = "Remove Tower"
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Exit/ExitButton" to="." method="_on_exit_button_pressed"]
