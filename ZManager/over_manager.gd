@@ -56,11 +56,11 @@ func _ready() -> void:
 	Data.defeat.connect(defeat, CONNECT_DEFERRED)
 	overManager.reset.connect(reset_manager)
 func reset_manager():
-	print("reset overmanager")
-	turn = 0
-	stop_end_music()
 	Engine.time_scale = 1.0
 	Engine.physics_ticks_per_second = 60
+	turn = 0
+	stop_end_music()
+	
 
 func set_waves(setwaves : int):
 	waves = setwaves 

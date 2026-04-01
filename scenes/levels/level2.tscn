@@ -51,12 +51,14 @@ position = Vector2(-61, -111)
 zoom = Vector2(0.333, 0.333)
 
 [node name="UI" parent="." unique_id=1655196185 instance=ExtResource("5_b0vvs")]
+visible = false
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1848448714]
 z_index = -3
 position = Vector2(-62.999996, -103)
 scale = Vector2(0.6789442, 0.8079897)
 texture = ExtResource("5_d5djh")
+metadata/_edit_lock_ = true
 
 [node name="NoPlaceZones" type="Area2D" parent="Background" unique_id=1970305489]
 scale = Vector2(1, 0.99999994)

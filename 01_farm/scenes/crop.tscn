@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://djuug4ij7lhbd"]
 
 [ext_resource type="Script" uid="uid://0gp775ilsi5s" path="res://01_farm/scripts/crop.gd" id="1_pl0dt"]
-[ext_resource type="Texture2D" uid="uid://yyu53i7hmv7h" path="res://01_farm/Sprites/Crops/Corn/corn_growth_4.tres" id="2_5qbyl"]
 
 [node name="Crop" type="Node2D" unique_id=653688065]
 z_index = 10
@@ -9,7 +8,6 @@ y_sort_enabled = true
 script = ExtResource("1_pl0dt")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=730773069]
-texture = ExtResource("2_5qbyl")
 
 [node name="Control" type="Control" parent="Sprite" unique_id=1822403014]
 layout_mode = 3

@@ -714,8 +714,9 @@ var health: int = 100:
 	set(value):
 		health = value
 		health_changed.emit(health)
-		if health == 0:
-			defeat.emit.call_deferred()
+		if health < 0:
+			health = 0
+			defeat.emit()
 		
 var money = 500:
 	set(value):

@@ -41,7 +41,7 @@ func _on_change_scene ():
 	for cd in all_crop_data:
 		give_seed.call_deferred(cd, 0)
 		print(owned_seeds)
-	money = 20
+	money = 30
 	
 func harvest_crop (crop : Crop, reward : int):
 	overManager.give_money_tower(reward)
