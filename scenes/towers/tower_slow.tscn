@@ -1,9 +1,16 @@
 [gd_scene format=3 uid="uid://c8jvellp0ruc1"]
 
+<<<<<<< Updated upstream
 [ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://scenes/towers/tower.tscn" id="1_3pw6u"]
 [ext_resource type="Script" uid="uid://bygeme0qf2pgy" path="res://scenes/towers/tower_slow.gd" id="2_3pw6u"]
 [ext_resource type="Texture2D" uid="uid://c5pai14m75jql" path="res://graphics/towers/basic/slow tower bottom.png" id="3_3pw6u"]
 [ext_resource type="Texture2D" uid="uid://6hqa733pf75h" path="res://graphics/towers/basic/slow tower top.png" id="4_h635o"]
+=======
+[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://Scenes/Towers/tower.tscn" id="1_3pw6u"]
+[ext_resource type="Script" uid="uid://bygeme0qf2pgy" path="res://Scenes/Towers/tower_slow.gd" id="2_3pw6u"]
+[ext_resource type="Texture2D" uid="uid://b61npykj5wvck" path="res://graphics/towers/blackberry/blackberry-bottom.png" id="3_psfkf"]
+[ext_resource type="Texture2D" uid="uid://c27vlexak5trm" path="res://graphics/towers/blackberry/blackberry-top.png" id="4_psfkf"]
+>>>>>>> Stashed changes
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t18nb"]
 radius = 100.0
@@ -12,10 +19,18 @@ radius = 100.0
 script = ExtResource("2_3pw6u")
 
 [node name="Base" parent="." index="0" unique_id=1033670289]
+<<<<<<< Updated upstream
 texture = ExtResource("3_3pw6u")
 
 [node name="Turret" parent="." index="1" unique_id=602573845]
 texture = ExtResource("4_h635o")
+=======
+texture = ExtResource("3_psfkf")
+
+[node name="Turret" parent="." index="1" unique_id=602573845]
+rotation = -1.5707964
+texture = ExtResource("4_psfkf")
+>>>>>>> Stashed changes
 flip_h = true
 
 [node name="CollisionShape2D" parent="EnemyDetectionArea" parent_id_path=PackedInt32Array(37526851) index="0" unique_id=1380349703]

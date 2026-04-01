@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dnq5a2n0mwki2"]
 
-[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://scenes/towers/tower.tscn" id="1_ut4rp"]
-[ext_resource type="Script" uid="uid://cyip1i0c0pex0" path="res://scenes/towers/tower_bomb.gd" id="2_ut4rp"]
-[ext_resource type="Texture2D" uid="uid://dcus2mnf1agk7" path="res://graphics/towers/basic/basic tower bottom.png" id="3_posww"]
-[ext_resource type="Texture2D" uid="uid://drqd7mybdere0" path="res://graphics/towers/basic/basic tower top.png" id="4_ht7yb"]
+[ext_resource type="PackedScene" uid="uid://to6d1j5dni6t" path="res://Scenes/Towers/tower.tscn" id="1_ut4rp"]
+[ext_resource type="Script" uid="uid://cyip1i0c0pex0" path="res://Scenes/Towers/tower_bomb.gd" id="2_ut4rp"]
+[ext_resource type="Texture2D" uid="uid://dg4vsjj6t5mde" path="res://graphics/towers/pumpkin/pumpkin-bottom.png" id="3_xv6ak"]
+[ext_resource type="Texture2D" uid="uid://co8u5fghs25cc" path="res://graphics/towers/pumpkin/pumpkin-top.png" id="4_xv6ak"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t18nb"]
 radius = 60.0
@@ -12,10 +12,10 @@ radius = 60.0
 script = ExtResource("2_ut4rp")
 
 [node name="Base" parent="." index="0" unique_id=1033670289]
-texture = ExtResource("3_posww")
+texture = ExtResource("3_xv6ak")
 
 [node name="Turret" parent="." index="1" unique_id=602573845]
-texture = ExtResource("4_ht7yb")
+texture = ExtResource("4_xv6ak")
 
 [node name="CollisionShape2D" parent="EnemyDetectionArea" parent_id_path=PackedInt32Array(37526851) index="0" unique_id=1380349703]
 shape = SubResource("CircleShape2D_t18nb")
