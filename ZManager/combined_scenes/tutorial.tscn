@@ -1,20 +1,20 @@
-[gd_scene format=4 uid="uid://ctx3gqg47sqwa"]
+[gd_scene format=4 uid="uid://bdwkcpuq12kms"]
 
-[ext_resource type="Script" uid="uid://cro3x2u2dmh0y" path="res://ZManager/menu.gd" id="1_sgx6j"]
-[ext_resource type="Texture2D" uid="uid://b8scojr0jv3nb" path="res://01_farm/Sprites/Tiles/Tileset.png" id="2_oiafy"]
-[ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_onk1l"]
-[ext_resource type="Texture2D" uid="uid://b7igbw3vsk421" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/button.png" id="3_2k4e5"]
-[ext_resource type="FontFile" uid="uid://c8n0pscbdsln4" path="res://graphics/ui/PixelifySans-Regular.ttf" id="3_l6w17"]
-[ext_resource type="Texture2D" uid="uid://csuncc8xr8jjr" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Spring.png" id="3_siw53"]
-[ext_resource type="Texture2D" uid="uid://8e38l2wyvc5o" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Water Spring.png" id="4_onk1l"]
-[ext_resource type="Texture2D" uid="uid://1u34kn32sast" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tilled Soil and wet soil.png" id="5_2k4e5"]
-[ext_resource type="Texture2D" uid="uid://c0nastjrlqnu0" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/ALL props seasons.png" id="6_l6w17"]
-[ext_resource type="Texture2D" uid="uid://w06ntfco1peu" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Cliff Tileset Spring.png" id="7_3djf3"]
-[ext_resource type="Texture2D" uid="uid://druns0384dl2e" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Water tile.png" id="8_henek"]
-[ext_resource type="Texture2D" uid="uid://w8xvrf0uluja" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Pets/Cats/2/Ginger.png" id="11_2k4e5"]
+[ext_resource type="Script" uid="uid://cro3x2u2dmh0y" path="res://ZManager/menu.gd" id="1_6nu8o"]
+[ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_f6lxo"]
+[ext_resource type="FontFile" uid="uid://c8n0pscbdsln4" path="res://graphics/ui/PixelifySans-Regular.ttf" id="3_pdanu"]
+[ext_resource type="Texture2D" uid="uid://b7igbw3vsk421" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/UI/button.png" id="4_8hdaj"]
+[ext_resource type="Texture2D" uid="uid://b8scojr0jv3nb" path="res://01_farm/Sprites/Tiles/Tileset.png" id="5_5lybl"]
+[ext_resource type="Texture2D" uid="uid://csuncc8xr8jjr" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Spring.png" id="6_8bq5w"]
+[ext_resource type="Texture2D" uid="uid://8e38l2wyvc5o" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Water Spring.png" id="7_bpmqh"]
+[ext_resource type="Texture2D" uid="uid://1u34kn32sast" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tilled Soil and wet soil.png" id="8_722at"]
+[ext_resource type="Texture2D" uid="uid://c0nastjrlqnu0" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/ALL props seasons.png" id="9_no24h"]
+[ext_resource type="Texture2D" uid="uid://w06ntfco1peu" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Tileset Grass Cliff Tileset Spring.png" id="10_gvuag"]
+[ext_resource type="Texture2D" uid="uid://druns0384dl2e" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Farm and Tileset/Tileset/Water tile.png" id="11_8v0sq"]
+[ext_resource type="Texture2D" uid="uid://w8xvrf0uluja" path="res://Farm RPG - Tiny Asset Pack - (All in One)/Farm RPG - Tiny Asset Pack - (All in One)/Pets/Cats/2/Ginger.png" id="12_l01li"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4h3mk"]
-font = ExtResource("2_onk1l")
+font = ExtResource("2_f6lxo")
 font_size = 60
 font_color = Color(0.26666668, 0.6392157, 0.20784314, 1)
 outline_size = 10
@@ -24,22 +24,12 @@ shadow_color = Color(0, 0, 0, 0.8666667)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l6w17"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_henek"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nu8o"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g6tdk"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3djf3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bu44s"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pofs4"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ro5r"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe3w7"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f6lxo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l6w17"]
-texture = ExtResource("2_oiafy")
+texture = ExtResource("5_5lybl")
 separation = Vector2i(1, 1)
 0:0/0 = 0
 1:0/0 = 0
@@ -48,7 +38,7 @@ separation = Vector2i(1, 1)
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3djf3"]
-texture = ExtResource("3_siw53")
+texture = ExtResource("6_8bq5w")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -992,7 +982,7 @@ texture = ExtResource("3_siw53")
 23:39/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_henek"]
-texture = ExtResource("4_onk1l")
+texture = ExtResource("7_bpmqh")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1756,7 +1746,7 @@ texture = ExtResource("4_onk1l")
 47:15/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g6tdk"]
-texture = ExtResource("5_2k4e5")
+texture = ExtResource("8_722at")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1947,7 +1937,7 @@ texture = ExtResource("5_2k4e5")
 23:7/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8ro5r"]
-texture = ExtResource("6_l6w17")
+texture = ExtResource("9_no24h")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -2117,7 +2107,7 @@ texture = ExtResource("6_l6w17")
 4:11/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qe3w7"]
-texture = ExtResource("7_3djf3")
+texture = ExtResource("10_gvuag")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -2298,7 +2288,7 @@ texture = ExtResource("7_3djf3")
 11:11/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bu44s"]
-texture = ExtResource("8_henek")
+texture = ExtResource("11_8v0sq")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_yqj2n"]
@@ -2311,42 +2301,36 @@ sources/4 = SubResource("TileSetAtlasSource_8ro5r")
 sources/6 = SubResource("TileSetAtlasSource_qe3w7")
 sources/7 = SubResource("TileSetAtlasSource_bu44s")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l6w17"]
-atlas = ExtResource("11_2k4e5")
-region = Rect2(0, 384, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_6nu8o"]
+atlas = ExtResource("12_l01li")
+region = Rect2(0, 288, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3djf3"]
-atlas = ExtResource("11_2k4e5")
-region = Rect2(32, 384, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6lxo"]
+atlas = ExtResource("12_l01li")
+region = Rect2(32, 288, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_henek"]
-atlas = ExtResource("11_2k4e5")
-region = Rect2(64, 384, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_pdanu"]
+atlas = ExtResource("12_l01li")
+region = Rect2(64, 288, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g6tdk"]
-atlas = ExtResource("11_2k4e5")
-region = Rect2(96, 384, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_8hdaj"]
+atlas = ExtResource("12_l01li")
+region = Rect2(96, 288, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8ro5r"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l6w17")
+"texture": SubResource("AtlasTexture_6nu8o")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3djf3")
+"texture": SubResource("AtlasTexture_f6lxo")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_henek")
-}, {
-"duration": 3.0,
-"texture": SubResource("AtlasTexture_g6tdk")
+"texture": SubResource("AtlasTexture_pdanu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_henek")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3djf3")
+"texture": SubResource("AtlasTexture_8hdaj")
 }],
 "loop": true,
 "name": &"default",
@@ -2360,7 +2344,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_sgx6j")
+script = ExtResource("1_6nu8o")
 
 [node name="Title" type="Label" parent="." unique_id=143478952]
 layout_mode = 1
@@ -2371,11 +2355,11 @@ offset_top = 97.0
 offset_right = 3.0
 offset_bottom = 181.0
 grow_horizontal = 2
-text = "Overgrowth"
+text = "Tutorial"
 label_settings = SubResource("LabelSettings_4h3mk")
 horizontal_alignment = 1
 
-[node name="Play" type="Button" parent="." unique_id=207932919]
+[node name="menu" type="Button" parent="." unique_id=207932919]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -2383,111 +2367,69 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -147.0
-offset_top = 26.0
-offset_right = 147.0
-offset_bottom = 111.0
+offset_left = 230.0
+offset_top = 206.0
+offset_right = 524.0
+offset_bottom = 291.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
-theme_override_fonts/font = ExtResource("3_l6w17")
+theme_override_fonts/font = ExtResource("3_pdanu")
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxEmpty_l6w17")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_henek")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_g6tdk")
-text = "Play"
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_6nu8o")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_f6lxo")
+text = "Back"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Play" unique_id=1237065392]
+[node name="NinePatchRect" type="NinePatchRect" parent="menu" unique_id=1237065392]
 z_index = -10
 layout_mode = 0
 offset_top = 6.5
 offset_right = 295.0
 offset_bottom = 92.0
-texture = ExtResource("3_2k4e5")
-region_rect = Rect2(0, 16, 48, 16)
-
-[node name="Quit" type="Button" parent="." unique_id=320465440]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -146.0
-offset_top = 128.5
-offset_right = 148.0
-offset_bottom = 213.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.03137255, 0.15686275, 0.2, 1)
-theme_override_fonts/font = ExtResource("3_l6w17")
-theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxEmpty_3djf3")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_bu44s")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_pofs4")
-text = "Quit"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="Quit" unique_id=2089010290]
-z_index = -10
-layout_mode = 0
-offset_top = 6.5
-offset_right = 295.0
-offset_bottom = 92.0
-texture = ExtResource("3_2k4e5")
-region_rect = Rect2(0, 16, 48, 16)
-
-[node name="Tutorial" type="Button" parent="." unique_id=1655232505]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 261.0
-offset_top = 214.0
-offset_right = 555.0
-offset_bottom = 299.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.03137255, 0.15686275, 0.2, 1)
-theme_override_fonts/font = ExtResource("3_l6w17")
-theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxEmpty_3djf3")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_8ro5r")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_qe3w7")
-text = "Tutorial"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="Tutorial" unique_id=665002563]
-z_index = -10
-layout_mode = 0
-offset_top = 6.5
-offset_right = 295.0
-offset_bottom = 92.0
-texture = ExtResource("3_2k4e5")
+texture = ExtResource("4_8hdaj")
 region_rect = Rect2(0, 16, 48, 16)
 
 [node name="GardenMap" type="TileMapLayer" parent="." unique_id=778142293]
 z_index = -75
 position = Vector2(1155, -3.8146973e-06)
 scale = Vector2(4.510232, 4.510232)
-tile_map_data = PackedByteArray("AADw/wAAAQAVAAIAAADw/wEAAQAVAAIAAADw/wIAAQAVAAIAAADw/wMAAQAVAAIAAADw/wQAAQAVAAIAAADw/wUAAQAVAAIAAADw/wYAAQAVAAIAAADw/wcAAQAVAAIAAADw/wgAAQAVAAIAAADx/wAAAQAVAAIAAADx/wEAAQAVAAIAAADx/wIAAQAVAAIAAADx/wMAAQAVAAIAAADx/wQAAQAVAAIAAADx/wUAAQAVAAIAAADx/wYAAQAVAAIAAADx/wcAAQAVAAIAAADx/wgAAQAVAAIAAADy/wAAAQAVAAIAAADy/wEAAQAVAAIAAADy/wIAAQAVAAIAAADy/wMAAQAVAAIAAADy/wQAAQAVAAIAAADy/wUAAQAVAAIAAADy/wYAAQAVAAIAAADy/wcAAQAVAAIAAADy/wgAAQAVAAIAAADz/wAAAQAVAAIAAADz/wEAAQAVAAIAAADz/wIAAQAVAAIAAADz/wMAAQAVAAIAAADz/wQAAQAVAAIAAADz/wUAAQAVAAIAAADz/wYAAQAVAAIAAADz/wcAAQAVAAIAAADz/wgAAQAVAAIAAAD0/wAAAQAVAAIAAAD0/wMAAQAVAAIAAAD0/wQAAQAVAAIAAAD0/wUAAQAVAAIAAAD0/wYAAQAVAAIAAAD0/wcAAQAVAAIAAAD0/wgAAQAVAAIAAAD1/wAAAQAVAAIAAAD1/wMAAQAVAAIAAAD1/wQAAQAVAAIAAAD1/wUAAQAVAAIAAAD1/wYAAQAVAAIAAAD1/wcAAQAVAAIAAAD1/wgAAQAVAAIAAAD2/wAAAQAVAAIAAAD2/wMAAQAVAAIAAAD2/wQAAQAVAAIAAAD2/wUAAQAVAAIAAAD2/wYAAQAVAAIAAAD2/wcAAQAVAAIAAAD2/wgAAQAVAAIAAAD3/wAAAQAVAAIAAAD3/wMAAQAVAAIAAAD3/wQAAQAVAAIAAAD3/wUAAQAVAAIAAAD3/wYAAQAVAAIAAAD3/wcAAQAVAAIAAAD3/wgAAQAVAAIAAAD4/wAAAQAVAAIAAAD4/wMAAQAVAAIAAAD4/wQAAQAVAAIAAAD4/wUAAQAVAAIAAAD4/wYAAQAVAAIAAAD4/wcAAQAVAAIAAAD4/wgAAQAVAAIAAAD5/wAAAQAVAAIAAAD5/wMAAQAVAAIAAAD5/wQAAQAVAAIAAAD5/wUAAQAVAAIAAAD5/wYAAQAVAAIAAAD5/wcAAQAVAAIAAAD5/wgAAQAVAAIAAAD6/wAAAQAVAAIAAAD6/wMAAQAVAAIAAAD6/wQAAQAVAAIAAAD6/wUAAQAVAAIAAAD6/wYAAQAVAAIAAAD6/wcAAQAVAAIAAAD6/wgAAQAVAAIAAAD7/wAAAQAVAAIAAAD7/wEAAQAVAAIAAAD7/wIAAQAVAAIAAAD7/wMAAQAVAAIAAAD7/wQAAQAVAAIAAAD7/wUAAQAVAAIAAAD7/wYAAQAVAAIAAAD7/wcAAQAVAAIAAAD7/wgAAQAVAAIAAAD8/wAAAQAVAAIAAAD8/wEAAQAVAAIAAAD8/wIAAQAVAAIAAAD8/wMAAQAVAAIAAAD8/wQAAQAVAAIAAAD8/wUAAQAVAAIAAAD8/wYAAQAVAAIAAAD8/wcAAQAVAAIAAAD8/wgAAQAVAAIAAAD9/wAAAQAVAAIAAAD9/wEAAQAVAAIAAAD9/wIAAQAVAAIAAAD9/wMAAQAVAAIAAAD9/wQAAQAVAAIAAAD9/wUAAQAVAAIAAAD9/wYAAQAVAAIAAAD9/wcAAQAVAAIAAAD9/wgAAQAVAAIAAAD+/wAAAQAVAAIAAAD+/wEAAQAVAAIAAAD+/wIAAQAVAAIAAAD+/wMAAQAVAAIAAAD+/wQAAQAVAAIAAAD+/wUAAQAVAAIAAAD+/wYAAQAVAAIAAAD+/wcAAQAVAAIAAAD+/wgAAQAVAAIAAAD//wAAAQAVAAIAAAD//wEAAQAVAAIAAAD//wIAAQAVAAIAAAD//wMAAQAVAAIAAAD//wQAAQAVAAIAAAD//wUAAQAVAAIAAAD//wYAAQAVAAIAAAD//wcAAQAVAAIAAAD//wgAAQAVAAIAAAD1/wEAAQAUAAwAAAD1/wIAAQAUAA8AAAD2/wEAAQAWAAwAAAD2/wIAAQAVAA8AAAD3/wEAAQAWAAwAAAD3/wIAAQAVAA8AAAD4/wEAAQAWAAwAAAD4/wIAAQAVAA8AAAD5/wEAAQAWAAwAAAD5/wIAAQAVAA8AAAD6/wEAAQAXAAwAAAD6/wIAAQAXAA8AAAD0/wEAAQAVABIAAAD0/wIAAQAVABIAAAA=")
+tile_map_data = PackedByteArray("AADw/wAAAQAVAAIAAADw/wEAAQAVAAIAAADw/wIAAQAVAAIAAADw/wMAAQAVAAIAAADw/wQAAQAVAAIAAADw/wUAAQAVAAIAAADw/wYAAQAVAAIAAADw/wcAAQAVAAIAAADw/wgAAQAVAAIAAADx/wAAAQAVAAIAAADx/wEAAQAVAAIAAADx/wIAAQAVAAIAAADx/wMAAQAUAAgAAADx/wQAAQAUAAkAAADx/wUAAQAUAAkAAADx/wYAAQAUAAkAAADx/wcAAQAUAAsAAADx/wgAAQAVAAIAAADy/wAAAQAVAAIAAADy/wEAAQAVAAIAAADy/wIAAQAVAAIAAADy/wMAAQAWAAgAAADy/wQAAQAVAAoAAADy/wUAAQAVAAoAAADy/wYAAQAVAAoAAADy/wcAAQAVAAsAAADy/wgAAQAVAAIAAADz/wAAAQAVAAIAAADz/wEAAQAVAAIAAADz/wIAAQAVAAIAAADz/wMAAQAWAAgAAADz/wQAAQAVAAoAAADz/wUAAQAVAAoAAADz/wYAAQAVAAoAAADz/wcAAQAVAAsAAADz/wgAAQAVAAIAAAD0/wAAAQAVAAIAAAD0/wMAAQAWAAgAAAD0/wQAAQAVAAoAAAD0/wUAAQAVAAoAAAD0/wYAAQAVAAoAAAD0/wcAAQAVAAsAAAD0/wgAAQAVAAIAAAD1/wAAAQAVAAIAAAD1/wMAAQAWAAgAAAD1/wQAAQAVAAoAAAD1/wUAAQAVAAoAAAD1/wYAAQAVAAoAAAD1/wcAAQAVAAsAAAD1/wgAAQAVAAIAAAD2/wAAAQAVAAIAAAD2/wMAAQAWAAgAAAD2/wQAAQAVAAoAAAD2/wUAAQAVAAoAAAD2/wYAAQAVAAoAAAD2/wcAAQAVAAsAAAD2/wgAAQAVAAIAAAD3/wAAAQAVAAIAAAD3/wMAAQAWAAgAAAD3/wQAAQAVAAoAAAD3/wUAAQAVAAoAAAD3/wYAAQAVAAoAAAD3/wcAAQAVAAsAAAD3/wgAAQAVAAIAAAD4/wAAAQAVAAIAAAD4/wMAAQAWAAgAAAD4/wQAAQAVAAoAAAD4/wUAAQAVAAoAAAD4/wYAAQAVAAoAAAD4/wcAAQAVAAsAAAD4/wgAAQAVAAIAAAD5/wAAAQAVAAIAAAD5/wMAAQAWAAgAAAD5/wQAAQAVAAoAAAD5/wUAAQAVAAoAAAD5/wYAAQAVAAoAAAD5/wcAAQAVAAsAAAD5/wgAAQAVAAIAAAD6/wAAAQAVAAIAAAD6/wMAAQAXAAgAAAD6/wQAAQAXAAoAAAD6/wUAAQAXAAoAAAD6/wYAAQAXAAoAAAD6/wcAAQAXAAsAAAD6/wgAAQAVAAIAAAD7/wAAAQAVAAIAAAD7/wEAAQAVAAIAAAD7/wIAAQAVAAIAAAD7/wMAAQAVAAIAAAD7/wQAAQAVAAIAAAD7/wUAAQAVAAIAAAD7/wYAAQAVAAIAAAD7/wcAAQAVAAIAAAD7/wgAAQAVAAIAAAD8/wAAAQAVAAIAAAD8/wEAAQAVAAIAAAD8/wIAAQAVAAIAAAD8/wMAAQAVAAIAAAD8/wQAAQAVAAIAAAD8/wUAAQAVAAIAAAD8/wYAAQAVAAIAAAD8/wcAAQAVAAIAAAD8/wgAAQAVAAIAAAD9/wAAAQAVAAIAAAD9/wEAAQAVAAIAAAD9/wIAAQAVAAIAAAD9/wMAAQAVAAIAAAD9/wQAAQAVAAIAAAD9/wUAAQAVAAIAAAD9/wYAAQAVAAIAAAD9/wcAAQAVAAIAAAD9/wgAAQAVAAIAAAD+/wAAAQAVAAIAAAD+/wEAAQAVAAIAAAD+/wIAAQAVAAIAAAD+/wMAAQAVAAIAAAD+/wQAAQAVAAIAAAD+/wUAAQAVAAIAAAD+/wYAAQAVAAIAAAD+/wcAAQAVAAIAAAD+/wgAAQAVAAIAAAD//wAAAQAVAAIAAAD//wEAAQAVAAIAAAD//wIAAQAVAAIAAAD//wMAAQAVAAIAAAD//wQAAQAVAAIAAAD//wUAAQAVAAIAAAD//wYAAQAVAAIAAAD//wcAAQAVAAIAAAD//wgAAQAVAAIAAAD1/wEAAQAUAAwAAAD1/wIAAQAUAA8AAAD2/wEAAQAWAAwAAAD2/wIAAQAVAA8AAAD3/wEAAQAWAAwAAAD3/wIAAQAVAA8AAAD4/wEAAQAWAAwAAAD4/wIAAQAVAA8AAAD5/wEAAQAWAAwAAAD5/wIAAQAVAA8AAAD6/wEAAQAXAAwAAAD6/wIAAQAXAA8AAAD0/wEAAQAVABIAAAD0/wIAAQAVABIAAAA=")
 tile_set = SubResource("TileSet_yqj2n")
 
 [node name="FlowerMap" type="TileMapLayer" parent="." unique_id=1472779974]
 z_index = -75
 position = Vector2(1155, -3.8146973e-06)
 scale = Vector2(4.510232, 4.510232)
-tile_map_data = PackedByteArray("AADw/wMABAACAAAAAADw/wUABAADAAEAAADw/wYABAADAAAAAADw/wcABAADAAEAAADx/wAABAACAAEAAADx/wEABAADAAEAAADx/wQABAACAAAAAADx/wUABAACAAAAAADx/wgABAACAAAAAADy/wMABAADAAEAAADy/wUABAACAAEAAADy/wcABAACAAEAAADy/wgABAADAAEAAADz/wAABAACAAAAAADz/wEABAADAAEAAADz/wMABAADAAEAAADz/wUABAADAAEAAAD0/wAABAADAAEAAAD0/wMABAACAAAAAAD0/wQABAADAAEAAAD0/wUABAACAAEAAAD0/wYABAADAAAAAAD0/wcABAADAAEAAAD1/wAABAACAAAAAAD1/wQABAADAAAAAAD1/wcABAADAAAAAAD1/wgABAADAAAAAAD2/wAABAACAAAAAAD2/wYABAADAAEAAAD2/wcABAACAAEAAAD2/wgABAADAAEAAAD3/wMABAADAAAAAAD3/wQABAACAAEAAAD3/wgABAADAAAAAAD4/wAABAADAAEAAAD4/wYABAACAAAAAAD4/wcABAADAAAAAAD4/wgABAADAAEAAAD5/wQABAACAAAAAAD5/wUABAADAAEAAAD5/wYABAACAAEAAAD6/wAABAADAAAAAAD6/wMABAADAAEAAAD6/wQABAACAAAAAAD6/wcABAADAAAAAAD7/wQABAACAAAAAAD7/wYABAACAAAAAAD8/wAABAADAAAAAAD8/wEABAADAAEAAAD8/wIABAACAAAAAAD8/wMABAADAAEAAAD8/wYABAACAAEAAAD9/wAABAACAAEAAAD9/wMABAADAAEAAAD9/wQABAACAAEAAAD9/wYABAACAAAAAAD9/wcABAACAAAAAAD9/wgABAADAAAAAAD+/wEABAACAAEAAAD+/wQABAADAAEAAAD+/wcABAADAAAAAAD+/wgABAADAAEAAAD//wMABAADAAAAAAD//wQABAACAAEAAAD//wUABAADAAAAAAA=")
+tile_map_data = PackedByteArray("AADw/wMABAACAAAAAADw/wUABAADAAEAAADw/wYABAADAAAAAADw/wcABAADAAEAAADx/wAABAACAAEAAADx/wEABAADAAEAAADx/wgABAACAAAAAADy/wgABAADAAEAAADz/wAABAACAAAAAADz/wEABAADAAEAAAD0/wAABAADAAEAAAD1/wAABAACAAAAAAD1/wgABAADAAAAAAD2/wAABAACAAAAAAD2/wgABAADAAEAAAD3/wgABAADAAAAAAD4/wAABAADAAEAAAD4/wgABAADAAEAAAD6/wAABAADAAAAAAD7/wQABAACAAAAAAD7/wYABAACAAAAAAD8/wAABAADAAAAAAD8/wEABAADAAEAAAD8/wIABAACAAAAAAD8/wMABAADAAEAAAD8/wYABAACAAEAAAD9/wAABAACAAEAAAD9/wMABAADAAEAAAD9/wQABAACAAEAAAD9/wYABAACAAAAAAD9/wcABAACAAAAAAD9/wgABAADAAAAAAD+/wEABAACAAEAAAD+/wQABAADAAEAAAD+/wcABAADAAAAAAD+/wgABAADAAEAAAD//wMABAADAAAAAAD//wQABAACAAEAAAD//wUABAADAAAAAAA=")
 tile_set = SubResource("TileSet_yqj2n")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1736624037]
-position = Vector2(576, 226)
+position = Vector2(221, 83)
 scale = Vector2(6.40625, 6.40625)
 sprite_frames = SubResource("SpriteFrames_8ro5r")
 autoplay = "default"
-frame = 1
-frame_progress = 0.44494697
+frame_progress = 0.38285768
 
-[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="Tutorial" to="." method="_on_tutorial_pressed"]
+[node name="Label" type="Label" parent="." unique_id=1790671522]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 278.0
+offset_right = 773.0
+offset_bottom = 551.0
+theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
+theme_override_fonts/font = ExtResource("3_pdanu")
+text = "Welcome to Overgrown!
+
+As a cat who tipped over a box full of evil magic, 
+you must now grow magical plants to fight against evil!
+
+Nurture your plants carefully, as they become the very towers you 
+will be used to defeat the evil creatures!. Some sacrifice will be necessary,
+ as the same plants can be harvested to pay for tower
+upgrades, with the best requiring a hefty sum.
+
+Grow and Defend in this out of the box take on a tower defense game!
+"
+
+[connection signal="pressed" from="menu" to="." method="_on_menu_pressed"]
