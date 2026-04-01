@@ -15,6 +15,10 @@ region = Rect2(19, 23, 9, 9)
 atlas = ExtResource("1_g36fw")
 region = Rect2(49, 16, 14, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_g36fw"]
+atlas = ExtResource("1_g36fw")
+region = Rect2(65, 15, 14, 17)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_vc8gi"]
 atlas = ExtResource("1_g36fw")
 region = Rect2(81, 13, 14, 19)
@@ -22,7 +26,7 @@ region = Rect2(81, 13, 14, 19)
 [resource]
 script = ExtResource("1_433a1")
 crop_name = "pineapple"
-growth_sprites = Array[Texture]([SubResource("AtlasTexture_7cvg2"), SubResource("AtlasTexture_nkowi"), SubResource("AtlasTexture_o8m4g"), SubResource("AtlasTexture_vc8gi")])
-days_to_grow = 6
+growth_sprites = Array[Texture]([SubResource("AtlasTexture_7cvg2"), SubResource("AtlasTexture_nkowi"), SubResource("AtlasTexture_o8m4g"), SubResource("AtlasTexture_g36fw"), SubResource("AtlasTexture_vc8gi")])
+days_to_grow = 5
 seed_price = 25
 metadata/_custom_type_script = "uid://b7psnp6bo1gm8"

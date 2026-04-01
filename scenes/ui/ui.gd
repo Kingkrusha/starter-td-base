@@ -118,9 +118,7 @@ func _on_menu_toggle_button_pressed():
 	$Control/TowerCards/TowerCardsContainer.visible = true if current_state == MenuState.OPEN else false
 
 func _on_toggle_scene_button_pressed() -> void:
-	if game_speed != 1.0:
-		Engine.time_scale = 1.0
-		game_speed = 1.0
+	current_speed.emit(Engine.time_scale, Engine.physics_ticks_per_second)
 	overManager.toggleMode.emit()
 
 
@@ -156,7 +154,6 @@ func _on_slow_down_pressed():
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(game_speed) + " X")
 	else:
 		$Control/PanelContainer/VBoxContainer/SpeedLabel.text = (str(int(game_speed)) + " X")
-	current_speed.emit(Engine.time_scale, Engine.physics_ticks_per_second)
 
 #func _on_pause_pressed():
 	#if Engine.time_scale > 0:

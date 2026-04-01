@@ -10,6 +10,8 @@ var engine_speed: float = 1.0
 var tick_speed: int = 60
 
 func _tower_speed(engine : float, tick : int):
+	print("engine speed", engine)
+	print("tick speed", tick)
 	engine_speed = engine
 	tick_speed = tick
 	
