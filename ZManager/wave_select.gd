@@ -8,7 +8,7 @@ func _ready() -> void:
 
 
 func _on_easy_pressed() -> void:
-	wave_num.emit(1)
+	wave_num.emit(10)
 	get_tree().change_scene_to_file("res://ZManager/combined_scenes/combined_main.tscn")
 
 
