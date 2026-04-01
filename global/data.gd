@@ -77,32 +77,32 @@ const TOWER_DATA = {
 		'reload_time': 1.5,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'mushroom',
-		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
-		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
+		'thumbnail': "res://graphics/ui/tower thumbnails/mushroom.png",
+		'portrait': "res://graphics/ui/tower thumbnails/mushroom.png"},
 	Tower.BLAST: {
 		'name': 'Blaster',
 		'cost': 30,
 		'reload_time': 2.2,
 		'bullet': Bullet.FIRE,
 		'plant_type': 'pepper',
-		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
-		'portrait': "res://graphics/ui/tower thumbnails/blaster.png"},
+		'thumbnail':"res://graphics/ui/tower thumbnails/pepper.png" ,
+		'portrait': "res://graphics/ui/tower thumbnails/pepper.png"},
 	Tower.MORTAR: {
 		'name': 'Mortar',
 		'cost': 30,
 		'reload_time': 3.2,
 		'bullet': Bullet.MORTAR_EXPLOSION,
 		'plant_type': 'pineapple',
-		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
-		'portrait': "res://graphics/ui/tower thumbnails/mortar.png"},
+		'thumbnail': "res://graphics/ui/tower thumbnails/pineapple.png",
+		'portrait': "res://graphics/ui/tower thumbnails/pineapple.png"},
 	Tower.SLOW: {
 		'name': 'Slow',
 		'cost': 25,
 		'reload_time': 1.7,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'blackberry',
-		'thumbnail': "res://graphics/towers/basic/slow tower  mockup.png",
-		'portrait': "res://graphics/towers/basic/slow tower  mockup.png"},
+		'thumbnail': "res://graphics/ui/tower thumbnails/blackberry.png",
+		'portrait': "res://graphics/ui/tower thumbnails/blackberry.png"},
 	Tower.BOMB: {
 		'name': 'Bomb',
 		'cost': 40,
@@ -110,8 +110,8 @@ const TOWER_DATA = {
 		'twr_range': 60,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'pumpkin',
-		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
-		'portrait': "res://graphics/ui/tower thumbnails/basic.png"}}
+		'thumbnail': "res://graphics/ui/tower thumbnails/pumpkin.png",
+		'portrait': "res://graphics/ui/tower thumbnails/pumpkin.png"}}
 
 
 func notify_tower_constraint_state_changed() -> void:
@@ -707,7 +707,7 @@ func reset():
 		tower_card.queue_free()
 	reset_run_stats()
 	health = 100
-	money = 500
+	money = 20
 	
 
 var health: int = 100:
@@ -718,7 +718,7 @@ var health: int = 100:
 			health = 0
 			defeat.emit()
 		
-var money = 500:
+var money = 20:
 	set(value):
 		money = value
 		money_changed.emit(money)

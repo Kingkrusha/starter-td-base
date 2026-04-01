@@ -20,7 +20,12 @@ func _health_ui(health : int):
 	healthUi.text = str(health)
 
 func _wave_ui(wave : int):
-	waveUi.text = "Wave: " + str(wave)
+	var current_wave := maxi(1, wave)
+	var total_waves := int(overManager.waves)
+	if total_waves > 0:
+		waveUi.text = "Wave: %d/%d" % [current_wave, total_waves]
+	else:
+		waveUi.text = "Wave: %d" % current_wave
 	
 func _tower(money : int):
 	tower_Money.text = str(money)

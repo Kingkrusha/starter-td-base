@@ -5,7 +5,7 @@ var crop_data : CropData:
 	set(value):
 		crop_data = value
 		_update_tooltip()
-var days_until_grown : int
+var waves_until_next_stage: int = 0
 var watered : bool
 var harvestable : bool
 var tile_map_coords : Vector2i
@@ -41,14 +41,12 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	watered = already_watered
 	tile_map_coords = tile_coords
 	harvestable = false
-
-	days_until_grown = data.days_to_grow
 	growth_stage = 0
-	_apply_growth_stage(0)
+	_apply_growth_stage(0, true)
 
 	# Any crop created before wave/day progression starts gets a free bump to stage 1.
-	if overManager.turn == 0 and crop_data.growth_sprites.size() > 1 and growth_stage < 1:
-		_apply_growth_stage(1)
+	if overManager.turn == 0 and _stage_count() > 1 and growth_stage < 1:
+		set_starting_growth_stage(1)
 
 	_update_tooltip()
 
@@ -59,77 +57,146 @@ func _update_tooltip():
 
 	var crop_name := String(crop_data.crop_name).capitalize()
 	var yield_value := int(sell_price)
-	var max_stage = max(0, crop_data.growth_sprites.size() - 1)
+	var max_stage = max(0, _stage_count() - 1)
 	var stage_value := int(growth_stage)
 	var tooltip := "%s, Yield %d, Growth stage %d" % [crop_name, yield_value, stage_value]
 
 	if stage_value < max_stage:
-		var progressed := int(crop_data.days_to_grow - days_until_grown)
-		var next_stage_progress := int(ceil(float(stage_value + 1) * float(crop_data.days_to_grow) / float(max(1, crop_data.growth_sprites.size()))))
-		var waves_until_next = max(0, next_stage_progress - progressed)
+		var waves_until_next = max(0, waves_until_next_stage)
 		tooltip += ", %d waves until next stage" % waves_until_next
 
 	node.tooltip_text = tooltip
 
-func _apply_growth_stage(stage: int) -> void:
-	var sprite_count := crop_data.growth_sprites.size()
-	if sprite_count <= 0:
+func _apply_growth_stage(stage: int, reset_stage_timer: bool = true) -> void:
+	var stage_count := _stage_count()
+	if stage_count <= 0:
 		return
 
-	var clamped_stage = clamp(stage, 0, sprite_count - 1)
+	var clamped_stage = clamp(stage, 0, stage_count - 1)
 	growth_stage = clamped_stage
-	sprite.texture = crop_data.growth_sprites[clamped_stage]
+	if crop_data.growth_sprites.size() > 0:
+		sprite.texture = crop_data.growth_sprites[min(clamped_stage, crop_data.growth_sprites.size() - 1)]
+	harvestable = _stage_is_harvestable(clamped_stage)
+	sell_price = _stage_sell_price(clamped_stage)
+	if reset_stage_timer:
+		waves_until_next_stage = _stage_waves_to_next(clamped_stage)
 
-	if clamped_stage <= 0:
-		harvestable = false
-		sell_price = 0
-	elif clamped_stage == 1:
-		harvestable = true
-		sell_price = crop_data.sell_price_initial
-	elif clamped_stage == 2:
-		harvestable = true
-		sell_price = crop_data.sell_price_second
-	elif clamped_stage == 3:
-		harvestable = true
-		sell_price = crop_data.sell_price_third
-	else:
-		harvestable = true
-		sell_price = crop_data.sell_price_final
-
-	days_until_grown = max(0, crop_data.days_to_grow - clamped_stage)
 	_update_tooltip()
+
+
+func _stage_count() -> int:
+	if crop_data == null:
+		return 0
+	var sprite_stages := crop_data.growth_sprites.size()
+	var sell_stages := crop_data.stage_sell_prices.size()
+	var harvest_stages := crop_data.stage_harvestable.size()
+	var wave_stages := crop_data.stage_waves_to_next.size() + 1
+	return max(1, max(sprite_stages, max(sell_stages, max(harvest_stages, wave_stages))))
+
+
+func _stage_waves_to_next(stage: int) -> int:
+	var stage_count := _stage_count()
+	if stage_count <= 0:
+		return 0
+	if stage >= stage_count - 1:
+		return 0
+	match stage:
+		0:
+			return _stage_wave_or_legacy(0, stage_count)
+		1:
+			return _stage_wave_or_legacy(1, stage_count)
+		2:
+			return _stage_wave_or_legacy(2, stage_count)
+		3:
+			return _stage_wave_or_legacy(3, stage_count)
+		4:
+			return _stage_wave_or_legacy(4, stage_count)
+		_:
+			return _stage_wave_or_legacy(stage, stage_count)
+
+
+func _stage_sell_price(stage: int) -> int:
+	if crop_data == null:
+		return 0
+	match stage:
+		0:
+			return _stage_sell_or_legacy(0, 0)
+		1:
+			return _stage_sell_or_legacy(1, crop_data.sell_price_initial)
+		2:
+			return _stage_sell_or_legacy(2, crop_data.sell_price_second)
+		3:
+			return _stage_sell_or_legacy(3, crop_data.sell_price_third)
+		4:
+			return _stage_sell_or_legacy(4, crop_data.sell_price_final)
+		_:
+			return _stage_sell_or_legacy(stage, crop_data.sell_price_final)
+
+
+func _stage_is_harvestable(stage: int) -> bool:
+	if crop_data == null:
+		return false
+	match stage:
+		0:
+			return _stage_harvest_or_legacy(0, false)
+		1:
+			return _stage_harvest_or_legacy(1, true)
+		2:
+			return _stage_harvest_or_legacy(2, true)
+		3:
+			return _stage_harvest_or_legacy(3, true)
+		4:
+			return _stage_harvest_or_legacy(4, true)
+		_:
+			return _stage_harvest_or_legacy(stage, stage > 0)
+
+
+func _stage_wave_or_legacy(stage: int, stage_count: int) -> int:
+	if crop_data.stage_waves_to_next.size() > stage:
+		return max(0, int(crop_data.stage_waves_to_next[stage]))
+	var transitions = max(1, stage_count - 1)
+	return max(1, int(ceil(float(max(1, crop_data.days_to_grow)) / float(transitions))))
+
+
+func _stage_sell_or_legacy(stage: int, legacy_value: int) -> int:
+	if crop_data.stage_sell_prices.size() > stage:
+		return int(crop_data.stage_sell_prices[stage])
+	return legacy_value
+
+
+func _stage_harvest_or_legacy(stage: int, legacy_value: bool) -> bool:
+	if crop_data.stage_harvestable.size() > stage:
+		return bool(crop_data.stage_harvestable[stage])
+	return legacy_value
+
+
+func set_starting_growth_stage(stage: int) -> void:
+	if crop_data == null:
+		return
+	var max_stage = max(0, _stage_count() - 1)
+	var clamped_stage = clamp(stage, 0, max_stage)
+	_apply_growth_stage(clamped_stage, true)
 	
 func _on_new_day (_day:int):
 	print("Crop ", crop_data)
 	if not watered:
 		print("Water is important!")
+		_update_tooltip()
 		return
 	watered = false
-	
-	var sprite_count : int = len(crop_data.growth_sprites)
-	var growth_percent : float = (crop_data.days_to_grow - days_until_grown) / float(crop_data.days_to_grow)	
-	var index : int = floor(growth_percent * sprite_count)
-	index = clamp(index, 0, sprite_count - 1)
-	_apply_growth_stage(index)
-	print_debug("index is: ", index)
-	
-	if growth_stage == 0:
-		print_debug("Seed")
-		days_until_grown -= 1
-	elif growth_stage == 1:
-		print_debug("First Stage")
-		days_until_grown -= 1
-	elif growth_stage == 2 :
-		print_debug("Second Stage")
-		days_until_grown -= 1
-	elif growth_stage == 3 :
-		print_debug("Third Stage")
-		days_until_grown -= 1
-	else:
-		print_debug("Final Stage")
-		pass
 
-	_update_tooltip()
+	var final_stage = max(0, _stage_count() - 1)
+	if growth_stage >= final_stage:
+		_update_tooltip()
+		return
+	if waves_until_next_stage <= 0:
+		waves_until_next_stage = _stage_waves_to_next(growth_stage)
+
+	waves_until_next_stage = max(0, waves_until_next_stage - 1)
+	while growth_stage < final_stage and waves_until_next_stage <= 0:
+		_apply_growth_stage(growth_stage + 1, true)
+
+	print_debug("stage is: ", growth_stage, " waves_until_next_stage: ", waves_until_next_stage)
 		
 		
 	

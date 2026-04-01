@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://5fcgjf624a6x" path="res://graphics/ui/frame.png" id="1_fixwu"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="2_dufpo"]
-[ext_resource type="Script" uid="uid://bw8iqjm7ynit2" path="res://Scenes/Ui/tower_card.gd" id="2_ensqj"]
+[ext_resource type="Script" uid="uid://bw8iqjm7ynit2" path="res://scenes/ui/tower_card.gd" id="2_ensqj"]
 [ext_resource type="FontFile" uid="uid://bqm53gushpubk" path="res://graphics/ui/Digitalt.otf" id="3_ensqj"]
 [ext_resource type="Texture2D" uid="uid://b3k0r3etcd08f" path="res://graphics/ui/dollar.png" id="5_4rgsa"]
 

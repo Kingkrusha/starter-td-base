@@ -138,4 +138,11 @@ func _on_exit_button_pressed():
 
 
 func _on_remove_button_pressed():
-	tower_ref.queue_free()
+	if tower_ref:
+		tower_ref.show_range = false
+		tower_ref.queue_redraw()
+		tower_ref.queue_free.call_deferred()
+
+	self.visible = false
+	close.emit()
+	Data.notify_tower_constraint_state_changed.call_deferred()
