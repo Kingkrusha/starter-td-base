@@ -14,7 +14,7 @@ region = Rect2(12, 133, 9, 9)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pt44p"]
 atlas = ExtResource("2_0dpfs")
-region = Rect2(40, 116, 15, 24)
+region = Rect2(12, 37, 9, 9)
 
 [resource]
 script = ExtResource("1_indsd")
