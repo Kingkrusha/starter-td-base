@@ -77,8 +77,6 @@ const TOWER_DATA = {
 		'reload_time': 1.5,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'mushroom',
-		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
-		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
 		'thumbnail': "res://graphics/ui/tower thumbnails/mushroom.png",
 		'portrait':"res://graphics/ui/tower thumbnails/mushroom.png" },
 	Tower.BLAST: {
@@ -87,8 +85,6 @@ const TOWER_DATA = {
 		'reload_time': 2.2,
 		'bullet': Bullet.FIRE,
 		'plant_type': 'pepper',
-		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
-		'portrait': "res://graphics/ui/tower thumbnails/blaster.png"},
 		'thumbnail':  "res://graphics/ui/tower thumbnails/pepper.png",
 		'portrait':  "res://graphics/ui/tower thumbnails/pepper.png"},
 	Tower.MORTAR: {
@@ -97,8 +93,6 @@ const TOWER_DATA = {
 		'reload_time': 3.2,
 		'bullet': Bullet.MORTAR_EXPLOSION,
 		'plant_type': 'pineapple',
-		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
-		'portrait': "res://graphics/ui/tower thumbnails/mortar.png"},
 		'thumbnail': "res://graphics/ui/tower thumbnails/pineapple.png",
 		'portrait': "res://graphics/ui/tower thumbnails/pineapple.png"},
 	Tower.SLOW: {
@@ -121,8 +115,6 @@ const TOWER_DATA = {
 		'twr_range': 60,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'pumpkin',
-		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
-		'portrait': "res://graphics/ui/tower thumbnails/basic.png"}}
 		'thumbnail': "res://graphics/ui/tower thumbnails/pumpkin.png",
 		'portrait': "res://graphics/ui/tower thumbnails/pumpkin.png"}}
 
