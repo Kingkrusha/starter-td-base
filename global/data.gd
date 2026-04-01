@@ -79,8 +79,6 @@ const TOWER_DATA = {
 		'plant_type': 'mushroom',
 		'thumbnail': "res://graphics/ui/tower thumbnails/basic.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"},
-		'thumbnail': "res://graphics/ui/tower thumbnails/mushroom.png",
-		'portrait':"res://graphics/ui/tower thumbnails/mushroom.png" },
 	Tower.BLAST: {
 		'name': 'Blaster',
 		'cost': 30,
@@ -89,8 +87,6 @@ const TOWER_DATA = {
 		'plant_type': 'pepper',
 		'thumbnail': "res://graphics/ui/tower thumbnails/blaster.png",
 		'portrait': "res://graphics/ui/tower thumbnails/blaster.png"},
-		'thumbnail':  "res://graphics/ui/tower thumbnails/pepper.png",
-		'portrait':  "res://graphics/ui/tower thumbnails/pepper.png"},
 	Tower.MORTAR: {
 		'name': 'Mortar',
 		'cost': 30,
@@ -99,21 +95,14 @@ const TOWER_DATA = {
 		'plant_type': 'pineapple',
 		'thumbnail': "res://graphics/ui/tower thumbnails/mortar.png",
 		'portrait': "res://graphics/ui/tower thumbnails/mortar.png"},
-		'thumbnail': "res://graphics/ui/tower thumbnails/pineapple.png",
-		'portrait': "res://graphics/ui/tower thumbnails/pineapple.png"},
 	Tower.SLOW: {
 		'name': 'Slow',
 		'cost': 25,
 		'reload_time': 1.7,
 		'bullet': Bullet.SINGLE,
 		'plant_type': 'blackberry',
-<<<<<<< Updated upstream
 		'thumbnail': "res://graphics/towers/basic/slow tower  mockup.png",
 		'portrait': "res://graphics/towers/basic/slow tower  mockup.png"},
-=======
-		'thumbnail': "res://graphics/ui/tower thumbnails/blackberry.png",
-		'portrait': "res://graphics/ui/tower thumbnails/blackberry.png"},
->>>>>>> Stashed changes
 	Tower.BOMB: {
 		'name': 'Bomb',
 		'cost': 40,
@@ -123,8 +112,6 @@ const TOWER_DATA = {
 		'plant_type': 'pumpkin',
 		'thumbnail': "res://graphics/towers/basic/basic tower upgrade mockup.png",
 		'portrait': "res://graphics/ui/tower thumbnails/basic.png"}}
-		'thumbnail': "res://graphics/ui/tower thumbnails/pumpkin.png",
-		'portrait': "res://graphics/ui/tower thumbnails/pumpkin.png"}}
 
 
 func notify_tower_constraint_state_changed() -> void:

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bs7mlpxrwhrat"]
 
-[ext_resource type="Script" uid="uid://d103txvrdom45" path="res://Scenes/Ui/tower_menu.gd" id="1_n2bmw"]
+[ext_resource type="Script" uid="uid://d103txvrdom45" path="res://scenes/ui/tower_menu.gd" id="1_n2bmw"]
 [ext_resource type="Texture2D" uid="uid://rnnvxeejg1o3" path="res://graphics/ui/bigup_normal.png" id="2_2nd6s"]
 [ext_resource type="FontFile" uid="uid://cqb25w7bvktuo" path="res://graphics/ui/MoonDance-Regular.ttf" id="2_n2bmw"]
 [ext_resource type="Texture2D" uid="uid://ftkgg8wg17u" path="res://graphics/ui/tower thumbnails/basic.png" id="3_10234"]
 [ext_resource type="Texture2D" uid="uid://btkxerqdlusr7" path="res://graphics/ui/bigup_hover.png" id="3_bvfoo"]
-[ext_resource type="FontFile" uid="uid://5wltcegg83o" path="res://Scenes/Ui/Tangerine-Bold.ttf" id="4_10234"]
+[ext_resource type="FontFile" uid="uid://5wltcegg83o" path="res://scenes/ui/Tangerine-Bold.ttf" id="4_10234"]
 [ext_resource type="Texture2D" uid="uid://duabn1x61wk2j" path="res://graphics/ui/icon.png" id="6_gy57x"]
 [ext_resource type="Texture2D" uid="uid://v2yuex73fti6" path="res://graphics/ui/progress bar_empty2.png" id="7_n2bmw"]
 [ext_resource type="Texture2D" uid="uid://ppuhmtuyh2w5" path="res://graphics/ui/progress bar2.png" id="8_10234"]
