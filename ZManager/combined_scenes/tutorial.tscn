@@ -2409,14 +2409,14 @@ position = Vector2(221, 83)
 scale = Vector2(6.40625, 6.40625)
 sprite_frames = SubResource("SpriteFrames_8ro5r")
 autoplay = "default"
-frame_progress = 0.38285768
+frame_progress = 0.1350712
 
 [node name="Label" type="Label" parent="." unique_id=1790671522]
 layout_mode = 0
-offset_left = 112.0
-offset_top = 278.0
-offset_right = 773.0
-offset_bottom = 551.0
+offset_left = 119.0
+offset_top = 262.0
+offset_right = 780.0
+offset_bottom = 535.0
 theme_override_colors/font_color = Color(0.039215688, 0.17254902, 0.2, 1)
 theme_override_fonts/font = ExtResource("3_pdanu")
 text = "Welcome to Overgrown!
@@ -2425,10 +2425,10 @@ As a cat who tipped over a box full of evil magic,
 you must now grow magical plants to fight against evil!
 
 Nurture your plants carefully, as they become the very towers you 
-will be used to defeat the evil creatures!. Some sacrifice will be necessary,
+will be used to defeat the evil creatures! Some sacrifice will be necessary,
  as the same plants can be harvested to pay for tower
-upgrades, with the best requiring a hefty sum.
-
+upgrades. Choose wisely, as fully matured plants can unlock powerful 
+upgrades.
 Grow and Defend in this out of the box take on a tower defense game!
 "
 
