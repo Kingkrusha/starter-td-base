@@ -16,6 +16,10 @@ var growth_stage: int = 0
 @onready var node: Control = $Sprite/Control
 func _ready ():
 	overManager.NewTurn.connect(_on_new_day)
+	node.position = Vector2(-8, -8)
+	node.size = Vector2(16, 16)
+	node.mouse_filter = Control.MOUSE_FILTER_STOP
+	_update_tooltip()
 	
 func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	crop_data = data
@@ -31,9 +35,27 @@ func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	if overManager.turn == 0 and crop_data.growth_sprites.size() > 1 and growth_stage < 1:
 		_apply_growth_stage(1)
 
+	_update_tooltip()
+
 func _update_tooltip():
-	var growth = crop_data.growth_stage
-	node.tooltip_text = "Growth Stage: %d" % growth
+	if crop_data == null:
+		node.tooltip_text = ""
+		return
+
+	var crop_name := String(crop_data.crop_name).capitalize()
+	var yield_value := int(sell_price)
+	var max_stage = max(0, crop_data.growth_sprites.size() - 1)
+	var stage_value := int(growth_stage)
+	var tooltip := "%s, Yield %d, Growth stage %d" % [crop_name, yield_value, stage_value]
+
+	if stage_value < max_stage:
+		var progressed := int(crop_data.days_to_grow - days_until_grown)
+		var next_stage_progress := int(ceil(float(stage_value + 1) * float(crop_data.days_to_grow) / float(max(1, crop_data.growth_sprites.size()))))
+		var waves_until_next = max(0, next_stage_progress - progressed)
+		tooltip += ", %d waves until next stage" % waves_until_next
+
+	node.tooltip_text = tooltip
+
 func _apply_growth_stage(stage: int) -> void:
 	var sprite_count := crop_data.growth_sprites.size()
 	if sprite_count <= 0:
@@ -60,6 +82,7 @@ func _apply_growth_stage(stage: int) -> void:
 		sell_price = crop_data.sell_price_final
 
 	days_until_grown = max(0, crop_data.days_to_grow - clamped_stage)
+	_update_tooltip()
 	
 func _on_new_day (_day:int):
 	print("Crop ", crop_data)
@@ -90,6 +113,8 @@ func _on_new_day (_day:int):
 	else:
 		print_debug("Final Stage")
 		pass
+
+	_update_tooltip()
 		
 		
 	
