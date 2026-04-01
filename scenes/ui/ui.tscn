@@ -105,7 +105,6 @@ texture = ExtResource("12_2wslt")
 region_rect = Rect2(0, 16, 48, 16)
 
 [node name="AlertIcon" type="TextureButton" parent="Control" unique_id=1577874511]
-visible = false
 layout_mode = 0
 offset_left = 860.0
 offset_top = 22.0
@@ -115,6 +114,7 @@ texture_normal = SubResource("AtlasTexture_cnrlj")
 stretch_mode = 5
 
 [node name="NinePatchRect" type="PanelContainer" parent="Control/AlertIcon" unique_id=380001147]
+visible = false
 z_index = -10
 layout_mode = 0
 offset_left = -423.00003

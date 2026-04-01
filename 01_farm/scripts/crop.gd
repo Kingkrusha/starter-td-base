@@ -16,10 +16,25 @@ var growth_stage: int = 0
 @onready var node: Control = $Sprite/Control
 func _ready ():
 	overManager.NewTurn.connect(_on_new_day)
-	node.position = Vector2(-8, -8)
+	node.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	node.size = Vector2(16, 16)
 	node.mouse_filter = Control.MOUSE_FILTER_STOP
+	_sync_tooltip_hitbox()
 	_update_tooltip()
+
+
+func _process(_delta: float) -> void:
+	_sync_tooltip_hitbox()
+
+
+func _exit_tree() -> void:
+	if overManager.NewTurn.is_connected(_on_new_day):
+		overManager.NewTurn.disconnect(_on_new_day)
+
+
+func _sync_tooltip_hitbox() -> void:
+	# Keep each tooltip hitbox aligned to its own crop instance in world space.
+	node.global_position = global_position + Vector2(-8, -8)
 	
 func _set_crop (data : CropData, already_watered: bool, tile_coords: Vector2i) :
 	crop_data = data
